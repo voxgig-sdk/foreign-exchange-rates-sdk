@@ -1,0 +1,32 @@
+# API Information
+
+
+main: {
+  kit: {
+    info: {
+      contact: {
+        name: "exchangerate.dev"
+        url: "https://exchangerate.dev/docs"
+      }
+      description: "Foreign exchange rate data from exchangerate.dev: latest and historical reference rates, currency conversion, time-series ranges and the list of supported currencies. All /v1 endpoints require an API key supplied as a Bearer token (or via the X-API-Key header)."
+      security: {
+        in: "header"
+        name: "Authorization"
+        prefix: "Bearer"
+        scheme: "bearerAuth"
+        type: "http"
+      }
+      servers: [
+        {
+          description: "exchangerate.dev production API"
+          url: "https://api.exchangerate.dev"
+        }
+      ]
+      summary: "Foreign exchange rate data from exchangerate.dev: latest and historical reference rates, currency conversion, time-series ranges and the list of supported currencies."
+      title: "Foreign Exchange Rates API"
+      version: "0.1.0"
+      website: "https://exchangerate.dev"
+    }
+  }
+}
+

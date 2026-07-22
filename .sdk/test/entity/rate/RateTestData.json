@@ -1,0 +1,72 @@
+{
+  "existing": {
+    "rate": {
+      "RATE00": {
+        "base": "s78",
+        "data_updated_at": "s79",
+        "derivation_bps_max": 122,
+        "derived": false,
+        "is_forward_filled": true,
+        "market_session": "s7d",
+        "notice": "s7e",
+        "pair": "s7f",
+        "quote": "s80",
+        "rate": {},
+        "source": "s82",
+        "timestamp": "s83",
+        "date": "DATE01",
+        "id": "RATE00"
+      },
+      "RATE01": {
+        "base": "sf0",
+        "data_updated_at": "sf1",
+        "derivation_bps_max": 242,
+        "derived": false,
+        "is_forward_filled": true,
+        "market_session": "sf5",
+        "notice": "sf6",
+        "pair": "sf7",
+        "quote": "sf8",
+        "rate": {},
+        "source": "sfa",
+        "timestamp": "sfb",
+        "date": "DATE01",
+        "id": "RATE01"
+      },
+      "RATE02": {
+        "base": "s168",
+        "data_updated_at": "s169",
+        "derivation_bps_max": 362,
+        "derived": false,
+        "is_forward_filled": true,
+        "market_session": "s16d",
+        "notice": "s16e",
+        "pair": "s16f",
+        "quote": "s170",
+        "rate": {},
+        "source": "s172",
+        "timestamp": "s173",
+        "date": "DATE01",
+        "id": "RATE02"
+      }
+    }
+  },
+  "new": {
+    "rate": {
+      "rate_ref01": {
+        "base": "s1e0",
+        "data_updated_at": "s1e1",
+        "derivation_bps_max": 482,
+        "derived": false,
+        "is_forward_filled": true,
+        "market_session": "s1e5",
+        "notice": "s1e6",
+        "pair": "s1e7",
+        "quote": "s1e8",
+        "rate": {},
+        "source": "s1ea",
+        "timestamp": "s1eb"
+      }
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "existing": {
+    "currency": {
+      "CURRENCY00": {
+        "decimal": "s28",
+        "derived": false,
+        "name": "s2a",
+        "type": "s2b",
+        "id": "CURRENCY00"
+      },
+      "CURRENCY01": {
+        "decimal": "s50",
+        "derived": false,
+        "name": "s52",
+        "type": "s53",
+        "id": "CURRENCY01"
+      },
+      "CURRENCY02": {
+        "decimal": "s78",
+        "derived": false,
+        "name": "s7a",
+        "type": "s7b",
+        "id": "CURRENCY02"
+      }
+    }
+  },
+  "new": {
+    "currency": {
+      "currency_ref01": {
+        "decimal": "sa0",
+        "derived": false,
+        "name": "sa2",
+        "type": "sa3"
+      }
+    }
+  }
+}

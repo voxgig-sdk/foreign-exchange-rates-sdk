@@ -1,0 +1,45 @@
+{
+  "existing": {
+    "convert": {
+      "CONVERT00": {
+        "amount": 60,
+        "conversion": [],
+        "converted": 62,
+        "from": "s3f",
+        "pair": [],
+        "to": "s41",
+        "id": "CONVERT00"
+      },
+      "CONVERT01": {
+        "amount": 120,
+        "conversion": [],
+        "converted": 122,
+        "from": "s7b",
+        "pair": [],
+        "to": "s7d",
+        "id": "CONVERT01"
+      },
+      "CONVERT02": {
+        "amount": 180,
+        "conversion": [],
+        "converted": 182,
+        "from": "sb7",
+        "pair": [],
+        "to": "sb9",
+        "id": "CONVERT02"
+      }
+    }
+  },
+  "new": {
+    "convert": {
+      "convert_ref01": {
+        "amount": 240,
+        "conversion": [],
+        "converted": 242,
+        "from": "sf3",
+        "pair": [],
+        "to": "sf5"
+      }
+    }
+  }
+}

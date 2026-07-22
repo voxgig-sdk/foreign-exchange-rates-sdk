@@ -1,0 +1,70 @@
+# Entity: currency
+
+main: kit: entity: currency: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "decimal"
+      req: false
+      type: "`$INTEGER`"
+    }
+    {
+      name: "derived"
+      req: false
+      type: "`$BOOLEAN`"
+    }
+    {
+      name: "name"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "type"
+      req: false
+      type: "`$STRING`"
+    }
+  ]
+
+  name: "currency"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          args: {
+            query: [
+              {
+                example: "fiat"
+                kind: "query"
+                name: "type"
+                orig: "type"
+                reqd: false
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "GET"
+          orig: "/v1/currencies"
+          parts: [
+            "v1"
+            "currencies"
+          ]
+          select: {
+            exist: [
+              "type"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

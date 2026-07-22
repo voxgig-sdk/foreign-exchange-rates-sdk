@@ -1,0 +1,202 @@
+# Entity: rate
+
+main: kit: entity: rate: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "base"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "data_updated_at"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "derivation_bps_max"
+      req: false
+      type: "`$NUMBER`"
+    }
+    {
+      name: "derived"
+      req: false
+      type: "`$BOOLEAN`"
+    }
+    {
+      name: "is_forward_filled"
+      req: false
+      type: "`$BOOLEAN`"
+    }
+    {
+      name: "market_session"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "notice"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "pair"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "quote"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "rate"
+      req: false
+      type: "`$OBJECT`"
+    }
+    {
+      name: "source"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "timestamp"
+      req: false
+      type: "`$INTEGER`"
+    }
+  ]
+
+  name: "rate"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          args: {
+            query: [
+              {
+                example: "USD"
+                kind: "query"
+                name: "base"
+                orig: "base"
+                reqd: false
+                type: "`$STRING`"
+              }
+              {
+                example: "EUR,GBP"
+                kind: "query"
+                name: "symbol"
+                orig: "symbol"
+                reqd: false
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "GET"
+          orig: "/v1/latest"
+          parts: [
+            "v1"
+            "latest"
+          ]
+          select: {
+            exist: [
+              "base"
+              "symbol"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+        {
+          args: {
+            params: [
+              {
+                example: "2020-01-15"
+                kind: "param"
+                name: "date"
+                orig: "date"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                example: "EUR,GBP"
+                kind: "query"
+                name: "symbol"
+                orig: "symbol"
+                reqd: false
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "GET"
+          orig: "/v1/{date}"
+          parts: [
+            "v1"
+            "{date}"
+          ]
+          select: {
+            exist: [
+              "date"
+              "symbol"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+        {
+          args: {
+            params: [
+              {
+                example: "eur-usd"
+                kind: "param"
+                name: "id"
+                orig: "slug"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "GET"
+          orig: "/v1/rate/{slug}"
+          parts: [
+            "v1"
+            "rate"
+            "{id}"
+          ]
+          rename: {
+            param: {
+              slug: "id"
+            }
+          }
+          select: {
+            exist: [
+              "id"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+  relations: {
+    ancestors: [
+      [
+        "v1"
+      ]
+    ]
+  }
+
+
+
+}

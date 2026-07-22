@@ -1,0 +1,132 @@
+# Entity: convert
+
+main: kit: entity: convert: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "amount"
+      req: false
+      type: "`$NUMBER`"
+    }
+    {
+      name: "conversion"
+      req: false
+      type: "`$ARRAY`"
+    }
+    {
+      name: "converted"
+      req: false
+      type: "`$NUMBER`"
+    }
+    {
+      name: "from"
+      op: {
+        create: {
+          req: true
+          type: "`$STRING`"
+        }
+      }
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "pair"
+      req: true
+      type: "`$ARRAY`"
+    }
+    {
+      name: "to"
+      req: false
+      type: "`$STRING`"
+    }
+  ]
+
+  name: "convert"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          method: "POST"
+          orig: "/v1/convert"
+          parts: [
+            "v1"
+            "convert"
+          ]
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+    list: {
+      name: "list"
+      points: [
+        {
+          args: {
+            params: [
+              {
+                example: 100
+                kind: "param"
+                name: "amount"
+                orig: "amount"
+                reqd: true
+                type: "`$NUMBER`"
+              }
+              {
+                example: "USD"
+                kind: "param"
+                name: "from"
+                orig: "from"
+                reqd: true
+                type: "`$STRING`"
+              }
+              {
+                example: "EUR"
+                kind: "param"
+                name: "to"
+                orig: "to"
+                reqd: true
+                type: "`$STRING`"
+              }
+            ]
+          }
+          method: "GET"
+          orig: "/v1/convert/{from}/{to}/{amount}"
+          parts: [
+            "v1"
+            "convert"
+            "{from}"
+            "{to}"
+            "{amount}"
+          ]
+          select: {
+            exist: [
+              "amount"
+              "from"
+              "to"
+            ]
+          }
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+  relations: {
+    ancestors: [
+      [
+        "convert"
+      ]
+    ]
+  }
+
+
+
+}

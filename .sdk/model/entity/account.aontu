@@ -1,0 +1,53 @@
+# Entity: account
+
+main: kit: entity: account: {
+
+  alias: field: {}
+
+  fields: [
+    {
+      name: "email"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "key"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "org"
+      req: false
+      type: "`$STRING`"
+    }
+    {
+      name: "usage"
+      req: false
+      type: "`$OBJECT`"
+    }
+  ]
+
+  name: "account"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          method: "GET"
+          orig: "/v1/account"
+          parts: [
+            "v1"
+            "account"
+          ]
+          transform: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

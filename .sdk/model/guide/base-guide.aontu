@@ -1,0 +1,48 @@
+# Guide
+
+guide: {
+  metrics: count: entity: 5
+  metrics: count: path: 8
+  metrics: count: method: 8
+
+  entity: account: {
+    path: "/v1/account": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: convert: {
+    path: "/v1/convert": {
+      op: create: method: *POST
+    }
+    path: "/v1/convert/{from}/{to}/{amount}": {
+      op: list: method: *GET
+    }
+  }
+
+  entity: currency: {
+    path: "/v1/currencies": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: range: {
+    path: "/v1/range": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: rate: {
+    path: "/v1/latest": {
+      op: load: method: *GET
+    }
+    path: "/v1/rate/{slug}": {
+      rename: param: "slug": *"id"
+      op: load: method: *GET
+    }
+    path: "/v1/{date}": {
+      op: load: method: *GET
+    }
+  }
+
+}

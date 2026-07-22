@@ -1,0 +1,408 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Foreign Exchange Rates API",
+    "description": "Foreign exchange rate data from exchangerate.dev: latest and historical reference rates, currency conversion, time-series ranges and the list of supported currencies. All /v1 endpoints require an API key supplied as a Bearer token (or via the X-API-Key header).",
+    "version": "0.1.0",
+    "contact": {
+      "name": "exchangerate.dev",
+      "url": "https://exchangerate.dev/docs"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.exchangerate.dev",
+      "description": "exchangerate.dev production API"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/v1/latest": {
+      "get": {
+        "operationId": "getLatestRates",
+        "summary": "Latest rates",
+        "description": "Latest exchange rates for a base currency, optionally filtered to a subset of target currencies.",
+        "parameters": [
+          {
+            "name": "base",
+            "in": "query",
+            "required": false,
+            "description": "Base currency code (ISO 4217). Defaults to USD.",
+            "schema": { "type": "string", "default": "USD", "example": "USD" }
+          },
+          {
+            "name": "symbols",
+            "in": "query",
+            "required": false,
+            "description": "Comma-separated list of target currency codes to filter the result (e.g. EUR,GBP).",
+            "schema": { "type": "string", "example": "EUR,GBP" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Latest rates",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/RatesResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/v1/{date}": {
+      "get": {
+        "operationId": "getHistoricalRates",
+        "summary": "Historical rates",
+        "description": "Reference rates published on a specific date (supported from 1999-01-04 onward). Weekend/holiday dates may be forward-filled.",
+        "parameters": [
+          {
+            "name": "date",
+            "in": "path",
+            "required": true,
+            "description": "Date in YYYY-MM-DD format.",
+            "schema": { "type": "string", "format": "date", "example": "2020-01-15" }
+          },
+          {
+            "name": "symbols",
+            "in": "query",
+            "required": false,
+            "description": "Comma-separated list of target currency codes to filter the result.",
+            "schema": { "type": "string", "example": "EUR,GBP" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Historical rates for the requested date",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/RatesResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/v1/convert/{from}/{to}/{amount}": {
+      "get": {
+        "operationId": "convertCurrency",
+        "summary": "Convert an amount between two currencies",
+        "parameters": [
+          {
+            "name": "from",
+            "in": "path",
+            "required": true,
+            "description": "Source currency code.",
+            "schema": { "type": "string", "example": "USD" }
+          },
+          {
+            "name": "to",
+            "in": "path",
+            "required": true,
+            "description": "Target currency code.",
+            "schema": { "type": "string", "example": "EUR" }
+          },
+          {
+            "name": "amount",
+            "in": "path",
+            "required": true,
+            "description": "Amount of the source currency to convert.",
+            "schema": { "type": "number", "example": 100 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Conversion result",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ConvertResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/v1/convert": {
+      "post": {
+        "operationId": "convertCurrencyBatch",
+        "summary": "Batch currency conversion",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "from": { "type": "string", "example": "USD" },
+                  "pairs": {
+                    "type": "array",
+                    "description": "Array of [targetCurrency, amount] tuples.",
+                    "items": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "example": [["EUR", 100], ["GBP", 50]]
+                  }
+                },
+                "required": ["from", "pairs"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Batch conversion result",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ConvertResponse" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/v1/rate/{slug}": {
+      "get": {
+        "operationId": "getRateBySlug",
+        "summary": "Single-pair quote by slug",
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "Currency pair slug, case-insensitive (e.g. eur-usd).",
+            "schema": { "type": "string", "example": "eur-usd" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Single-pair rate",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "pair": { "type": "string", "example": "EUR/USD" },
+                    "base": { "type": "string", "example": "EUR" },
+                    "quote": { "type": "string", "example": "USD" },
+                    "rate": { "type": "number", "example": 1.0876 },
+                    "source": { "type": "string" },
+                    "derived": { "type": "boolean" },
+                    "derivation_bps_max": { "type": "number" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/v1/range": {
+      "get": {
+        "operationId": "getRateRange",
+        "summary": "Daily time-series over a date window",
+        "description": "Daily rates for a date window with keyset pagination.",
+        "parameters": [
+          {
+            "name": "base",
+            "in": "query",
+            "required": false,
+            "description": "Base currency code.",
+            "schema": { "type": "string", "example": "USD" }
+          },
+          {
+            "name": "symbols",
+            "in": "query",
+            "required": false,
+            "description": "Comma-separated list of target currency codes.",
+            "schema": { "type": "string", "example": "EUR,GBP" }
+          },
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": true,
+            "description": "Range start date (YYYY-MM-DD).",
+            "schema": { "type": "string", "format": "date", "example": "2020-01-01" }
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": true,
+            "description": "Range end date (YYYY-MM-DD).",
+            "schema": { "type": "string", "format": "date", "example": "2020-01-31" }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "description": "Output format. json (default, capped at 366 rows), csv or parquet.",
+            "schema": { "type": "string", "enum": ["json", "csv", "parquet"], "default": "json" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Time-series of daily rates",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "base": { "type": "string" },
+                    "start_date": { "type": "string", "format": "date" },
+                    "end_date": { "type": "string", "format": "date" },
+                    "rates": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "object",
+                        "additionalProperties": { "type": "number" }
+                      }
+                    },
+                    "next_cursor": { "type": "string", "nullable": true },
+                    "has_more": { "type": "boolean" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/v1/currencies": {
+      "get": {
+        "operationId": "listCurrencies",
+        "summary": "List supported currencies",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "description": "Filter currencies by type (e.g. fiat).",
+            "schema": { "type": "string", "example": "fiat" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Supported currencies",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string" },
+                      "type": { "type": "string" },
+                      "decimals": { "type": "integer" },
+                      "derived": { "type": "boolean" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/v1/account": {
+      "get": {
+        "operationId": "getAccount",
+        "summary": "Account, key and monthly usage",
+        "responses": {
+          "200": {
+            "description": "Account details and usage",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "email": { "type": "string" },
+                    "org": { "type": "string" },
+                    "key": { "type": "string" },
+                    "usage": {
+                      "type": "object",
+                      "properties": {
+                        "calls_this_month": { "type": "integer" },
+                        "limit": { "type": "integer" },
+                        "resets_on": { "type": "string", "format": "date" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "API key supplied as a Bearer token. The X-API-Key header is also accepted."
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Missing or invalid API key",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": { "error": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "RatesResponse": {
+        "type": "object",
+        "properties": {
+          "base": { "type": "string", "example": "USD" },
+          "rates": {
+            "type": "object",
+            "additionalProperties": { "type": "number" },
+            "example": { "EUR": 0.9193, "GBP": 0.7876 }
+          },
+          "source": { "type": "string" },
+          "market_session": { "type": "string" },
+          "timestamp": { "type": "integer" },
+          "data_updated_at": { "type": "string", "format": "date-time" },
+          "is_forward_filled": { "type": "boolean" },
+          "notice": { "type": "string" }
+        }
+      },
+      "ConvertResponse": {
+        "type": "object",
+        "properties": {
+          "from": { "type": "string", "example": "USD" },
+          "conversions": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "to": { "type": "string" },
+                "amount": { "type": "number" },
+                "converted": { "type": "number" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

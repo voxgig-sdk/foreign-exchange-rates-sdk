@@ -1,0 +1,42 @@
+# BasicConvertFlow
+
+main: kit: flow: BasicConvertFlow:
+{
+  entity: "convert",
+  kind: "basic",
+  name: "BasicConvertFlow",
+  step: [
+    {
+      input: {
+        ref: "convert_ref01"
+      }
+
+      match: {
+        amount: "amount01",
+        from: "from01",
+        to: "to01"
+      }
+
+      op: "create"
+    }
+
+    {
+      match: {
+        amount: "amount01",
+        from: "from01",
+        to: "to01"
+      }
+
+      op: "list",
+      valid: [
+        {
+          apply: "ItemExists",
+          def: {
+            ref: "convert_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicConvertFlow"
+}

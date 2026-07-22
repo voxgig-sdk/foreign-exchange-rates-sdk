@@ -1,0 +1,37 @@
+{
+  "existing": {
+    "account": {
+      "ACCOUNT00": {
+        "email": "s28",
+        "key": "s29",
+        "org": "s2a",
+        "usage": {},
+        "id": "ACCOUNT00"
+      },
+      "ACCOUNT01": {
+        "email": "s50",
+        "key": "s51",
+        "org": "s52",
+        "usage": {},
+        "id": "ACCOUNT01"
+      },
+      "ACCOUNT02": {
+        "email": "s78",
+        "key": "s79",
+        "org": "s7a",
+        "usage": {},
+        "id": "ACCOUNT02"
+      }
+    }
+  },
+  "new": {
+    "account": {
+      "account_ref01": {
+        "email": "sa0",
+        "key": "sa1",
+        "org": "sa2",
+        "usage": {}
+      }
+    }
+  }
+}
