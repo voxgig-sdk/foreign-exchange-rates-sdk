@@ -8,6 +8,7 @@ guide: {
   entity: account: {
     path: "/v1/account": {
       op: load: method: *GET
+      op: load: transform: res: *("`body.usage`")|top
     }
   }
 
@@ -17,6 +18,7 @@ guide: {
     }
     path: "/v1/convert/{from}/{to}/{amount}": {
       op: list: method: *GET
+      op: list: transform: res: *("`body.conversions`")|top
     }
   }
 
@@ -29,12 +31,14 @@ guide: {
   entity: range: {
     path: "/v1/range": {
       op: load: method: *GET
+      op: load: transform: res: *("`body.rates`")|top
     }
   }
 
   entity: rate: {
     path: "/v1/latest": {
       op: load: method: *GET
+      op: load: transform: res: *("`body.rates`")|top
     }
     path: "/v1/rate/{slug}": {
       rename: param: "slug": *"id"
@@ -42,6 +46,7 @@ guide: {
     }
     path: "/v1/{date}": {
       op: load: method: *GET
+      op: load: transform: res: *("`body.rates`")|top
     }
   }
 

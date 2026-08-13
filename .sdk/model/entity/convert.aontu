@@ -11,7 +11,7 @@ main: kit: entity: convert: {
       type: "`$NUMBER`"
     }
     {
-      name: "conversion"
+      name: "conversions"
       req: false
       type: "`$ARRAY`"
     }
@@ -32,7 +32,7 @@ main: kit: entity: convert: {
       type: "`$STRING`"
     }
     {
-      name: "pair"
+      name: "pairs"
       req: true
       type: "`$ARRAY`"
     }
@@ -112,7 +112,7 @@ main: kit: entity: convert: {
           }
           transform: {
             req: "`reqdata`"
-            res: "`body`"
+            res: "`body.conversions`"
           }
         }
       ]

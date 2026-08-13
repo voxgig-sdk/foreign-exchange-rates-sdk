@@ -110,10 +110,9 @@ account = client.Account
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `email` | `String` | No |  |
-| `key` | `String` | No |  |
-| `org` | `String` | No |  |
-| `usage` | `Hash` | No |  |
+| `calls_this_month` | `Integer` | No |  |
+| `limit` | `Integer` | No |  |
+| `resets_on` | `String` | No |  |
 
 ### Operations
 
@@ -166,10 +165,10 @@ convert = client.Convert
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `amount` | `Float` | No |  |
-| `conversion` | `Array` | No |  |
+| `conversions` | `Array` | No |  |
 | `converted` | `Float` | No |  |
 | `from` | `String` | No |  |
-| `pair` | `Array` | Yes |  |
+| `pairs` | `Array` | Yes |  |
 | `to` | `String` | No |  |
 
 ### Field Usage by Operation
@@ -177,10 +176,10 @@ convert = client.Convert
 | Field | list | create |
 | --- | --- | --- |
 | `amount` | - | - |
-| `conversion` | - | - |
+| `conversions` | - | - |
 | `converted` | - | - |
 | `from` | - | Yes |
-| `pair` | - | - |
+| `pairs` | - | - |
 | `to` | - | - |
 
 ### Operations
@@ -191,7 +190,7 @@ Create a new entity with the given data. Raises on error.
 
 ```ruby
 result = client.Convert.create({
-  "pair" => [], # Array
+  "pairs" => [], # Array
 })
 ```
 
@@ -243,7 +242,7 @@ currency = client.Currency
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `decimal` | `Integer` | No |  |
+| `decimals` | `Integer` | No |  |
 | `derived` | `Boolean` | No |  |
 | `name` | `String` | No |  |
 | `type` | `String` | No |  |
@@ -293,17 +292,6 @@ Return the entity name.
 ```ruby
 range = client.Range
 ```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `base` | `String` | No |  |
-| `end_date` | `String` | No |  |
-| `has_more` | `Boolean` | No |  |
-| `next_cursor` | `String` | No |  |
-| `rate` | `Hash` | No |  |
-| `start_date` | `String` | No |  |
 
 ### Operations
 
@@ -356,17 +344,12 @@ rate = client.Rate
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `base` | `String` | No |  |
-| `data_updated_at` | `String` | No |  |
 | `derivation_bps_max` | `Float` | No |  |
 | `derived` | `Boolean` | No |  |
-| `is_forward_filled` | `Boolean` | No |  |
-| `market_session` | `String` | No |  |
-| `notice` | `String` | No |  |
 | `pair` | `String` | No |  |
 | `quote` | `String` | No |  |
-| `rate` | `Hash` | No |  |
+| `rate` | `Float` | No |  |
 | `source` | `String` | No |  |
-| `timestamp` | `Integer` | No |  |
 
 ### Operations
 

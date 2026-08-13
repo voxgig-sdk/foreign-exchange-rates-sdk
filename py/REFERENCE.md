@@ -104,10 +104,9 @@ account = client.Account()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `email` | `str` | No |  |
-| `key` | `str` | No |  |
-| `org` | `str` | No |  |
-| `usage` | `dict` | No |  |
+| `calls_this_month` | `int` | No |  |
+| `limit` | `int` | No |  |
+| `resets_on` | `str` | No |  |
 
 ### Operations
 
@@ -159,10 +158,10 @@ convert = client.Convert()
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `amount` | `float` | No |  |
-| `conversion` | `list` | No |  |
+| `conversions` | `list` | No |  |
 | `converted` | `float` | No |  |
 | `from` | `str` | No |  |
-| `pair` | `list` | Yes |  |
+| `pairs` | `list` | Yes |  |
 | `to` | `str` | No |  |
 
 ### Field Usage by Operation
@@ -170,10 +169,10 @@ convert = client.Convert()
 | Field | list | create |
 | --- | --- | --- |
 | `amount` | - | - |
-| `conversion` | - | - |
+| `conversions` | - | - |
 | `converted` | - | - |
 | `from` | - | Yes |
-| `pair` | - | - |
+| `pairs` | - | - |
 | `to` | - | - |
 
 ### Operations
@@ -184,7 +183,7 @@ Create a new entity with the given data. Returns the created entity data and rai
 
 ```python
 result = client.Convert().create({
-    "pair": [],  # list
+    "pairs": [],  # list
 })
 ```
 
@@ -193,7 +192,7 @@ result = client.Convert().create({
 List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list and raises on error.
 
 ```python
-results = client.Convert().list()
+results = client.Convert().list({"amount": 1, "from": "example", "to": "example"})
 for convert in results:
     print(convert)
 ```
@@ -237,7 +236,7 @@ currency = client.Currency()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `decimal` | `int` | No |  |
+| `decimals` | `int` | No |  |
 | `derived` | `bool` | No |  |
 | `name` | `str` | No |  |
 | `type` | `str` | No |  |
@@ -286,17 +285,6 @@ Return the entity name.
 ```python
 range = client.Range()
 ```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `base` | `str` | No |  |
-| `end_date` | `str` | No |  |
-| `has_more` | `bool` | No |  |
-| `next_cursor` | `str` | No |  |
-| `rate` | `dict` | No |  |
-| `start_date` | `str` | No |  |
 
 ### Operations
 
@@ -348,17 +336,12 @@ rate = client.Rate()
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `base` | `str` | No |  |
-| `data_updated_at` | `str` | No |  |
 | `derivation_bps_max` | `float` | No |  |
 | `derived` | `bool` | No |  |
-| `is_forward_filled` | `bool` | No |  |
-| `market_session` | `str` | No |  |
-| `notice` | `str` | No |  |
 | `pair` | `str` | No |  |
 | `quote` | `str` | No |  |
-| `rate` | `dict` | No |  |
+| `rate` | `float` | No |  |
 | `source` | `str` | No |  |
-| `timestamp` | `int` | No |  |
 
 ### Operations
 

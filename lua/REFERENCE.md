@@ -107,10 +107,9 @@ local account = client:Account(nil)
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `email` | `string` | No |  |
-| `key` | `string` | No |  |
-| `org` | `string` | No |  |
-| `usage` | `table` | No |  |
+| `calls_this_month` | `number` | No |  |
+| `limit` | `number` | No |  |
+| `resets_on` | `string` | No |  |
 
 ### Operations
 
@@ -163,10 +162,10 @@ local convert = client:Convert(nil)
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `amount` | `number` | No |  |
-| `conversion` | `table` | No |  |
+| `conversions` | `table` | No |  |
 | `converted` | `number` | No |  |
 | `from` | `string` | No |  |
-| `pair` | `table` | Yes |  |
+| `pairs` | `table` | Yes |  |
 | `to` | `string` | No |  |
 
 ### Field Usage by Operation
@@ -174,10 +173,10 @@ local convert = client:Convert(nil)
 | Field | list | create |
 | --- | --- | --- |
 | `amount` | - | - |
-| `conversion` | - | - |
+| `conversions` | - | - |
 | `converted` | - | - |
 | `from` | - | Yes |
-| `pair` | - | - |
+| `pairs` | - | - |
 | `to` | - | - |
 
 ### Operations
@@ -188,7 +187,7 @@ Create a new entity with the given data.
 
 ```lua
 local result, err = client:Convert():create({
-  pair = --[[ table ]],
+  pairs = --[[ table ]],
 })
 ```
 
@@ -240,7 +239,7 @@ local currency = client:Currency(nil)
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `decimal` | `number` | No |  |
+| `decimals` | `number` | No |  |
 | `derived` | `boolean` | No |  |
 | `name` | `string` | No |  |
 | `type` | `string` | No |  |
@@ -290,17 +289,6 @@ Return the entity name.
 ```lua
 local range = client:Range(nil)
 ```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `base` | `string` | No |  |
-| `end_date` | `string` | No |  |
-| `has_more` | `boolean` | No |  |
-| `next_cursor` | `string` | No |  |
-| `rate` | `table` | No |  |
-| `start_date` | `string` | No |  |
 
 ### Operations
 
@@ -353,17 +341,12 @@ local rate = client:Rate(nil)
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `base` | `string` | No |  |
-| `data_updated_at` | `string` | No |  |
 | `derivation_bps_max` | `number` | No |  |
 | `derived` | `boolean` | No |  |
-| `is_forward_filled` | `boolean` | No |  |
-| `market_session` | `string` | No |  |
-| `notice` | `string` | No |  |
 | `pair` | `string` | No |  |
 | `quote` | `string` | No |  |
-| `rate` | `table` | No |  |
+| `rate` | `number` | No |  |
 | `source` | `string` | No |  |
-| `timestamp` | `number` | No |  |
 
 ### Operations
 

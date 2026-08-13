@@ -3,9 +3,9 @@
 import json
 import pytest
 
-from utility.voxgig_struct import voxgig_struct as vs
+from foreignexchangerates_sdk.utility.voxgig_struct import voxgig_struct as vs
 from foreignexchangerates_sdk import ForeignExchangeRatesSDK
-from core import helpers
+from foreignexchangerates_sdk.core import helpers
 from test import runner
 
 
@@ -62,16 +62,16 @@ def _range_direct_setup(mockres):
     calls = []
 
     env = runner.env_override({
-        "FOREIGNEXCHANGERATES_TEST_RANGE_ENTID": {},
-        "FOREIGNEXCHANGERATES_TEST_LIVE": "FALSE",
-        "FOREIGNEXCHANGERATES_APIKEY": "NONE",
+        "FOREIGN_EXCHANGE_RATES_TEST_RANGE_ENTID": {},
+        "FOREIGN_EXCHANGE_RATES_TEST_LIVE": "FALSE",
+        "FOREIGN_EXCHANGE_RATES_APIKEY": "NONE",
     })
 
-    live = env.get("FOREIGNEXCHANGERATES_TEST_LIVE") == "TRUE"
+    live = env.get("FOREIGN_EXCHANGE_RATES_TEST_LIVE") == "TRUE"
 
     if live:
         merged_opts = {
-            "apikey": env.get("FOREIGNEXCHANGERATES_APIKEY"),
+            "apikey": env.get("FOREIGN_EXCHANGE_RATES_APIKEY"),
         }
         client = ForeignExchangeRatesSDK(merged_opts)
         return {

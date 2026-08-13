@@ -43,8 +43,8 @@ class ForeignExchangeRatesTestRunner
 
     public static function env_override(array $m): array
     {
-        $live = self::getenv('FOREIGNEXCHANGERATES_TEST_LIVE');
-        $override = self::getenv('FOREIGNEXCHANGERATES_TEST_OVERRIDE');
+        $live = self::getenv('FOREIGN_EXCHANGE_RATES_TEST_LIVE');
+        $override = self::getenv('FOREIGN_EXCHANGE_RATES_TEST_OVERRIDE');
 
         if ($live === 'TRUE' || $override === 'TRUE') {
             foreach (array_keys($m) as $key) {
@@ -63,9 +63,9 @@ class ForeignExchangeRatesTestRunner
             }
         }
 
-        $explain = self::getenv('FOREIGNEXCHANGERATES_TEST_EXPLAIN');
+        $explain = self::getenv('FOREIGN_EXCHANGE_RATES_TEST_EXPLAIN');
         if ($explain !== null && $explain !== '') {
-            $m['FOREIGNEXCHANGERATES_TEST_EXPLAIN'] = $explain;
+            $m['FOREIGN_EXCHANGE_RATES_TEST_EXPLAIN'] = $explain;
         }
 
         return $m;

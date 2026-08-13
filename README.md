@@ -38,18 +38,27 @@ network, and no credentials:
 ### TypeScript
 
 ```ts
-const client = ForeignExchangeRatesSDK.test()
-const account = await client.Account().load()
-// account is a bare Account populated with mock data
-console.log(account)
+// The offline mock starts EMPTY — seed it with the records the test needs.
+// Shape: { entity: { <entity-name>: { <id>: <record> } } }
+const client = ForeignExchangeRatesSDK.test({
+  entity: {
+    currency: {
+      test01: { id: 'test01' },
+    },
+  },
+})
+const currency = await client.Currency().load()
+// currency is the Currency entity, populated with mock data
+// — call currency.data() for the record itself
+console.log(currency)
 ```
 
 ### Python
 
 ```python
 client = ForeignExchangeRatesSDK.test()
-account = client.Account().load()
-print(account)
+currency = client.Currency().load()
+print(currency)
 ```
 
 ### PHP
@@ -57,16 +66,16 @@ print(account)
 ```php
 // Seed fixture data so offline calls resolve without a live server.
 $client = ForeignExchangeRatesSDK::test([
-    "entity" => ["account" => ["test01" => []]],
+    "entity" => ["currency" => ["test01" => []]],
 ]);
-$account = $client->Account()->load();
+$currency = $client->Currency()->load();
 ```
 
 ### Golang
 
 ```go
 client := sdk.Test()
-result, err := client.Account(nil).Load(
+result, err := client.Currency(nil).Load(
     nil, nil,
 )
 ```
@@ -76,16 +85,16 @@ result, err := client.Account(nil).Load(
 ```ruby
 # Seed fixture data so offline calls resolve without a live server.
 client = ForeignExchangeRatesSDK.test({
-  "entity" => { "account" => { "test01" => {} } },
+  "entity" => { "currency" => { "test01" => {} } },
 })
-account = client.Account.load()
+currency = client.Currency.load()
 ```
 
 ### Lua
 
 ```lua
 local client = sdk.test()
-local result, err = client:Account():load()
+local result, err = client:Currency():load()
 ```
 
 ## Packages
@@ -156,7 +165,7 @@ The API exposes 5 entities:
 | Entity | Description | API path |
 | --- | --- | --- |
 | **Account** | The Account entity (load). | `/v1/account` |
-| **Convert** | The Convert entity (create, list). | `/v1/convert` |
+| **Convert** | The Convert entity (create, list). | `/v1/convert/{from}/{to}/{amount}` |
 | **Currency** | The Currency entity (load). | `/v1/currencies` |
 | **Range** | The Range entity (load). | `/v1/range` |
 | **Rate** | The Rate entity (load). | `/v1/latest` |
@@ -193,7 +202,7 @@ $client = new ForeignExchangeRatesSDK([
 ]);
 
 
-// Load a specific account (returns the bare record; throws on error)
+// Load a specific account (returns the ENTITY; call data_get() for the record; throws on error)
 $account = $client->Account()->load();
 print_r($account);
 ```
@@ -225,7 +234,7 @@ client = ForeignExchangeRatesSDK.new({
 })
 
 
-# Load a specific account (returns the bare record; raises on error)
+# Load a specific account (returns the ENTITY; call data_get for the record)
 account = client.Account.load()
 puts account
 ```
@@ -361,6 +370,9 @@ Pass custom features via the `extend` option at construction time.
 
 This SDK is generated from the upstream OpenAPI specification. It is an
 unofficial client and is not affiliated with the API provider.
+
+The OpenAPI spec(s) this SDK was generated from are kept in the
+[`.sdk/def/`](.sdk/def/) folder.
 
 - Upstream API: [https://exchangerate.dev/docs](https://exchangerate.dev/docs)
 

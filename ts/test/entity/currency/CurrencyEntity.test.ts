@@ -26,8 +26,8 @@ import {
 describe('CurrencyEntity', async () => {
 
   // Per-test live pacing. Delay is read from sdk-test-control.json's
-  // `test.live.delayMs`; only sleeps when FOREIGNEXCHANGERATES_TEST_LIVE=TRUE.
-  afterEach(liveDelay('FOREIGNEXCHANGERATES_TEST_LIVE'))
+  // `test.live.delayMs`; only sleeps when FOREIGN_EXCHANGE_RATES_TEST_LIVE=TRUE.
+  afterEach(liveDelay('FOREIGN_EXCHANGE_RATES_TEST_LIVE'))
 
   test('instance', async () => {
     const testsdk = ForeignExchangeRatesSDK.test()
@@ -62,7 +62,7 @@ describe('CurrencyEntity', async () => {
     // LOAD
     const currency_ref01_ent = client.Currency()
     const currency_ref01_match_dt0: any = {}
-    const currency_ref01_data_dt0 = await currency_ref01_ent.load(currency_ref01_match_dt0)
+    const currency_ref01_data_dt0 = (await currency_ref01_ent.load(currency_ref01_match_dt0)).data()
     assert(null != currency_ref01_data_dt0)
 
 

@@ -59,16 +59,16 @@ def rate_direct_setup(mockres)
   calls = []
 
   env = Runner.env_override({
-    "FOREIGNEXCHANGERATES_TEST_RATE_ENTID" => {},
-    "FOREIGNEXCHANGERATES_TEST_LIVE" => "FALSE",
-    "FOREIGNEXCHANGERATES_APIKEY" => "NONE",
+    "FOREIGN_EXCHANGE_RATES_TEST_RATE_ENTID" => {},
+    "FOREIGN_EXCHANGE_RATES_TEST_LIVE" => "FALSE",
+    "FOREIGN_EXCHANGE_RATES_APIKEY" => "NONE",
   })
 
-  live = env["FOREIGNEXCHANGERATES_TEST_LIVE"] == "TRUE"
+  live = env["FOREIGN_EXCHANGE_RATES_TEST_LIVE"] == "TRUE"
 
   if live
     merged_opts = {
-      "apikey" => env["FOREIGNEXCHANGERATES_APIKEY"],
+      "apikey" => env["FOREIGN_EXCHANGE_RATES_APIKEY"],
     }
     client = ForeignExchangeRatesSDK.new(merged_opts)
     return {

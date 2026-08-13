@@ -14,12 +14,12 @@ from __future__ import annotations
 
 from urllib.parse import quote
 
-from config import make_config
-from features import _make_feature
-from core.control import ForeignExchangeRatesControl
-from core.error import ForeignExchangeRatesError
-from core.result import ForeignExchangeRatesResult
-from core.spec import ForeignExchangeRatesSpec
+from foreignexchangerates_sdk.config import make_config
+from foreignexchangerates_sdk.features import _make_feature
+from foreignexchangerates_sdk.core.control import ForeignExchangeRatesControl
+from foreignexchangerates_sdk.core.error import ForeignExchangeRatesError
+from foreignexchangerates_sdk.core.result import ForeignExchangeRatesResult
+from foreignexchangerates_sdk.core.spec import ForeignExchangeRatesSpec
 
 
 # True when this SDK was generated with the named feature.

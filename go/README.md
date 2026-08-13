@@ -69,12 +69,12 @@ Every entity operation returns `(value, error)`. Check `err` before
 using the value — there is no exception to catch:
 
 ```go
-account, err := client.Account(nil).Load(nil, nil)
+currency, err := client.Currency(nil).Load(nil, nil)
 if err != nil {
     // handle err
     return
 }
-_ = account
+_ = currency
 ```
 
 `Direct` follows the same `(value, error)` convention:
@@ -138,13 +138,13 @@ Create a mock client for unit testing — no server required:
 ```go
 client := sdk.Test()
 
-account, err := client.Account(nil).Load(
+currency, err := client.Currency(nil).Load(
     nil, nil,
 )
 if err != nil {
     panic(err)
 }
-fmt.Println(account) // the returned mock data
+fmt.Println(currency) // the returned mock data
 ```
 
 ### Use a custom fetch function
@@ -270,10 +270,9 @@ Only `Direct()` returns a response envelope — a `map[string]any` with
 
 | Field | Description |
 | --- | --- |
-| `"email"` |  |
-| `"key"` |  |
-| `"org"` |  |
-| `"usage"` |  |
+| `"calls_this_month"` |  |
+| `"limit"` |  |
+| `"resets_on"` |  |
 
 Operations: Load.
 
@@ -284,10 +283,10 @@ API path: `/v1/account`
 | Field | Description |
 | --- | --- |
 | `"amount"` |  |
-| `"conversion"` |  |
+| `"conversions"` |  |
 | `"converted"` |  |
 | `"from"` |  |
-| `"pair"` |  |
+| `"pairs"` |  |
 | `"to"` |  |
 
 Operations: Create, List.
@@ -298,7 +297,7 @@ API path: `/v1/convert`
 
 | Field | Description |
 | --- | --- |
-| `"decimal"` |  |
+| `"decimals"` |  |
 | `"derived"` |  |
 | `"name"` |  |
 | `"type"` |  |
@@ -311,12 +310,6 @@ API path: `/v1/currencies`
 
 | Field | Description |
 | --- | --- |
-| `"base"` |  |
-| `"end_date"` |  |
-| `"has_more"` |  |
-| `"next_cursor"` |  |
-| `"rate"` |  |
-| `"start_date"` |  |
 
 Operations: Load.
 
@@ -327,17 +320,12 @@ API path: `/v1/range`
 | Field | Description |
 | --- | --- |
 | `"base"` |  |
-| `"data_updated_at"` |  |
 | `"derivation_bps_max"` |  |
 | `"derived"` |  |
-| `"is_forward_filled"` |  |
-| `"market_session"` |  |
-| `"notice"` |  |
 | `"pair"` |  |
 | `"quote"` |  |
 | `"rate"` |  |
 | `"source"` |  |
-| `"timestamp"` |  |
 
 Operations: Load.
 
@@ -362,10 +350,9 @@ Create an instance: `account := client.Account(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `email` | `string` |  |
-| `key` | `string` |  |
-| `org` | `string` |  |
-| `usage` | `map[string]any` |  |
+| `calls_this_month` | `int` |  |
+| `limit` | `int` |  |
+| `resets_on` | `string` |  |
 
 #### Example: Load
 
@@ -394,10 +381,10 @@ Create an instance: `convert := client.Convert(nil)`
 | Field | Type | Description |
 | --- | --- | --- |
 | `amount` | `float64` |  |
-| `conversion` | `[]any` |  |
+| `conversions` | `[]any` |  |
 | `converted` | `float64` |  |
 | `from` | `string` |  |
-| `pair` | `[]any` |  |
+| `pairs` | `[]any` |  |
 | `to` | `string` |  |
 
 #### Example: List
@@ -414,7 +401,7 @@ fmt.Println(converts) // the array of records
 
 ```go
 result, err := client.Convert(nil).Create(map[string]any{
-    "pair": []any{},
+    "pairs": []any{},
 }, nil)
 if err != nil {
     panic(err)
@@ -437,7 +424,7 @@ Create an instance: `currency := client.Currency(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `decimal` | `int` |  |
+| `decimals` | `int` |  |
 | `derived` | `bool` |  |
 | `name` | `string` |  |
 | `type` | `string` |  |
@@ -462,17 +449,6 @@ Create an instance: `range_ := client.Range(nil)`
 | Method | Description |
 | --- | --- |
 | `Load(match, ctrl)` | Load a single entity by match criteria. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `base` | `string` |  |
-| `end_date` | `string` |  |
-| `has_more` | `bool` |  |
-| `next_cursor` | `string` |  |
-| `rate` | `map[string]any` |  |
-| `start_date` | `string` |  |
 
 #### Example: Load
 
@@ -500,17 +476,12 @@ Create an instance: `rate := client.Rate(nil)`
 | Field | Type | Description |
 | --- | --- | --- |
 | `base` | `string` |  |
-| `data_updated_at` | `string` |  |
 | `derivation_bps_max` | `float64` |  |
 | `derived` | `bool` |  |
-| `is_forward_filled` | `bool` |  |
-| `market_session` | `string` |  |
-| `notice` | `string` |  |
 | `pair` | `string` |  |
 | `quote` | `string` |  |
-| `rate` | `map[string]any` |  |
+| `rate` | `float64` |  |
 | `source` | `string` |  |
-| `timestamp` | `int` |  |
 
 #### Example: Load
 
@@ -596,11 +567,11 @@ Entity instances are stateful. After a successful `Load`, the entity
 stores the returned data and match criteria internally.
 
 ```go
-account := client.Account(nil)
-account.Load(nil, nil)
+currency := client.Currency(nil)
+currency.Load(nil, nil)
 
-// account.Data() now returns the account data from the last load
-// account.Match() returns the last match criteria
+// currency.Data() now returns the currency data from the last load
+// currency.Match() returns the last match criteria
 ```
 
 Call `Make()` to create a fresh instance with the same configuration

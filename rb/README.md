@@ -36,7 +36,7 @@ client = ForeignExchangeRatesSDK.new({
 
 ```ruby
 begin
-  # load returns the bare Account record (raises on error).
+  # load returns the ENTITY — call data_get for the Account record (raises on error).
   account = client.Account.load()
   puts account
 rescue => err
@@ -51,7 +51,7 @@ Entity operations raise on failure, so rescue them:
 
 ```ruby
 begin
-  account = client.Account.load()
+  currency = client.Currency.load()
 rescue => err
   warn "load failed: #{err}"
 end
@@ -119,9 +119,10 @@ Create a mock client for unit testing — no server required:
 ```ruby
 client = ForeignExchangeRatesSDK.test
 
-# Entity ops return the bare mock record (raises on error).
-account = client.Account.load()
-puts account
+# Entity ops return the ENTITY (raises on error);
+# call data_get for the mock record.
+currency = client.Currency.load()
+puts currency
 ```
 
 ### Use a custom fetch function
@@ -244,10 +245,9 @@ returns a result `Hash` with these keys:
 
 | Field | Description |
 | --- | --- |
-| `email` |  |
-| `key` |  |
-| `org` |  |
-| `usage` |  |
+| `calls_this_month` |  |
+| `limit` |  |
+| `resets_on` |  |
 
 Operations: Load.
 
@@ -258,10 +258,10 @@ API path: `/v1/account`
 | Field | Description |
 | --- | --- |
 | `amount` |  |
-| `conversion` |  |
+| `conversions` |  |
 | `converted` |  |
 | `from` |  |
-| `pair` |  |
+| `pairs` |  |
 | `to` |  |
 
 Operations: Create, List.
@@ -272,7 +272,7 @@ API path: `/v1/convert`
 
 | Field | Description |
 | --- | --- |
-| `decimal` |  |
+| `decimals` |  |
 | `derived` |  |
 | `name` |  |
 | `type` |  |
@@ -285,12 +285,6 @@ API path: `/v1/currencies`
 
 | Field | Description |
 | --- | --- |
-| `base` |  |
-| `end_date` |  |
-| `has_more` |  |
-| `next_cursor` |  |
-| `rate` |  |
-| `start_date` |  |
 
 Operations: Load.
 
@@ -301,17 +295,12 @@ API path: `/v1/range`
 | Field | Description |
 | --- | --- |
 | `base` |  |
-| `data_updated_at` |  |
 | `derivation_bps_max` |  |
 | `derived` |  |
-| `is_forward_filled` |  |
-| `market_session` |  |
-| `notice` |  |
 | `pair` |  |
 | `quote` |  |
 | `rate` |  |
 | `source` |  |
-| `timestamp` |  |
 
 Operations: Load.
 
@@ -336,15 +325,14 @@ Create an instance: `account = client.Account`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `email` | `String` |  |
-| `key` | `String` |  |
-| `org` | `String` |  |
-| `usage` | `Hash` |  |
+| `calls_this_month` | `Integer` |  |
+| `limit` | `Integer` |  |
+| `resets_on` | `String` |  |
 
 #### Example: Load
 
 ```ruby
-# load returns the bare Account record (raises on error).
+# load returns the ENTITY — call data_get for the Account record (raises on error).
 account = client.Account.load()
 ```
 
@@ -365,10 +353,10 @@ Create an instance: `convert = client.Convert`
 | Field | Type | Description |
 | --- | --- | --- |
 | `amount` | `Float` |  |
-| `conversion` | `Array` |  |
+| `conversions` | `Array` |  |
 | `converted` | `Float` |  |
 | `from` | `String` |  |
-| `pair` | `Array` |  |
+| `pairs` | `Array` |  |
 | `to` | `String` |  |
 
 #### Example: List
@@ -382,7 +370,7 @@ converts = client.Convert.list
 
 ```ruby
 convert = client.Convert.create({
-  "pair" => [], # Array
+  "pairs" => [], # Array
 })
 ```
 
@@ -401,7 +389,7 @@ Create an instance: `currency = client.Currency`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `decimal` | `Integer` |  |
+| `decimals` | `Integer` |  |
 | `derived` | `Boolean` |  |
 | `name` | `String` |  |
 | `type` | `String` |  |
@@ -409,7 +397,7 @@ Create an instance: `currency = client.Currency`
 #### Example: Load
 
 ```ruby
-# load returns the bare Currency record (raises on error).
+# load returns the ENTITY — call data_get for the Currency record (raises on error).
 currency = client.Currency.load()
 ```
 
@@ -424,21 +412,10 @@ Create an instance: `range = client.Range`
 | --- | --- |
 | `load(match)` | Load a single entity by match criteria. |
 
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `base` | `String` |  |
-| `end_date` | `String` |  |
-| `has_more` | `Boolean` |  |
-| `next_cursor` | `String` |  |
-| `rate` | `Hash` |  |
-| `start_date` | `String` |  |
-
 #### Example: Load
 
 ```ruby
-# load returns the bare Range record (raises on error).
+# load returns the ENTITY — call data_get for the Range record (raises on error).
 range = client.Range.load()
 ```
 
@@ -458,22 +435,17 @@ Create an instance: `rate = client.Rate`
 | Field | Type | Description |
 | --- | --- | --- |
 | `base` | `String` |  |
-| `data_updated_at` | `String` |  |
 | `derivation_bps_max` | `Float` |  |
 | `derived` | `Boolean` |  |
-| `is_forward_filled` | `Boolean` |  |
-| `market_session` | `String` |  |
-| `notice` | `String` |  |
 | `pair` | `String` |  |
 | `quote` | `String` |  |
-| `rate` | `Hash` |  |
+| `rate` | `Float` |  |
 | `source` | `String` |  |
-| `timestamp` | `Integer` |  |
 
 #### Example: Load
 
 ```ruby
-# load returns the bare Rate record (raises on error).
+# load returns the ENTITY — call data_get for the Rate record (raises on error).
 rate = client.Rate.load({ "id" => "rate_id" })
 ```
 
@@ -554,11 +526,11 @@ Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```ruby
-account = client.Account
-account.load()
+currency = client.Currency
+currency.load()
 
-# account.data_get now returns the account data from the last load
-# account.match_get returns the last match criteria
+# currency.data_get now returns the currency data from the last load
+# currency.match_get returns the last match criteria
 ```
 
 Call `make` to create a fresh instance with the same configuration

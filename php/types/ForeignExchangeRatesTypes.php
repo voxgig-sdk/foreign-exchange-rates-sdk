@@ -15,29 +15,27 @@ declare(strict_types=1);
 /** Account entity data model. */
 class Account
 {
-    public ?string $email = null;
-    public ?string $key = null;
-    public ?string $org = null;
-    public ?array $usage = null;
+    public ?int $calls_this_month = null;
+    public ?int $limit = null;
+    public ?string $resets_on = null;
 }
 
 /** Request payload for Account#load. */
 class AccountLoadMatch
 {
-    public ?string $email = null;
-    public ?string $key = null;
-    public ?string $org = null;
-    public ?array $usage = null;
+    public ?int $calls_this_month = null;
+    public ?int $limit = null;
+    public ?string $resets_on = null;
 }
 
 /** Convert entity data model. */
 class Convert
 {
     public ?float $amount = null;
-    public ?array $conversion = null;
+    public ?array $conversions = null;
     public ?float $converted = null;
     public ?string $from = null;
-    public array $pair;
+    public array $pairs;
     public ?string $to = null;
 }
 
@@ -53,17 +51,17 @@ class ConvertListMatch
 class ConvertCreateData
 {
     public ?float $amount = null;
-    public ?array $conversion = null;
+    public ?array $conversions = null;
     public ?float $converted = null;
     public ?string $from = null;
-    public array $pair;
+    public array $pairs;
     public ?string $to = null;
 }
 
 /** Currency entity data model. */
 class Currency
 {
-    public ?int $decimal = null;
+    public ?int $decimals = null;
     public ?bool $derived = null;
     public ?string $name = null;
     public ?string $type = null;
@@ -72,7 +70,7 @@ class Currency
 /** Request payload for Currency#load. */
 class CurrencyLoadMatch
 {
-    public ?int $decimal = null;
+    public ?int $decimals = null;
     public ?bool $derived = null;
     public ?string $name = null;
     public ?string $type = null;
@@ -81,40 +79,23 @@ class CurrencyLoadMatch
 /** Range entity data model. */
 class Range
 {
-    public ?string $base = null;
-    public ?string $end_date = null;
-    public ?bool $has_more = null;
-    public ?string $next_cursor = null;
-    public ?array $rate = null;
-    public ?string $start_date = null;
 }
 
 /** Request payload for Range#load. */
 class RangeLoadMatch
 {
-    public ?string $base = null;
-    public ?string $end_date = null;
-    public ?bool $has_more = null;
-    public ?string $next_cursor = null;
-    public ?array $rate = null;
-    public ?string $start_date = null;
 }
 
 /** Rate entity data model. */
 class Rate
 {
     public ?string $base = null;
-    public ?string $data_updated_at = null;
     public ?float $derivation_bps_max = null;
     public ?bool $derived = null;
-    public ?bool $is_forward_filled = null;
-    public ?string $market_session = null;
-    public ?string $notice = null;
     public ?string $pair = null;
     public ?string $quote = null;
-    public ?array $rate = null;
+    public ?float $rate = null;
     public ?string $source = null;
-    public ?int $timestamp = null;
 }
 
 /** Request payload for Rate#load. */

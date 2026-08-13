@@ -85,16 +85,16 @@ function convert_direct_setup(mockres)
   local calls = {}
 
   local env = runner.env_override({
-    ["FOREIGNEXCHANGERATES_TEST_CONVERT_ENTID"] = {},
-    ["FOREIGNEXCHANGERATES_TEST_LIVE"] = "FALSE",
-    ["FOREIGNEXCHANGERATES_APIKEY"] = "NONE",
+    ["FOREIGN_EXCHANGE_RATES_TEST_CONVERT_ENTID"] = {},
+    ["FOREIGN_EXCHANGE_RATES_TEST_LIVE"] = "FALSE",
+    ["FOREIGN_EXCHANGE_RATES_APIKEY"] = "NONE",
   })
 
-  local live = env["FOREIGNEXCHANGERATES_TEST_LIVE"] == "TRUE"
+  local live = env["FOREIGN_EXCHANGE_RATES_TEST_LIVE"] == "TRUE"
 
   if live then
     local merged_opts = {
-      apikey = env["FOREIGNEXCHANGERATES_APIKEY"],
+      apikey = env["FOREIGN_EXCHANGE_RATES_APIKEY"],
     }
     local client = sdk.new(merged_opts)
     return {

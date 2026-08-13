@@ -6,31 +6,33 @@
 // @voxgig/apidef VALID_CANON). Do not edit by hand.
 package entity
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"github.com/voxgig-sdk/foreign-exchange-rates-sdk/go/core"
+)
 
 // Account is the typed data model for the account entity.
 type Account struct {
-	Email *string `json:"email,omitempty"`
-	Key *string `json:"key,omitempty"`
-	Org *string `json:"org,omitempty"`
-	Usage *map[string]any `json:"usage,omitempty"`
+	CallsThisMonth *int `json:"calls_this_month,omitempty"`
+	Limit *int `json:"limit,omitempty"`
+	ResetsOn *string `json:"resets_on,omitempty"`
 }
 
 // AccountLoadMatch is the typed request payload for Account.LoadTyped.
 type AccountLoadMatch struct {
-	Email *string `json:"email,omitempty"`
-	Key *string `json:"key,omitempty"`
-	Org *string `json:"org,omitempty"`
-	Usage *map[string]any `json:"usage,omitempty"`
+	CallsThisMonth *int `json:"calls_this_month,omitempty"`
+	Limit *int `json:"limit,omitempty"`
+	ResetsOn *string `json:"resets_on,omitempty"`
 }
 
 // Convert is the typed data model for the convert entity.
 type Convert struct {
 	Amount *float64 `json:"amount,omitempty"`
-	Conversion *[]any `json:"conversion,omitempty"`
+	Conversions *[]any `json:"conversions,omitempty"`
 	Converted *float64 `json:"converted,omitempty"`
 	From *string `json:"from,omitempty"`
-	Pair []any `json:"pair"`
+	Pairs []any `json:"pairs"`
 	To *string `json:"to,omitempty"`
 }
 
@@ -44,16 +46,16 @@ type ConvertListMatch struct {
 // ConvertCreateData is the typed request payload for Convert.CreateTyped.
 type ConvertCreateData struct {
 	Amount *float64 `json:"amount,omitempty"`
-	Conversion *[]any `json:"conversion,omitempty"`
+	Conversions *[]any `json:"conversions,omitempty"`
 	Converted *float64 `json:"converted,omitempty"`
 	From *string `json:"from,omitempty"`
-	Pair []any `json:"pair"`
+	Pairs []any `json:"pairs"`
 	To *string `json:"to,omitempty"`
 }
 
 // Currency is the typed data model for the currency entity.
 type Currency struct {
-	Decimal *int `json:"decimal,omitempty"`
+	Decimals *int `json:"decimals,omitempty"`
 	Derived *bool `json:"derived,omitempty"`
 	Name *string `json:"name,omitempty"`
 	Type *string `json:"type,omitempty"`
@@ -61,7 +63,7 @@ type Currency struct {
 
 // CurrencyLoadMatch is the typed request payload for Currency.LoadTyped.
 type CurrencyLoadMatch struct {
-	Decimal *int `json:"decimal,omitempty"`
+	Decimals *int `json:"decimals,omitempty"`
 	Derived *bool `json:"derived,omitempty"`
 	Name *string `json:"name,omitempty"`
 	Type *string `json:"type,omitempty"`
@@ -69,38 +71,21 @@ type CurrencyLoadMatch struct {
 
 // Range is the typed data model for the range entity.
 type Range struct {
-	Base *string `json:"base,omitempty"`
-	EndDate *string `json:"end_date,omitempty"`
-	HasMore *bool `json:"has_more,omitempty"`
-	NextCursor *string `json:"next_cursor,omitempty"`
-	Rate *map[string]any `json:"rate,omitempty"`
-	StartDate *string `json:"start_date,omitempty"`
 }
 
 // RangeLoadMatch is the typed request payload for Range.LoadTyped.
 type RangeLoadMatch struct {
-	Base *string `json:"base,omitempty"`
-	EndDate *string `json:"end_date,omitempty"`
-	HasMore *bool `json:"has_more,omitempty"`
-	NextCursor *string `json:"next_cursor,omitempty"`
-	Rate *map[string]any `json:"rate,omitempty"`
-	StartDate *string `json:"start_date,omitempty"`
 }
 
 // Rate is the typed data model for the rate entity.
 type Rate struct {
 	Base *string `json:"base,omitempty"`
-	DataUpdatedAt *string `json:"data_updated_at,omitempty"`
 	DerivationBpsMax *float64 `json:"derivation_bps_max,omitempty"`
 	Derived *bool `json:"derived,omitempty"`
-	IsForwardFilled *bool `json:"is_forward_filled,omitempty"`
-	MarketSession *string `json:"market_session,omitempty"`
-	Notice *string `json:"notice,omitempty"`
 	Pair *string `json:"pair,omitempty"`
 	Quote *string `json:"quote,omitempty"`
-	Rate *map[string]any `json:"rate,omitempty"`
+	Rate *float64 `json:"rate,omitempty"`
 	Source *string `json:"source,omitempty"`
-	Timestamp *int `json:"timestamp,omitempty"`
 }
 
 // RateLoadMatch is the typed request payload for Rate.LoadTyped.
@@ -121,12 +106,26 @@ func asMap(v any) map[string]any {
 	return out
 }
 
-// typedFrom decodes a runtime value (a map[string]any produced by the op
-// pipeline) into a typed model T via a JSON round-trip. On any error it
-// returns the zero value of T; the op's own (value, error) tuple carries the
-// real error.
+// entityData unwraps an entity to its data map.
+//
+// Operations resolve to the ENTITY, not the raw data (see AGENTS.md), and an
+// entity's fields are UNEXPORTED — marshalling one directly yields `{}`, so
+// every typed accessor would silently hand back a zero-valued struct. The
+// typed boundary therefore takes the data hop first.
+func entityData(v any) any {
+	if ent, ok := v.(core.Entity); ok {
+		return ent.Data()
+	}
+	return v
+}
+
+// typedFrom decodes a runtime value (an entity, or the map[string]any the op
+// pipeline produced) into a typed model T via a JSON round-trip. On any error
+// it returns the zero value of T; the op's own (value, error) tuple carries
+// the real error.
 func typedFrom[T any](v any) T {
 	var out T
+	v = entityData(v)
 	if v == nil {
 		return out
 	}
@@ -138,12 +137,20 @@ func typedFrom[T any](v any) T {
 	return out
 }
 
-// typedSliceFrom decodes a runtime list value ([]any of maps) into a typed
-// slice []T via a JSON round-trip, for list ops.
+// typedSliceFrom decodes a runtime list value into a typed slice []T via a
+// JSON round-trip, for list ops. `list` resolves to a slice of ENTITY
+// instances, so each element takes the data hop.
 func typedSliceFrom[T any](v any) []T {
 	var out []T
 	if v == nil {
 		return out
+	}
+	if list, ok := v.([]any); ok {
+		unwrapped := make([]any, 0, len(list))
+		for _, item := range list {
+			unwrapped = append(unwrapped, entityData(item))
+		}
+		v = unwrapped
 	}
 	b, err := json.Marshal(v)
 	if err != nil {

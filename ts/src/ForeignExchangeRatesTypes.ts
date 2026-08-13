@@ -6,25 +6,23 @@
 // @voxgig/apidef VALID_CANON). Do not edit by hand.
 
 export interface Account {
-  email?: string
-  key?: string
-  org?: string
-  usage?: Record<string, any>
+  calls_this_month?: number
+  limit?: number
+  resets_on?: string
 }
 
 export interface AccountLoadMatch {
-  email?: string
-  key?: string
-  org?: string
-  usage?: Record<string, any>
+  calls_this_month?: number
+  limit?: number
+  resets_on?: string
 }
 
 export interface Convert {
   amount?: number
-  conversion?: any[]
+  conversions?: any[]
   converted?: number
   from?: string
-  pair: any[]
+  pairs: any[]
   to?: string
 }
 
@@ -36,58 +34,41 @@ export interface ConvertListMatch {
 
 export interface ConvertCreateData {
   amount?: number
-  conversion?: any[]
+  conversions?: any[]
   converted?: number
   from?: string
-  pair: any[]
+  pairs: any[]
   to?: string
 }
 
 export interface Currency {
-  decimal?: number
+  decimals?: number
   derived?: boolean
   name?: string
   type?: string
 }
 
 export interface CurrencyLoadMatch {
-  decimal?: number
+  decimals?: number
   derived?: boolean
   name?: string
   type?: string
 }
 
 export interface Range {
-  base?: string
-  end_date?: string
-  has_more?: boolean
-  next_cursor?: string
-  rate?: Record<string, any>
-  start_date?: string
 }
 
 export interface RangeLoadMatch {
-  base?: string
-  end_date?: string
-  has_more?: boolean
-  next_cursor?: string
-  rate?: Record<string, any>
-  start_date?: string
 }
 
 export interface Rate {
   base?: string
-  data_updated_at?: string
   derivation_bps_max?: number
   derived?: boolean
-  is_forward_filled?: boolean
-  market_session?: string
-  notice?: string
   pair?: string
   quote?: string
-  rate?: Record<string, any>
+  rate?: number
   source?: string
-  timestamp?: number
 }
 
 export interface RateLoadMatch {

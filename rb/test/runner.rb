@@ -23,8 +23,8 @@ module ForeignExchangeRatesTestRunner
   end
 
   def self.env_override(m)
-    live = getenv("FOREIGNEXCHANGERATES_TEST_LIVE")
-    override = getenv("FOREIGNEXCHANGERATES_TEST_OVERRIDE")
+    live = getenv("FOREIGN_EXCHANGE_RATES_TEST_LIVE")
+    override = getenv("FOREIGN_EXCHANGE_RATES_TEST_OVERRIDE")
 
     if live == "TRUE" || override == "TRUE"
       m.each_key do |key|
@@ -44,8 +44,8 @@ module ForeignExchangeRatesTestRunner
       end
     end
 
-    explain = getenv("FOREIGNEXCHANGERATES_TEST_EXPLAIN")
-    m["FOREIGNEXCHANGERATES_TEST_EXPLAIN"] = explain if explain && !explain.empty?
+    explain = getenv("FOREIGN_EXCHANGE_RATES_TEST_EXPLAIN")
+    m["FOREIGN_EXCHANGE_RATES_TEST_EXPLAIN"] = explain if explain && !explain.empty?
 
     m
   end

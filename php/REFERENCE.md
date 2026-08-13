@@ -109,10 +109,9 @@ $account = $client->Account();
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `email` | `string` | No |  |
-| `key` | `string` | No |  |
-| `org` | `string` | No |  |
-| `usage` | `array` | No |  |
+| `calls_this_month` | `int` | No |  |
+| `limit` | `int` | No |  |
+| `resets_on` | `string` | No |  |
 
 ### Operations
 
@@ -165,10 +164,10 @@ $convert = $client->Convert();
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `amount` | `float` | No |  |
-| `conversion` | `array` | No |  |
+| `conversions` | `array` | No |  |
 | `converted` | `float` | No |  |
 | `from` | `string` | No |  |
-| `pair` | `array` | Yes |  |
+| `pairs` | `array` | Yes |  |
 | `to` | `string` | No |  |
 
 ### Field Usage by Operation
@@ -176,10 +175,10 @@ $convert = $client->Convert();
 | Field | list | create |
 | --- | --- | --- |
 | `amount` | - | - |
-| `conversion` | - | - |
+| `conversions` | - | - |
 | `converted` | - | - |
 | `from` | - | Yes |
-| `pair` | - | - |
+| `pairs` | - | - |
 | `to` | - | - |
 
 ### Operations
@@ -190,7 +189,7 @@ Create a new entity with the given data. Throws on error.
 
 ```php
 $result = $client->Convert()->create([
-  "pair" => null, // array
+  "pairs" => null, // array
 ]);
 ```
 
@@ -242,7 +241,7 @@ $currency = $client->Currency();
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `decimal` | `int` | No |  |
+| `decimals` | `int` | No |  |
 | `derived` | `bool` | No |  |
 | `name` | `string` | No |  |
 | `type` | `string` | No |  |
@@ -292,17 +291,6 @@ Return the entity name.
 ```php
 $range = $client->Range();
 ```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `base` | `string` | No |  |
-| `end_date` | `string` | No |  |
-| `has_more` | `bool` | No |  |
-| `next_cursor` | `string` | No |  |
-| `rate` | `array` | No |  |
-| `start_date` | `string` | No |  |
 
 ### Operations
 
@@ -355,17 +343,12 @@ $rate = $client->Rate();
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `base` | `string` | No |  |
-| `data_updated_at` | `string` | No |  |
 | `derivation_bps_max` | `float` | No |  |
 | `derived` | `bool` | No |  |
-| `is_forward_filled` | `bool` | No |  |
-| `market_session` | `string` | No |  |
-| `notice` | `string` | No |  |
 | `pair` | `string` | No |  |
 | `quote` | `string` | No |  |
-| `rate` | `array` | No |  |
+| `rate` | `float` | No |  |
 | `source` | `string` | No |  |
-| `timestamp` | `int` | No |  |
 
 ### Operations
 

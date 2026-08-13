@@ -41,7 +41,7 @@ client = ForeignExchangeRatesSDK({
 
 ### 3. Load an account
 
-`load()` returns the bare record (a `dict`) and raises on error.
+`load()` returns the ENTITY — call data_get() for the record — and raises on error.
 
 ```python
 try:
@@ -58,8 +58,8 @@ Entity operations raise on failure, so wrap them in `try` / `except`:
 
 ```python
 try:
-    account = client.Account().load()
-    print(account)
+    currency = client.Currency().load()
+    print(currency)
 except Exception as err:
     print(f"load failed: {err}")
 ```
@@ -125,9 +125,10 @@ Create a mock client for unit testing — no server required:
 ```python
 client = ForeignExchangeRatesSDK.test()
 
-# Entity ops return the bare record and raise on error.
-account = client.Account().load()
-# account contains the mock response record
+# Entity ops return the ENTITY and raises on error;
+# call data_get() for the record.
+currency = client.Currency().load()
+# currency contains the mock response record
 ```
 
 ### Use a custom fetch function
@@ -229,7 +230,7 @@ All entities share the same interface.
 
 ### Result shape
 
-Entity operations return the bare result data (a `dict` for single-entity
+Entity operations return the ENTITY (call data_get() for the record) (a `dict` for single-entity
 ops, a `list` for `list`) and raise on error. Wrap calls in
 `try`/`except` to handle failures.
 
@@ -251,10 +252,9 @@ On error, `ok` is `False` and `err` contains the error value.
 
 | Field | Description |
 | --- | --- |
-| `email` |  |
-| `key` |  |
-| `org` |  |
-| `usage` |  |
+| `calls_this_month` |  |
+| `limit` |  |
+| `resets_on` |  |
 
 Operations: Load.
 
@@ -265,10 +265,10 @@ API path: `/v1/account`
 | Field | Description |
 | --- | --- |
 | `amount` |  |
-| `conversion` |  |
+| `conversions` |  |
 | `converted` |  |
 | `from` |  |
-| `pair` |  |
+| `pairs` |  |
 | `to` |  |
 
 Operations: Create, List.
@@ -279,7 +279,7 @@ API path: `/v1/convert`
 
 | Field | Description |
 | --- | --- |
-| `decimal` |  |
+| `decimals` |  |
 | `derived` |  |
 | `name` |  |
 | `type` |  |
@@ -292,12 +292,6 @@ API path: `/v1/currencies`
 
 | Field | Description |
 | --- | --- |
-| `base` |  |
-| `end_date` |  |
-| `has_more` |  |
-| `next_cursor` |  |
-| `rate` |  |
-| `start_date` |  |
 
 Operations: Load.
 
@@ -308,17 +302,12 @@ API path: `/v1/range`
 | Field | Description |
 | --- | --- |
 | `base` |  |
-| `data_updated_at` |  |
 | `derivation_bps_max` |  |
 | `derived` |  |
-| `is_forward_filled` |  |
-| `market_session` |  |
-| `notice` |  |
 | `pair` |  |
 | `quote` |  |
 | `rate` |  |
 | `source` |  |
-| `timestamp` |  |
 
 Operations: Load.
 
@@ -343,10 +332,9 @@ Create an instance: `account = client.Account()`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `email` | `str` |  |
-| `key` | `str` |  |
-| `org` | `str` |  |
-| `usage` | `dict` |  |
+| `calls_this_month` | `int` |  |
+| `limit` | `int` |  |
+| `resets_on` | `str` |  |
 
 #### Example: Load
 
@@ -371,23 +359,23 @@ Create an instance: `convert = client.Convert()`
 | Field | Type | Description |
 | --- | --- | --- |
 | `amount` | `float` |  |
-| `conversion` | `list` |  |
+| `conversions` | `list` |  |
 | `converted` | `float` |  |
 | `from` | `str` |  |
-| `pair` | `list` |  |
+| `pairs` | `list` |  |
 | `to` | `str` |  |
 
 #### Example: List
 
 ```python
-converts = client.Convert().list()
+converts = client.Convert().list({"amount": 1, "from": "example", "to": "example"})
 ```
 
 #### Example: Create
 
 ```python
 convert = client.Convert().create({
-    "pair": [],  # list
+    "pairs": [],  # list
 })
 ```
 
@@ -406,7 +394,7 @@ Create an instance: `currency = client.Currency()`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `decimal` | `int` |  |
+| `decimals` | `int` |  |
 | `derived` | `bool` |  |
 | `name` | `str` |  |
 | `type` | `str` |  |
@@ -427,17 +415,6 @@ Create an instance: `range = client.Range()`
 | Method | Description |
 | --- | --- |
 | `load(match)` | Load a single entity by match criteria. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `base` | `str` |  |
-| `end_date` | `str` |  |
-| `has_more` | `bool` |  |
-| `next_cursor` | `str` |  |
-| `rate` | `dict` |  |
-| `start_date` | `str` |  |
 
 #### Example: Load
 
@@ -461,17 +438,12 @@ Create an instance: `rate = client.Rate()`
 | Field | Type | Description |
 | --- | --- | --- |
 | `base` | `str` |  |
-| `data_updated_at` | `str` |  |
 | `derivation_bps_max` | `float` |  |
 | `derived` | `bool` |  |
-| `is_forward_filled` | `bool` |  |
-| `market_session` | `str` |  |
-| `notice` | `str` |  |
 | `pair` | `str` |  |
 | `quote` | `str` |  |
-| `rate` | `dict` |  |
+| `rate` | `float` |  |
 | `source` | `str` |  |
-| `timestamp` | `int` |  |
 
 #### Example: Load
 
@@ -555,11 +527,11 @@ Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```python
-account = client.Account()
-account.load()
+currency = client.Currency()
+currency.load()
 
-# account.data_get() now returns the account data from the last load
-# account.match_get() returns the last match criteria
+# currency.data_get() now returns the currency data from the last load
+# currency.match_get() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

@@ -2,44 +2,19 @@
   "existing": {
     "range": {
       "RANGE00": {
-        "base": "s3c",
-        "end_date": "s3d",
-        "has_more": true,
-        "next_cursor": "s3f",
-        "rate": {},
-        "start_date": "s41",
         "id": "RANGE00"
       },
       "RANGE01": {
-        "base": "s78",
-        "end_date": "s79",
-        "has_more": true,
-        "next_cursor": "s7b",
-        "rate": {},
-        "start_date": "s7d",
         "id": "RANGE01"
       },
       "RANGE02": {
-        "base": "sb4",
-        "end_date": "sb5",
-        "has_more": true,
-        "next_cursor": "sb7",
-        "rate": {},
-        "start_date": "sb9",
         "id": "RANGE02"
       }
     }
   },
   "new": {
     "range": {
-      "range_ref01": {
-        "base": "sf0",
-        "end_date": "sf1",
-        "has_more": true,
-        "next_cursor": "sf3",
-        "rate": {},
-        "start_date": "sf5"
-      }
+      "range_ref01": {}
     }
   }
 }

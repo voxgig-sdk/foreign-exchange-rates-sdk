@@ -1,4 +1,4 @@
-# ProjectName SDK exists test
+# ForeignExchangeRates SDK exists test
 
 import pytest
 from foreignexchangerates_sdk import ForeignExchangeRatesSDK

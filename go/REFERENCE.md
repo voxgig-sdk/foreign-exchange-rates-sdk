@@ -115,10 +115,9 @@ fmt.Println(account.GetName()) // "account"
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `email` | `string` | No |  |
-| `key` | `string` | No |  |
-| `org` | `string` | No |  |
-| `usage` | `map[string]any` | No |  |
+| `calls_this_month` | `int` | No |  |
+| `limit` | `int` | No |  |
+| `resets_on` | `string` | No |  |
 
 ### Operations
 
@@ -170,10 +169,10 @@ fmt.Println(convert.GetName()) // "convert"
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `amount` | `float64` | No |  |
-| `conversion` | `[]any` | No |  |
+| `conversions` | `[]any` | No |  |
 | `converted` | `float64` | No |  |
 | `from` | `string` | No |  |
-| `pair` | `[]any` | Yes |  |
+| `pairs` | `[]any` | Yes |  |
 | `to` | `string` | No |  |
 
 ### Field Usage by Operation
@@ -181,10 +180,10 @@ fmt.Println(convert.GetName()) // "convert"
 | Field | list | create |
 | --- | --- | --- |
 | `amount` | - | - |
-| `conversion` | - | - |
+| `conversions` | - | - |
 | `converted` | - | - |
 | `from` | - | Yes |
-| `pair` | - | - |
+| `pairs` | - | - |
 | `to` | - | - |
 
 ### Operations
@@ -207,7 +206,7 @@ Create a new entity with the given data.
 
 ```go
 result, err := client.Convert(nil).Create(map[string]any{
-    "pair": []any{},
+    "pairs": []any{},
 }, nil)
 if err != nil {
     panic(err)
@@ -250,7 +249,7 @@ fmt.Println(currency.GetName()) // "currency"
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `decimal` | `int` | No |  |
+| `decimals` | `int` | No |  |
 | `derived` | `bool` | No |  |
 | `name` | `string` | No |  |
 | `type` | `string` | No |  |
@@ -299,17 +298,6 @@ Return the entity name.
 range_ := client.Range(nil)
 fmt.Println(range_.GetName()) // "range"
 ```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `base` | `string` | No |  |
-| `end_date` | `string` | No |  |
-| `has_more` | `bool` | No |  |
-| `next_cursor` | `string` | No |  |
-| `rate` | `map[string]any` | No |  |
-| `start_date` | `string` | No |  |
 
 ### Operations
 
@@ -361,17 +349,12 @@ fmt.Println(rate.GetName()) // "rate"
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `base` | `string` | No |  |
-| `data_updated_at` | `string` | No |  |
 | `derivation_bps_max` | `float64` | No |  |
 | `derived` | `bool` | No |  |
-| `is_forward_filled` | `bool` | No |  |
-| `market_session` | `string` | No |  |
-| `notice` | `string` | No |  |
 | `pair` | `string` | No |  |
 | `quote` | `string` | No |  |
-| `rate` | `map[string]any` | No |  |
+| `rate` | `float64` | No |  |
 | `source` | `string` | No |  |
-| `timestamp` | `int` | No |  |
 
 ### Operations
 

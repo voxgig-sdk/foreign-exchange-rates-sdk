@@ -33,31 +33,24 @@ func MakeConfig() map[string]any {
 				"fields": []any{
 					map[string]any{
 						"active": true,
-						"name": "email",
+						"name": "calls_this_month",
 						"req": false,
-						"type": "`$STRING`",
+						"type": "`$INTEGER`",
 						"index$": 0,
 					},
 					map[string]any{
 						"active": true,
-						"name": "key",
+						"name": "limit",
 						"req": false,
-						"type": "`$STRING`",
+						"type": "`$INTEGER`",
 						"index$": 1,
 					},
 					map[string]any{
 						"active": true,
-						"name": "org",
+						"name": "resets_on",
 						"req": false,
 						"type": "`$STRING`",
 						"index$": 2,
-					},
-					map[string]any{
-						"active": true,
-						"name": "usage",
-						"req": false,
-						"type": "`$OBJECT`",
-						"index$": 3,
 					},
 				},
 				"name": "account",
@@ -69,6 +62,7 @@ func MakeConfig() map[string]any {
 							map[string]any{
 								"active": true,
 								"args": map[string]any{},
+								"kind": "http",
 								"method": "GET",
 								"orig": "/v1/account",
 								"parts": []any{
@@ -78,12 +72,11 @@ func MakeConfig() map[string]any {
 								"select": map[string]any{},
 								"transform": map[string]any{
 									"req": "`reqdata`",
-									"res": "`body`",
+									"res": "`body.usage`",
 								},
 								"index$": 0,
 							},
 						},
-						"key$": "load",
 					},
 				},
 				"relations": map[string]any{
@@ -101,7 +94,7 @@ func MakeConfig() map[string]any {
 					},
 					map[string]any{
 						"active": true,
-						"name": "conversion",
+						"name": "conversions",
 						"req": false,
 						"type": "`$ARRAY`",
 						"index$": 1,
@@ -128,7 +121,7 @@ func MakeConfig() map[string]any {
 					},
 					map[string]any{
 						"active": true,
-						"name": "pair",
+						"name": "pairs",
 						"req": true,
 						"type": "`$ARRAY`",
 						"index$": 4,
@@ -150,6 +143,7 @@ func MakeConfig() map[string]any {
 							map[string]any{
 								"active": true,
 								"args": map[string]any{},
+								"kind": "http",
 								"method": "POST",
 								"orig": "/v1/convert",
 								"parts": []any{
@@ -164,7 +158,6 @@ func MakeConfig() map[string]any {
 								"index$": 0,
 							},
 						},
-						"key$": "create",
 					},
 					"list": map[string]any{
 						"input": "data",
@@ -206,6 +199,7 @@ func MakeConfig() map[string]any {
 										},
 									},
 								},
+								"kind": "http",
 								"method": "GET",
 								"orig": "/v1/convert/{from}/{to}/{amount}",
 								"parts": []any{
@@ -224,12 +218,11 @@ func MakeConfig() map[string]any {
 								},
 								"transform": map[string]any{
 									"req": "`reqdata`",
-									"res": "`body`",
+									"res": "`body.conversions`",
 								},
 								"index$": 0,
 							},
 						},
-						"key$": "list",
 					},
 				},
 				"relations": map[string]any{
@@ -244,7 +237,7 @@ func MakeConfig() map[string]any {
 				"fields": []any{
 					map[string]any{
 						"active": true,
-						"name": "decimal",
+						"name": "decimals",
 						"req": false,
 						"type": "`$INTEGER`",
 						"index$": 0,
@@ -292,6 +285,7 @@ func MakeConfig() map[string]any {
 										},
 									},
 								},
+								"kind": "http",
 								"method": "GET",
 								"orig": "/v1/currencies",
 								"parts": []any{
@@ -310,7 +304,6 @@ func MakeConfig() map[string]any {
 								"index$": 0,
 							},
 						},
-						"key$": "load",
 					},
 				},
 				"relations": map[string]any{
@@ -318,50 +311,7 @@ func MakeConfig() map[string]any {
 				},
 			},
 			"range": map[string]any{
-				"fields": []any{
-					map[string]any{
-						"active": true,
-						"name": "base",
-						"req": false,
-						"type": "`$STRING`",
-						"index$": 0,
-					},
-					map[string]any{
-						"active": true,
-						"name": "end_date",
-						"req": false,
-						"type": "`$STRING`",
-						"index$": 1,
-					},
-					map[string]any{
-						"active": true,
-						"name": "has_more",
-						"req": false,
-						"type": "`$BOOLEAN`",
-						"index$": 2,
-					},
-					map[string]any{
-						"active": true,
-						"name": "next_cursor",
-						"req": false,
-						"type": "`$STRING`",
-						"index$": 3,
-					},
-					map[string]any{
-						"active": true,
-						"name": "rate",
-						"req": false,
-						"type": "`$OBJECT`",
-						"index$": 4,
-					},
-					map[string]any{
-						"active": true,
-						"name": "start_date",
-						"req": false,
-						"type": "`$STRING`",
-						"index$": 5,
-					},
-				},
+				"fields": []any{},
 				"name": "range",
 				"op": map[string]any{
 					"load": map[string]any{
@@ -419,6 +369,7 @@ func MakeConfig() map[string]any {
 										},
 									},
 								},
+								"kind": "http",
 								"method": "GET",
 								"orig": "/v1/range",
 								"parts": []any{
@@ -436,12 +387,11 @@ func MakeConfig() map[string]any {
 								},
 								"transform": map[string]any{
 									"req": "`reqdata`",
-									"res": "`body`",
+									"res": "`body.rates`",
 								},
 								"index$": 0,
 							},
 						},
-						"key$": "load",
 					},
 				},
 				"relations": map[string]any{
@@ -459,80 +409,45 @@ func MakeConfig() map[string]any {
 					},
 					map[string]any{
 						"active": true,
-						"name": "data_updated_at",
-						"req": false,
-						"type": "`$STRING`",
-						"index$": 1,
-					},
-					map[string]any{
-						"active": true,
 						"name": "derivation_bps_max",
 						"req": false,
 						"type": "`$NUMBER`",
-						"index$": 2,
+						"index$": 1,
 					},
 					map[string]any{
 						"active": true,
 						"name": "derived",
 						"req": false,
 						"type": "`$BOOLEAN`",
-						"index$": 3,
-					},
-					map[string]any{
-						"active": true,
-						"name": "is_forward_filled",
-						"req": false,
-						"type": "`$BOOLEAN`",
-						"index$": 4,
-					},
-					map[string]any{
-						"active": true,
-						"name": "market_session",
-						"req": false,
-						"type": "`$STRING`",
-						"index$": 5,
-					},
-					map[string]any{
-						"active": true,
-						"name": "notice",
-						"req": false,
-						"type": "`$STRING`",
-						"index$": 6,
+						"index$": 2,
 					},
 					map[string]any{
 						"active": true,
 						"name": "pair",
 						"req": false,
 						"type": "`$STRING`",
-						"index$": 7,
+						"index$": 3,
 					},
 					map[string]any{
 						"active": true,
 						"name": "quote",
 						"req": false,
 						"type": "`$STRING`",
-						"index$": 8,
+						"index$": 4,
 					},
 					map[string]any{
 						"active": true,
 						"name": "rate",
 						"req": false,
-						"type": "`$OBJECT`",
-						"index$": 9,
+						"type": "`$NUMBER`",
+						"index$": 5,
 					},
 					map[string]any{
 						"active": true,
 						"name": "source",
 						"req": false,
 						"type": "`$STRING`",
-						"index$": 10,
-					},
-					map[string]any{
-						"active": true,
-						"name": "timestamp",
-						"req": false,
-						"type": "`$INTEGER`",
-						"index$": 11,
+						"index$": 6,
 					},
 				},
 				"name": "rate",
@@ -565,6 +480,7 @@ func MakeConfig() map[string]any {
 										},
 									},
 								},
+								"kind": "http",
 								"method": "GET",
 								"orig": "/v1/latest",
 								"parts": []any{
@@ -579,7 +495,7 @@ func MakeConfig() map[string]any {
 								},
 								"transform": map[string]any{
 									"req": "`reqdata`",
-									"res": "`body`",
+									"res": "`body.rates`",
 								},
 								"index$": 0,
 							},
@@ -610,6 +526,7 @@ func MakeConfig() map[string]any {
 										},
 									},
 								},
+								"kind": "http",
 								"method": "GET",
 								"orig": "/v1/{date}",
 								"parts": []any{
@@ -624,7 +541,7 @@ func MakeConfig() map[string]any {
 								},
 								"transform": map[string]any{
 									"req": "`reqdata`",
-									"res": "`body`",
+									"res": "`body.rates`",
 								},
 								"index$": 1,
 							},
@@ -644,6 +561,7 @@ func MakeConfig() map[string]any {
 										},
 									},
 								},
+								"kind": "http",
 								"method": "GET",
 								"orig": "/v1/rate/{slug}",
 								"parts": []any{
@@ -668,7 +586,6 @@ func MakeConfig() map[string]any {
 								"index$": 2,
 							},
 						},
-						"key$": "load",
 					},
 				},
 				"relations": map[string]any{

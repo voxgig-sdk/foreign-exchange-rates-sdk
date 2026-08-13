@@ -50,7 +50,7 @@ Entity operations return `(value, err)`. Check `err` before using
 the value:
 
 ```lua
-local account, err = client:Account():load()
+local currency, err = client:Currency():load()
 if err then error(err) end
 ```
 
@@ -108,7 +108,7 @@ Create a mock client for unit testing — no server required:
 ```lua
 local client = sdk.test()
 
-local result, err = client:Account():load()
+local result, err = client:Currency():load()
 -- result is the returned data; err is set on failure
 ```
 
@@ -236,10 +236,9 @@ Only `direct()` returns a response envelope — a `table` with `ok`,
 
 | Field | Description |
 | --- | --- |
-| `email` |  |
-| `key` |  |
-| `org` |  |
-| `usage` |  |
+| `calls_this_month` |  |
+| `limit` |  |
+| `resets_on` |  |
 
 Operations: Load.
 
@@ -250,10 +249,10 @@ API path: `/v1/account`
 | Field | Description |
 | --- | --- |
 | `amount` |  |
-| `conversion` |  |
+| `conversions` |  |
 | `converted` |  |
 | `from` |  |
-| `pair` |  |
+| `pairs` |  |
 | `to` |  |
 
 Operations: Create, List.
@@ -264,7 +263,7 @@ API path: `/v1/convert`
 
 | Field | Description |
 | --- | --- |
-| `decimal` |  |
+| `decimals` |  |
 | `derived` |  |
 | `name` |  |
 | `type` |  |
@@ -277,12 +276,6 @@ API path: `/v1/currencies`
 
 | Field | Description |
 | --- | --- |
-| `base` |  |
-| `end_date` |  |
-| `has_more` |  |
-| `next_cursor` |  |
-| `rate` |  |
-| `start_date` |  |
 
 Operations: Load.
 
@@ -293,17 +286,12 @@ API path: `/v1/range`
 | Field | Description |
 | --- | --- |
 | `base` |  |
-| `data_updated_at` |  |
 | `derivation_bps_max` |  |
 | `derived` |  |
-| `is_forward_filled` |  |
-| `market_session` |  |
-| `notice` |  |
 | `pair` |  |
 | `quote` |  |
 | `rate` |  |
 | `source` |  |
-| `timestamp` |  |
 
 Operations: Load.
 
@@ -328,10 +316,9 @@ Create an instance: `local account = client:Account(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `email` | `string` |  |
-| `key` | `string` |  |
-| `org` | `string` |  |
-| `usage` | `table` |  |
+| `calls_this_month` | `number` |  |
+| `limit` | `number` |  |
+| `resets_on` | `string` |  |
 
 #### Example: Load
 
@@ -356,10 +343,10 @@ Create an instance: `local convert = client:Convert(nil)`
 | Field | Type | Description |
 | --- | --- | --- |
 | `amount` | `number` |  |
-| `conversion` | `table` |  |
+| `conversions` | `table` |  |
 | `converted` | `number` |  |
 | `from` | `string` |  |
-| `pair` | `table` |  |
+| `pairs` | `table` |  |
 | `to` | `string` |  |
 
 #### Example: List
@@ -372,7 +359,7 @@ local converts, err = client:Convert():list()
 
 ```lua
 local convert, err = client:Convert():create({
-  pair = {}, -- table
+  pairs = {}, -- table
 })
 ```
 
@@ -391,7 +378,7 @@ Create an instance: `local currency = client:Currency(nil)`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `decimal` | `number` |  |
+| `decimals` | `number` |  |
 | `derived` | `boolean` |  |
 | `name` | `string` |  |
 | `type` | `string` |  |
@@ -412,17 +399,6 @@ Create an instance: `local range = client:Range(nil)`
 | Method | Description |
 | --- | --- |
 | `load(match)` | Load a single entity by match criteria. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `base` | `string` |  |
-| `end_date` | `string` |  |
-| `has_more` | `boolean` |  |
-| `next_cursor` | `string` |  |
-| `rate` | `table` |  |
-| `start_date` | `string` |  |
 
 #### Example: Load
 
@@ -446,17 +422,12 @@ Create an instance: `local rate = client:Rate(nil)`
 | Field | Type | Description |
 | --- | --- | --- |
 | `base` | `string` |  |
-| `data_updated_at` | `string` |  |
 | `derivation_bps_max` | `number` |  |
 | `derived` | `boolean` |  |
-| `is_forward_filled` | `boolean` |  |
-| `market_session` | `string` |  |
-| `notice` | `string` |  |
 | `pair` | `string` |  |
 | `quote` | `string` |  |
-| `rate` | `table` |  |
+| `rate` | `number` |  |
 | `source` | `string` |  |
-| `timestamp` | `number` |  |
 
 #### Example: Load
 
@@ -541,11 +512,11 @@ Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```lua
-local account = client:Account()
-account:load()
+local currency = client:Currency()
+currency:load()
 
--- account:data_get() now returns the account data from the last load
--- account:match_get() returns the last match criteria
+-- currency:data_get() now returns the currency data from the last load
+-- currency:match_get() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

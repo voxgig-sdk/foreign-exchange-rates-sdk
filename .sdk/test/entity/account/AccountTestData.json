@@ -2,24 +2,21 @@
   "existing": {
     "account": {
       "ACCOUNT00": {
-        "email": "s28",
-        "key": "s29",
-        "org": "s2a",
-        "usage": {},
+        "calls_this_month": "s1e",
+        "limit": "s1f",
+        "resets_on": "s20",
         "id": "ACCOUNT00"
       },
       "ACCOUNT01": {
-        "email": "s50",
-        "key": "s51",
-        "org": "s52",
-        "usage": {},
+        "calls_this_month": "s3c",
+        "limit": "s3d",
+        "resets_on": "s3e",
         "id": "ACCOUNT01"
       },
       "ACCOUNT02": {
-        "email": "s78",
-        "key": "s79",
-        "org": "s7a",
-        "usage": {},
+        "calls_this_month": "s5a",
+        "limit": "s5b",
+        "resets_on": "s5c",
         "id": "ACCOUNT02"
       }
     }
@@ -27,10 +24,9 @@
   "new": {
     "account": {
       "account_ref01": {
-        "email": "sa0",
-        "key": "sa1",
-        "org": "sa2",
-        "usage": {}
+        "calls_this_month": "s78",
+        "limit": "s79",
+        "resets_on": "s7a"
       }
     }
   }

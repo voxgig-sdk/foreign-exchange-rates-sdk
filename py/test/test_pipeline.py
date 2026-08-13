@@ -16,11 +16,11 @@
 import pytest
 
 from foreignexchangerates_sdk import ForeignExchangeRatesSDK
-from core.error import ForeignExchangeRatesError
-from core.result import ForeignExchangeRatesResult
-from core.response import ForeignExchangeRatesResponse
-from core.spec import ForeignExchangeRatesSpec
-from feature.base_feature import ForeignExchangeRatesBaseFeature
+from foreignexchangerates_sdk.core.error import ForeignExchangeRatesError
+from foreignexchangerates_sdk.core.result import ForeignExchangeRatesResult
+from foreignexchangerates_sdk.core.response import ForeignExchangeRatesResponse
+from foreignexchangerates_sdk.core.spec import ForeignExchangeRatesSpec
+from foreignexchangerates_sdk.feature.base_feature import ForeignExchangeRatesBaseFeature
 
 
 def _client():

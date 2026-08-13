@@ -7,23 +7,21 @@
 -- edit by hand.
 
 ---@class Account
----@field email? string
----@field key? string
----@field org? string
----@field usage? table
+---@field calls_this_month? number
+---@field limit? number
+---@field resets_on? string
 
 ---@class AccountLoadMatch
----@field email? string
----@field key? string
----@field org? string
----@field usage? table
+---@field calls_this_month? number
+---@field limit? number
+---@field resets_on? string
 
 ---@class Convert
 ---@field amount? number
----@field conversion? table
+---@field conversions? table
 ---@field converted? number
 ---@field from? string
----@field pair table
+---@field pairs table
 ---@field to? string
 
 ---@class ConvertListMatch
@@ -33,53 +31,36 @@
 
 ---@class ConvertCreateData
 ---@field amount? number
----@field conversion? table
+---@field conversions? table
 ---@field converted? number
 ---@field from? string
----@field pair table
+---@field pairs table
 ---@field to? string
 
 ---@class Currency
----@field decimal? number
+---@field decimals? number
 ---@field derived? boolean
 ---@field name? string
 ---@field type? string
 
 ---@class CurrencyLoadMatch
----@field decimal? number
+---@field decimals? number
 ---@field derived? boolean
 ---@field name? string
 ---@field type? string
 
 ---@class Range
----@field base? string
----@field end_date? string
----@field has_more? boolean
----@field next_cursor? string
----@field rate? table
----@field start_date? string
 
 ---@class RangeLoadMatch
----@field base? string
----@field end_date? string
----@field has_more? boolean
----@field next_cursor? string
----@field rate? table
----@field start_date? string
 
 ---@class Rate
 ---@field base? string
----@field data_updated_at? string
 ---@field derivation_bps_max? number
 ---@field derived? boolean
----@field is_forward_filled? boolean
----@field market_session? string
----@field notice? string
 ---@field pair? string
 ---@field quote? string
----@field rate? table
+---@field rate? number
 ---@field source? string
----@field timestamp? number
 
 ---@class RateLoadMatch
 ---@field date? string

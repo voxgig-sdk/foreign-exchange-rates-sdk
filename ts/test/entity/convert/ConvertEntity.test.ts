@@ -26,8 +26,8 @@ import {
 describe('ConvertEntity', async () => {
 
   // Per-test live pacing. Delay is read from sdk-test-control.json's
-  // `test.live.delayMs`; only sleeps when FOREIGNEXCHANGERATES_TEST_LIVE=TRUE.
-  afterEach(liveDelay('FOREIGNEXCHANGERATES_TEST_LIVE'))
+  // `test.live.delayMs`; only sleeps when FOREIGN_EXCHANGE_RATES_TEST_LIVE=TRUE.
+  afterEach(liveDelay('FOREIGN_EXCHANGE_RATES_TEST_LIVE'))
 
   test('instance', async () => {
     const testsdk = ForeignExchangeRatesSDK.test()
@@ -65,7 +65,7 @@ describe('ConvertEntity', async () => {
     convert_ref01_data['from'] = setup.idmap['from01']
     convert_ref01_data['to'] = setup.idmap['to01']
 
-    convert_ref01_data = await convert_ref01_ent.create(convert_ref01_data)
+    convert_ref01_data = (await convert_ref01_ent.create(convert_ref01_data)).data()
     assert(null != convert_ref01_data)
 
 
@@ -75,9 +75,7 @@ describe('ConvertEntity', async () => {
     convert_ref01_match['from'] = setup.idmap['from01']
     convert_ref01_match['to'] = setup.idmap['to01']
 
-    const convert_ref01_list = await convert_ref01_ent.list(convert_ref01_match)
-
-    assert(!isempty(select(convert_ref01_list, { id: convert_ref01_data.id })))
+    const convert_ref01_list = (await convert_ref01_ent.list(convert_ref01_match)).map((e: any) => e.data())
 
 
   })

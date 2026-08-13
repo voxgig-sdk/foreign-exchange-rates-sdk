@@ -6,24 +6,19 @@ main: kit: entity: account: {
 
   fields: [
     {
-      name: "email"
+      name: "calls_this_month"
       req: false
-      type: "`$STRING`"
+      type: "`$INTEGER`"
     }
     {
-      name: "key"
+      name: "limit"
       req: false
-      type: "`$STRING`"
+      type: "`$INTEGER`"
     }
     {
-      name: "org"
+      name: "resets_on"
       req: false
       type: "`$STRING`"
-    }
-    {
-      name: "usage"
-      req: false
-      type: "`$OBJECT`"
     }
   ]
 
@@ -41,7 +36,7 @@ main: kit: entity: account: {
           ]
           transform: {
             req: "`reqdata`"
-            res: "`body`"
+            res: "`body.usage`"
           }
         }
       ]

@@ -21,7 +21,7 @@ class Config {
 
 
   main = {
-    name: 'ProjectName',
+    name: 'ForeignExchangeRates',
   }
 
 
@@ -72,31 +72,24 @@ class Config {
       "fields": [
         {
           "active": true,
-          "name": "email",
+          "name": "calls_this_month",
           "req": false,
-          "type": "`$STRING`",
+          "type": "`$INTEGER`",
           "index$": 0
         },
         {
           "active": true,
-          "name": "key",
+          "name": "limit",
           "req": false,
-          "type": "`$STRING`",
+          "type": "`$INTEGER`",
           "index$": 1
         },
         {
           "active": true,
-          "name": "org",
+          "name": "resets_on",
           "req": false,
           "type": "`$STRING`",
           "index$": 2
-        },
-        {
-          "active": true,
-          "name": "usage",
-          "req": false,
-          "type": "`$OBJECT`",
-          "index$": 3
         }
       ],
       "name": "account",
@@ -108,6 +101,7 @@ class Config {
             {
               "active": true,
               "args": {},
+              "kind": "http",
               "method": "GET",
               "orig": "/v1/account",
               "parts": [
@@ -117,7 +111,7 @@ class Config {
               "select": {},
               "transform": {
                 "req": "`reqdata`",
-                "res": "`body`"
+                "res": "`body.usage`"
               },
               "index$": 0
             }
@@ -140,7 +134,7 @@ class Config {
         },
         {
           "active": true,
-          "name": "conversion",
+          "name": "conversions",
           "req": false,
           "type": "`$ARRAY`",
           "index$": 1
@@ -167,7 +161,7 @@ class Config {
         },
         {
           "active": true,
-          "name": "pair",
+          "name": "pairs",
           "req": true,
           "type": "`$ARRAY`",
           "index$": 4
@@ -189,6 +183,7 @@ class Config {
             {
               "active": true,
               "args": {},
+              "kind": "http",
               "method": "POST",
               "orig": "/v1/convert",
               "parts": [
@@ -245,6 +240,7 @@ class Config {
                   }
                 ]
               },
+              "kind": "http",
               "method": "GET",
               "orig": "/v1/convert/{from}/{to}/{amount}",
               "parts": [
@@ -263,7 +259,7 @@ class Config {
               },
               "transform": {
                 "req": "`reqdata`",
-                "res": "`body`"
+                "res": "`body.conversions`"
               },
               "index$": 0
             }
@@ -283,7 +279,7 @@ class Config {
       "fields": [
         {
           "active": true,
-          "name": "decimal",
+          "name": "decimals",
           "req": false,
           "type": "`$INTEGER`",
           "index$": 0
@@ -331,6 +327,7 @@ class Config {
                   }
                 ]
               },
+              "kind": "http",
               "method": "GET",
               "orig": "/v1/currencies",
               "parts": [
@@ -357,50 +354,7 @@ class Config {
       }
     },
     "range": {
-      "fields": [
-        {
-          "active": true,
-          "name": "base",
-          "req": false,
-          "type": "`$STRING`",
-          "index$": 0
-        },
-        {
-          "active": true,
-          "name": "end_date",
-          "req": false,
-          "type": "`$STRING`",
-          "index$": 1
-        },
-        {
-          "active": true,
-          "name": "has_more",
-          "req": false,
-          "type": "`$BOOLEAN`",
-          "index$": 2
-        },
-        {
-          "active": true,
-          "name": "next_cursor",
-          "req": false,
-          "type": "`$STRING`",
-          "index$": 3
-        },
-        {
-          "active": true,
-          "name": "rate",
-          "req": false,
-          "type": "`$OBJECT`",
-          "index$": 4
-        },
-        {
-          "active": true,
-          "name": "start_date",
-          "req": false,
-          "type": "`$STRING`",
-          "index$": 5
-        }
-      ],
+      "fields": [],
       "name": "range",
       "op": {
         "load": {
@@ -458,6 +412,7 @@ class Config {
                   }
                 ]
               },
+              "kind": "http",
               "method": "GET",
               "orig": "/v1/range",
               "parts": [
@@ -475,7 +430,7 @@ class Config {
               },
               "transform": {
                 "req": "`reqdata`",
-                "res": "`body`"
+                "res": "`body.rates`"
               },
               "index$": 0
             }
@@ -498,80 +453,45 @@ class Config {
         },
         {
           "active": true,
-          "name": "data_updated_at",
-          "req": false,
-          "type": "`$STRING`",
-          "index$": 1
-        },
-        {
-          "active": true,
           "name": "derivation_bps_max",
           "req": false,
           "type": "`$NUMBER`",
-          "index$": 2
+          "index$": 1
         },
         {
           "active": true,
           "name": "derived",
           "req": false,
           "type": "`$BOOLEAN`",
-          "index$": 3
-        },
-        {
-          "active": true,
-          "name": "is_forward_filled",
-          "req": false,
-          "type": "`$BOOLEAN`",
-          "index$": 4
-        },
-        {
-          "active": true,
-          "name": "market_session",
-          "req": false,
-          "type": "`$STRING`",
-          "index$": 5
-        },
-        {
-          "active": true,
-          "name": "notice",
-          "req": false,
-          "type": "`$STRING`",
-          "index$": 6
+          "index$": 2
         },
         {
           "active": true,
           "name": "pair",
           "req": false,
           "type": "`$STRING`",
-          "index$": 7
+          "index$": 3
         },
         {
           "active": true,
           "name": "quote",
           "req": false,
           "type": "`$STRING`",
-          "index$": 8
+          "index$": 4
         },
         {
           "active": true,
           "name": "rate",
           "req": false,
-          "type": "`$OBJECT`",
-          "index$": 9
+          "type": "`$NUMBER`",
+          "index$": 5
         },
         {
           "active": true,
           "name": "source",
           "req": false,
           "type": "`$STRING`",
-          "index$": 10
-        },
-        {
-          "active": true,
-          "name": "timestamp",
-          "req": false,
-          "type": "`$INTEGER`",
-          "index$": 11
+          "index$": 6
         }
       ],
       "name": "rate",
@@ -604,6 +524,7 @@ class Config {
                   }
                 ]
               },
+              "kind": "http",
               "method": "GET",
               "orig": "/v1/latest",
               "parts": [
@@ -618,7 +539,7 @@ class Config {
               },
               "transform": {
                 "req": "`reqdata`",
-                "res": "`body`"
+                "res": "`body.rates`"
               },
               "index$": 0
             },
@@ -649,6 +570,7 @@ class Config {
                   }
                 ]
               },
+              "kind": "http",
               "method": "GET",
               "orig": "/v1/{date}",
               "parts": [
@@ -663,7 +585,7 @@ class Config {
               },
               "transform": {
                 "req": "`reqdata`",
-                "res": "`body`"
+                "res": "`body.rates`"
               },
               "index$": 1
             },
@@ -683,6 +605,7 @@ class Config {
                   }
                 ]
               },
+              "kind": "http",
               "method": "GET",
               "orig": "/v1/rate/{slug}",
               "parts": [

@@ -60,9 +60,10 @@ func TestConvertDirect(t *testing.T) {
 			"params": params,
 		})
 		if setup.live {
-			// Live mode is lenient: synthetic IDs frequently 4xx and the
-			// list-response shape varies wildly across public APIs. Skip
-			// rather than fail when the call doesn't return a usable list.
+			// Live-mode leniency is a model decision
+			// (main.kit.test.live.strict): synthetic IDs 4xx constantly
+			// against an arbitrary public API, so the default SKIPS here.
+			// A project that owns its test server sets strict and FAILS.
 			if err != nil {
 				t.Skipf("list call failed (likely synthetic IDs against live API): %v", err)
 			}
@@ -132,21 +133,21 @@ func convertDirectSetup(mockres any) *convertDirectSetupResult {
 	calls := &[]map[string]any{}
 
 	env := envOverride(map[string]any{
-		"FOREIGNEXCHANGERATES_TEST_CONVERT_ENTID": map[string]any{},
-		"FOREIGNEXCHANGERATES_TEST_LIVE":    "FALSE",
-		"FOREIGNEXCHANGERATES_APIKEY":       "NONE",
+		"FOREIGN_EXCHANGE_RATES_TEST_CONVERT_ENTID": map[string]any{},
+		"FOREIGN_EXCHANGE_RATES_TEST_LIVE":    "FALSE",
+		"FOREIGN_EXCHANGE_RATES_APIKEY":       "NONE",
 	})
 
-	live := env["FOREIGNEXCHANGERATES_TEST_LIVE"] == "TRUE"
+	live := env["FOREIGN_EXCHANGE_RATES_TEST_LIVE"] == "TRUE"
 
 	if live {
 		mergedOpts := map[string]any{
-			"apikey": env["FOREIGNEXCHANGERATES_APIKEY"],
+			"apikey": env["FOREIGN_EXCHANGE_RATES_APIKEY"],
 		}
 		client := sdk.NewForeignExchangeRatesSDK(mergedOpts)
 
 		idmap := map[string]any{}
-		if entidRaw, ok := env["FOREIGNEXCHANGERATES_TEST_CONVERT_ENTID"]; ok {
+		if entidRaw, ok := env["FOREIGN_EXCHANGE_RATES_TEST_CONVERT_ENTID"]; ok {
 			if entidStr, ok := entidRaw.(string); ok && strings.HasPrefix(entidStr, "{") {
 				json.Unmarshal([]byte(entidStr), &idmap)
 			} else if entidMap, ok := entidRaw.(map[string]any); ok {

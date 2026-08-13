@@ -19,11 +19,15 @@ import {
 describe('AccountDirect', async () => {
 
   // Per-test live pacing. Delay is read from sdk-test-control.json's
-  // `test.live.delayMs`; only sleeps when FOREIGNEXCHANGERATES_TEST_LIVE=TRUE.
-  afterEach(liveDelay('FOREIGNEXCHANGERATES_TEST_LIVE'))
+  // `test.live.delayMs`; only sleeps when FOREIGN_EXCHANGE_RATES_TEST_LIVE=TRUE.
+  afterEach(liveDelay('FOREIGN_EXCHANGE_RATES_TEST_LIVE'))
 
   test('direct-exists', async () => {
     const sdk = new ForeignExchangeRatesSDK({
+      // Concrete base: a live construction must satisfy any server
+      // variables a templated base URL declares; overriding base with a
+      // literal (as the direct flow tests do) sidesteps the requirement.
+      base: 'http://localhost:8080',
       system: { fetch: async () => ({}) }
     })
     assert('function' === typeof sdk.direct)
@@ -72,19 +76,19 @@ function directSetup(mockres?: any) {
   const calls: any[] = []
 
   const env = envOverride({
-    'FOREIGNEXCHANGERATES_TEST_ACCOUNT_ENTID': {},
-    'FOREIGNEXCHANGERATES_TEST_LIVE': 'FALSE',
-    'FOREIGNEXCHANGERATES_APIKEY': 'NONE',
+    'FOREIGN_EXCHANGE_RATES_TEST_ACCOUNT_ENTID': {},
+    'FOREIGN_EXCHANGE_RATES_TEST_LIVE': 'FALSE',
+    'FOREIGN_EXCHANGE_RATES_APIKEY': 'NONE',
   })
 
-  const live = 'TRUE' === env.FOREIGNEXCHANGERATES_TEST_LIVE
+  const live = 'TRUE' === env.FOREIGN_EXCHANGE_RATES_TEST_LIVE
 
   if (live) {
     const client = new ForeignExchangeRatesSDK({
-      apikey: env.FOREIGNEXCHANGERATES_APIKEY,
+      apikey: env.FOREIGN_EXCHANGE_RATES_APIKEY,
     })
 
-    let idmap: any = env['FOREIGNEXCHANGERATES_TEST_ACCOUNT_ENTID']
+    let idmap: any = env['FOREIGN_EXCHANGE_RATES_TEST_ACCOUNT_ENTID']
     if ('string' === typeof idmap && idmap.startsWith('{')) {
       idmap = JSON.parse(idmap)
     }

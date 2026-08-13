@@ -11,11 +11,6 @@ main: kit: entity: rate: {
       type: "`$STRING`"
     }
     {
-      name: "data_updated_at"
-      req: false
-      type: "`$STRING`"
-    }
-    {
       name: "derivation_bps_max"
       req: false
       type: "`$NUMBER`"
@@ -24,21 +19,6 @@ main: kit: entity: rate: {
       name: "derived"
       req: false
       type: "`$BOOLEAN`"
-    }
-    {
-      name: "is_forward_filled"
-      req: false
-      type: "`$BOOLEAN`"
-    }
-    {
-      name: "market_session"
-      req: false
-      type: "`$STRING`"
-    }
-    {
-      name: "notice"
-      req: false
-      type: "`$STRING`"
     }
     {
       name: "pair"
@@ -53,17 +33,12 @@ main: kit: entity: rate: {
     {
       name: "rate"
       req: false
-      type: "`$OBJECT`"
+      type: "`$NUMBER`"
     }
     {
       name: "source"
       req: false
       type: "`$STRING`"
-    }
-    {
-      name: "timestamp"
-      req: false
-      type: "`$INTEGER`"
     }
   ]
 
@@ -107,7 +82,7 @@ main: kit: entity: rate: {
           }
           transform: {
             req: "`reqdata`"
-            res: "`body`"
+            res: "`body.rates`"
           }
         }
         {
@@ -147,7 +122,7 @@ main: kit: entity: rate: {
           }
           transform: {
             req: "`reqdata`"
-            res: "`body`"
+            res: "`body.rates`"
           }
         }
         {

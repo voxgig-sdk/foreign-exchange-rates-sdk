@@ -4,39 +4,6 @@ main: kit: entity: range: {
 
   alias: field: {}
 
-  fields: [
-    {
-      name: "base"
-      req: false
-      type: "`$STRING`"
-    }
-    {
-      name: "end_date"
-      req: false
-      type: "`$STRING`"
-    }
-    {
-      name: "has_more"
-      req: false
-      type: "`$BOOLEAN`"
-    }
-    {
-      name: "next_cursor"
-      req: false
-      type: "`$STRING`"
-    }
-    {
-      name: "rate"
-      req: false
-      type: "`$OBJECT`"
-    }
-    {
-      name: "start_date"
-      req: false
-      type: "`$STRING`"
-    }
-  ]
-
   name: "range"
   op: {
     load: {
@@ -104,7 +71,7 @@ main: kit: entity: range: {
           }
           transform: {
             req: "`reqdata`"
-            res: "`body`"
+            res: "`body.rates`"
           }
         }
       ]

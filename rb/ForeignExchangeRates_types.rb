@@ -10,43 +10,35 @@
 
 # Account entity data model.
 #
-# @!attribute [rw] email
-#   @return [String, nil]
+# @!attribute [rw] calls_this_month
+#   @return [Integer, nil]
 #
-# @!attribute [rw] key
-#   @return [String, nil]
+# @!attribute [rw] limit
+#   @return [Integer, nil]
 #
-# @!attribute [rw] org
+# @!attribute [rw] resets_on
 #   @return [String, nil]
-#
-# @!attribute [rw] usage
-#   @return [Hash, nil]
 Account = Struct.new(
-  :email,
-  :key,
-  :org,
-  :usage,
+  :calls_this_month,
+  :limit,
+  :resets_on,
   keyword_init: true
 )
 
 # Request payload for Account#load.
 #
-# @!attribute [rw] email
-#   @return [String, nil]
+# @!attribute [rw] calls_this_month
+#   @return [Integer, nil]
 #
-# @!attribute [rw] key
-#   @return [String, nil]
+# @!attribute [rw] limit
+#   @return [Integer, nil]
 #
-# @!attribute [rw] org
+# @!attribute [rw] resets_on
 #   @return [String, nil]
-#
-# @!attribute [rw] usage
-#   @return [Hash, nil]
 AccountLoadMatch = Struct.new(
-  :email,
-  :key,
-  :org,
-  :usage,
+  :calls_this_month,
+  :limit,
+  :resets_on,
   keyword_init: true
 )
 
@@ -55,7 +47,7 @@ AccountLoadMatch = Struct.new(
 # @!attribute [rw] amount
 #   @return [Float, nil]
 #
-# @!attribute [rw] conversion
+# @!attribute [rw] conversions
 #   @return [Array, nil]
 #
 # @!attribute [rw] converted
@@ -64,17 +56,17 @@ AccountLoadMatch = Struct.new(
 # @!attribute [rw] from
 #   @return [String, nil]
 #
-# @!attribute [rw] pair
+# @!attribute [rw] pairs
 #   @return [Array]
 #
 # @!attribute [rw] to
 #   @return [String, nil]
 Convert = Struct.new(
   :amount,
-  :conversion,
+  :conversions,
   :converted,
   :from,
-  :pair,
+  :pairs,
   :to,
   keyword_init: true
 )
@@ -101,7 +93,7 @@ ConvertListMatch = Struct.new(
 # @!attribute [rw] amount
 #   @return [Float, nil]
 #
-# @!attribute [rw] conversion
+# @!attribute [rw] conversions
 #   @return [Array, nil]
 #
 # @!attribute [rw] converted
@@ -110,24 +102,24 @@ ConvertListMatch = Struct.new(
 # @!attribute [rw] from
 #   @return [String, nil]
 #
-# @!attribute [rw] pair
+# @!attribute [rw] pairs
 #   @return [Array]
 #
 # @!attribute [rw] to
 #   @return [String, nil]
 ConvertCreateData = Struct.new(
   :amount,
-  :conversion,
+  :conversions,
   :converted,
   :from,
-  :pair,
+  :pairs,
   :to,
   keyword_init: true
 )
 
 # Currency entity data model.
 #
-# @!attribute [rw] decimal
+# @!attribute [rw] decimals
 #   @return [Integer, nil]
 #
 # @!attribute [rw] derived
@@ -139,7 +131,7 @@ ConvertCreateData = Struct.new(
 # @!attribute [rw] type
 #   @return [String, nil]
 Currency = Struct.new(
-  :decimal,
+  :decimals,
   :derived,
   :name,
   :type,
@@ -148,7 +140,7 @@ Currency = Struct.new(
 
 # Request payload for Currency#load.
 #
-# @!attribute [rw] decimal
+# @!attribute [rw] decimals
 #   @return [Integer, nil]
 #
 # @!attribute [rw] derived
@@ -160,7 +152,7 @@ Currency = Struct.new(
 # @!attribute [rw] type
 #   @return [String, nil]
 CurrencyLoadMatch = Struct.new(
-  :decimal,
+  :decimals,
   :derived,
   :name,
   :type,
@@ -168,69 +160,16 @@ CurrencyLoadMatch = Struct.new(
 )
 
 # Range entity data model.
-#
-# @!attribute [rw] base
-#   @return [String, nil]
-#
-# @!attribute [rw] end_date
-#   @return [String, nil]
-#
-# @!attribute [rw] has_more
-#   @return [Boolean, nil]
-#
-# @!attribute [rw] next_cursor
-#   @return [String, nil]
-#
-# @!attribute [rw] rate
-#   @return [Hash, nil]
-#
-# @!attribute [rw] start_date
-#   @return [String, nil]
-Range = Struct.new(
-  :base,
-  :end_date,
-  :has_more,
-  :next_cursor,
-  :rate,
-  :start_date,
-  keyword_init: true
-)
+class RangeType
+end
 
 # Request payload for Range#load.
-#
-# @!attribute [rw] base
-#   @return [String, nil]
-#
-# @!attribute [rw] end_date
-#   @return [String, nil]
-#
-# @!attribute [rw] has_more
-#   @return [Boolean, nil]
-#
-# @!attribute [rw] next_cursor
-#   @return [String, nil]
-#
-# @!attribute [rw] rate
-#   @return [Hash, nil]
-#
-# @!attribute [rw] start_date
-#   @return [String, nil]
-RangeLoadMatch = Struct.new(
-  :base,
-  :end_date,
-  :has_more,
-  :next_cursor,
-  :rate,
-  :start_date,
-  keyword_init: true
-)
+class RangeLoadMatch
+end
 
 # Rate entity data model.
 #
 # @!attribute [rw] base
-#   @return [String, nil]
-#
-# @!attribute [rw] data_updated_at
 #   @return [String, nil]
 #
 # @!attribute [rw] derivation_bps_max
@@ -239,15 +178,6 @@ RangeLoadMatch = Struct.new(
 # @!attribute [rw] derived
 #   @return [Boolean, nil]
 #
-# @!attribute [rw] is_forward_filled
-#   @return [Boolean, nil]
-#
-# @!attribute [rw] market_session
-#   @return [String, nil]
-#
-# @!attribute [rw] notice
-#   @return [String, nil]
-#
 # @!attribute [rw] pair
 #   @return [String, nil]
 #
@@ -255,26 +185,18 @@ RangeLoadMatch = Struct.new(
 #   @return [String, nil]
 #
 # @!attribute [rw] rate
-#   @return [Hash, nil]
+#   @return [Float, nil]
 #
 # @!attribute [rw] source
 #   @return [String, nil]
-#
-# @!attribute [rw] timestamp
-#   @return [Integer, nil]
 Rate = Struct.new(
   :base,
-  :data_updated_at,
   :derivation_bps_max,
   :derived,
-  :is_forward_filled,
-  :market_session,
-  :notice,
   :pair,
   :quote,
   :rate,
   :source,
-  :timestamp,
   keyword_init: true
 )
 

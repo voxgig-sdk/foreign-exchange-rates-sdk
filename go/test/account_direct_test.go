@@ -35,7 +35,8 @@ func TestAccountDirect(t *testing.T) {
 		if setup.live {
 			// Live mode is lenient: synthetic IDs frequently 4xx. Skip
 			// rather than fail when the load endpoint isn't reachable with
-			// the IDs we can construct from setup.idmap.
+			// the IDs we can construct from setup.idmap — unless the model
+			// sets main.kit.test.live.strict.
 			if err != nil {
 				t.Skipf("load call failed (likely synthetic IDs against live API): %v", err)
 			}
@@ -97,21 +98,21 @@ func accountDirectSetup(mockres any) *accountDirectSetupResult {
 	calls := &[]map[string]any{}
 
 	env := envOverride(map[string]any{
-		"FOREIGNEXCHANGERATES_TEST_ACCOUNT_ENTID": map[string]any{},
-		"FOREIGNEXCHANGERATES_TEST_LIVE":    "FALSE",
-		"FOREIGNEXCHANGERATES_APIKEY":       "NONE",
+		"FOREIGN_EXCHANGE_RATES_TEST_ACCOUNT_ENTID": map[string]any{},
+		"FOREIGN_EXCHANGE_RATES_TEST_LIVE":    "FALSE",
+		"FOREIGN_EXCHANGE_RATES_APIKEY":       "NONE",
 	})
 
-	live := env["FOREIGNEXCHANGERATES_TEST_LIVE"] == "TRUE"
+	live := env["FOREIGN_EXCHANGE_RATES_TEST_LIVE"] == "TRUE"
 
 	if live {
 		mergedOpts := map[string]any{
-			"apikey": env["FOREIGNEXCHANGERATES_APIKEY"],
+			"apikey": env["FOREIGN_EXCHANGE_RATES_APIKEY"],
 		}
 		client := sdk.NewForeignExchangeRatesSDK(mergedOpts)
 
 		idmap := map[string]any{}
-		if entidRaw, ok := env["FOREIGNEXCHANGERATES_TEST_ACCOUNT_ENTID"]; ok {
+		if entidRaw, ok := env["FOREIGN_EXCHANGE_RATES_TEST_ACCOUNT_ENTID"]; ok {
 			if entidStr, ok := entidRaw.(string); ok && strings.HasPrefix(entidStr, "{") {
 				json.Unmarshal([]byte(entidStr), &idmap)
 			} else if entidMap, ok := entidRaw.(map[string]any); ok {

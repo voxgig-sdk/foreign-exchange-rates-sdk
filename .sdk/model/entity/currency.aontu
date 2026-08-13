@@ -6,7 +6,7 @@ main: kit: entity: currency: {
 
   fields: [
     {
-      name: "decimal"
+      name: "decimals"
       req: false
       type: "`$INTEGER`"
     }

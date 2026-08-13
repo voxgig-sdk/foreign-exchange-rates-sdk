@@ -37,7 +37,7 @@ $client = new ForeignExchangeRatesSDK([
 
 ```php
 try {
-    // load() returns the bare Account record (throws on error).
+    // load() returns the ENTITY — call data_get() for the Account record (throws on error).
     $account = $client->Account()->load();
     print_r($account);
 } catch (\Throwable $err) {
@@ -53,7 +53,7 @@ Entity operations throw a `\Throwable` on failure, so wrap them in
 
 ```php
 try {
-    $account = $client->Account()->load();
+    $currency = $client->Currency()->load();
 } catch (\Throwable $err) {
     echo "Error: " . $err->getMessage();
 }
@@ -125,9 +125,10 @@ Create a mock client for unit testing — no server required:
 ```php
 $client = ForeignExchangeRatesSDK::test();
 
-// Entity ops return the bare mock record (throws on error).
-$account = $client->Account()->load();
-print_r($account);
+// Entity ops return the ENTITY (throws on error);
+// call data_get() for the mock record.
+$currency = $client->Currency()->load();
+print_r($currency);
 ```
 
 ### Use a custom fetch function
@@ -232,7 +233,7 @@ All entities share the same interface.
 
 ### Result shape
 
-Entity operations return the bare result data (an `array` for single-entity
+Entity operations return the ENTITY (call data_get() for the record) (an `array` for single-entity
 ops, a `list` for `list`) and throw on error. Wrap calls in
 `try`/`catch` to handle failures.
 
@@ -254,10 +255,9 @@ On error, `ok` is `false` and `$err` contains the error value.
 
 | Field | Description |
 | --- | --- |
-| `email` |  |
-| `key` |  |
-| `org` |  |
-| `usage` |  |
+| `calls_this_month` |  |
+| `limit` |  |
+| `resets_on` |  |
 
 Operations: Load.
 
@@ -268,10 +268,10 @@ API path: `/v1/account`
 | Field | Description |
 | --- | --- |
 | `amount` |  |
-| `conversion` |  |
+| `conversions` |  |
 | `converted` |  |
 | `from` |  |
-| `pair` |  |
+| `pairs` |  |
 | `to` |  |
 
 Operations: Create, List.
@@ -282,7 +282,7 @@ API path: `/v1/convert`
 
 | Field | Description |
 | --- | --- |
-| `decimal` |  |
+| `decimals` |  |
 | `derived` |  |
 | `name` |  |
 | `type` |  |
@@ -295,12 +295,6 @@ API path: `/v1/currencies`
 
 | Field | Description |
 | --- | --- |
-| `base` |  |
-| `end_date` |  |
-| `has_more` |  |
-| `next_cursor` |  |
-| `rate` |  |
-| `start_date` |  |
 
 Operations: Load.
 
@@ -311,17 +305,12 @@ API path: `/v1/range`
 | Field | Description |
 | --- | --- |
 | `base` |  |
-| `data_updated_at` |  |
 | `derivation_bps_max` |  |
 | `derived` |  |
-| `is_forward_filled` |  |
-| `market_session` |  |
-| `notice` |  |
 | `pair` |  |
 | `quote` |  |
 | `rate` |  |
 | `source` |  |
-| `timestamp` |  |
 
 Operations: Load.
 
@@ -346,15 +335,14 @@ Create an instance: `$account = $client->Account();`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `email` | `string` |  |
-| `key` | `string` |  |
-| `org` | `string` |  |
-| `usage` | `array` |  |
+| `calls_this_month` | `int` |  |
+| `limit` | `int` |  |
+| `resets_on` | `string` |  |
 
 #### Example: Load
 
 ```php
-// load() returns the bare Account record (throws on error).
+// load() returns the ENTITY — call data_get() for the Account record (throws on error).
 $account = $client->Account()->load();
 ```
 
@@ -375,10 +363,10 @@ Create an instance: `$convert = $client->Convert();`
 | Field | Type | Description |
 | --- | --- | --- |
 | `amount` | `float` |  |
-| `conversion` | `array` |  |
+| `conversions` | `array` |  |
 | `converted` | `float` |  |
 | `from` | `string` |  |
-| `pair` | `array` |  |
+| `pairs` | `array` |  |
 | `to` | `string` |  |
 
 #### Example: List
@@ -392,7 +380,7 @@ $converts = $client->Convert()->list();
 
 ```php
 $convert = $client->Convert()->create([
-    "pair" => null, // array
+    "pairs" => null, // array
 ]);
 ```
 
@@ -411,7 +399,7 @@ Create an instance: `$currency = $client->Currency();`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `decimal` | `int` |  |
+| `decimals` | `int` |  |
 | `derived` | `bool` |  |
 | `name` | `string` |  |
 | `type` | `string` |  |
@@ -419,7 +407,7 @@ Create an instance: `$currency = $client->Currency();`
 #### Example: Load
 
 ```php
-// load() returns the bare Currency record (throws on error).
+// load() returns the ENTITY — call data_get() for the Currency record (throws on error).
 $currency = $client->Currency()->load();
 ```
 
@@ -434,21 +422,10 @@ Create an instance: `$range = $client->Range();`
 | --- | --- |
 | `load(match)` | Load a single entity by match criteria. |
 
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `base` | `string` |  |
-| `end_date` | `string` |  |
-| `has_more` | `bool` |  |
-| `next_cursor` | `string` |  |
-| `rate` | `array` |  |
-| `start_date` | `string` |  |
-
 #### Example: Load
 
 ```php
-// load() returns the bare Range record (throws on error).
+// load() returns the ENTITY — call data_get() for the Range record (throws on error).
 $range = $client->Range()->load();
 ```
 
@@ -468,22 +445,17 @@ Create an instance: `$rate = $client->Rate();`
 | Field | Type | Description |
 | --- | --- | --- |
 | `base` | `string` |  |
-| `data_updated_at` | `string` |  |
 | `derivation_bps_max` | `float` |  |
 | `derived` | `bool` |  |
-| `is_forward_filled` | `bool` |  |
-| `market_session` | `string` |  |
-| `notice` | `string` |  |
 | `pair` | `string` |  |
 | `quote` | `string` |  |
-| `rate` | `array` |  |
+| `rate` | `float` |  |
 | `source` | `string` |  |
-| `timestamp` | `int` |  |
 
 #### Example: Load
 
 ```php
-// load() returns the bare Rate record (throws on error).
+// load() returns the ENTITY — call data_get() for the Rate record (throws on error).
 $rate = $client->Rate()->load(["id" => "rate_id"]);
 ```
 
@@ -564,11 +536,11 @@ Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```php
-$account = $client->Account();
-$account->load();
+$currency = $client->Currency();
+$currency->load();
 
-// $account->data_get() now returns the account data from the last load
-// $account->match_get() returns the last match criteria
+// $currency->data_get() now returns the currency data from the last load
+// $currency->match_get() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

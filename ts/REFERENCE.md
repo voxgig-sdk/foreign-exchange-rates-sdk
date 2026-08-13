@@ -165,10 +165,9 @@ const account = client.Account()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `email` | `string` | No |  |
-| `key` | `string` | No |  |
-| `org` | `string` | No |  |
-| `usage` | `Record<string, any>` | No |  |
+| `calls_this_month` | `number` | No |  |
+| `limit` | `number` | No |  |
+| `resets_on` | `string` | No |  |
 
 ### Operations
 
@@ -219,10 +218,10 @@ const convert = client.Convert()
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `amount` | `number` | No |  |
-| `conversion` | `any[]` | No |  |
+| `conversions` | `any[]` | No |  |
 | `converted` | `number` | No |  |
 | `from` | `string` | No |  |
-| `pair` | `any[]` | Yes |  |
+| `pairs` | `any[]` | Yes |  |
 | `to` | `string` | No |  |
 
 ### Field Usage by Operation
@@ -230,10 +229,10 @@ const convert = client.Convert()
 | Field | list | create |
 | --- | --- | --- |
 | `amount` | - | - |
-| `conversion` | - | - |
+| `conversions` | - | - |
 | `converted` | - | - |
 | `from` | - | Yes |
-| `pair` | - | - |
+| `pairs` | - | - |
 | `to` | - | - |
 
 ### Operations
@@ -244,7 +243,7 @@ Create a new entity with the given data.
 
 ```ts
 const result = await client.Convert().create({
-  pair: [],
+  pairs: [],
 })
 ```
 
@@ -253,7 +252,7 @@ const result = await client.Convert().create({
 List entities matching the given criteria. Returns an array.
 
 ```ts
-const results = await client.Convert().list()
+const results = await client.Convert().list({ amount: 1, from: "example", to: "example" })
 ```
 
 ### Common Methods
@@ -294,7 +293,7 @@ const currency = client.Currency()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `decimal` | `number` | No |  |
+| `decimals` | `number` | No |  |
 | `derived` | `boolean` | No |  |
 | `name` | `string` | No |  |
 | `type` | `string` | No |  |
@@ -342,17 +341,6 @@ Return a copy of the entity options.
 ```ts
 const range = client.Range()
 ```
-
-### Fields
-
-| Field | Type | Required | Description |
-| --- | --- | --- | --- |
-| `base` | `string` | No |  |
-| `end_date` | `string` | No |  |
-| `has_more` | `boolean` | No |  |
-| `next_cursor` | `string` | No |  |
-| `rate` | `Record<string, any>` | No |  |
-| `start_date` | `string` | No |  |
 
 ### Operations
 
@@ -403,17 +391,12 @@ const rate = client.Rate()
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
 | `base` | `string` | No |  |
-| `data_updated_at` | `string` | No |  |
 | `derivation_bps_max` | `number` | No |  |
 | `derived` | `boolean` | No |  |
-| `is_forward_filled` | `boolean` | No |  |
-| `market_session` | `string` | No |  |
-| `notice` | `string` | No |  |
 | `pair` | `string` | No |  |
 | `quote` | `string` | No |  |
-| `rate` | `Record<string, any>` | No |  |
+| `rate` | `number` | No |  |
 | `source` | `string` | No |  |
-| `timestamp` | `number` | No |  |
 
 ### Operations
 

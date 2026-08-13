@@ -55,8 +55,8 @@ Entity operations reject on failure, so wrap them in `try` / `catch`:
 
 ```ts
 try {
-  const account = await client.Account().load()
-  console.log(account)
+  const currency = await client.Currency().load()
+  console.log(currency)
 } catch (err) {
   console.error('load failed:', err)
 }
@@ -122,9 +122,10 @@ Create a mock client for unit testing — no server required:
 ```ts
 const client = ForeignExchangeRatesSDK.test()
 
-const account = await client.Account().load()
-// account is a bare entity populated with mock response data
-console.log(account)
+const currency = await client.Currency().load()
+// currency is the entity, populated with mock response data
+// — call currency.data() for the record itself
+console.log(currency)
 ```
 
 You can also use the instance method:
@@ -139,7 +140,7 @@ const testClient = client.tester()
 Entity instances remember their last match and data:
 
 ```ts
-const entity = client.Account()
+const entity = client.Currency()
 
 // First call runs the operation and stores its result
 await entity.load()
@@ -298,10 +299,9 @@ The `prepare()` method returns:
 
 | Field | Description |
 | --- | --- |
-| `email` |  |
-| `key` |  |
-| `org` |  |
-| `usage` |  |
+| `calls_this_month` |  |
+| `limit` |  |
+| `resets_on` |  |
 
 Operations: load.
 
@@ -312,10 +312,10 @@ API path: `/v1/account`
 | Field | Description |
 | --- | --- |
 | `amount` |  |
-| `conversion` |  |
+| `conversions` |  |
 | `converted` |  |
 | `from` |  |
-| `pair` |  |
+| `pairs` |  |
 | `to` |  |
 
 Operations: create, list.
@@ -326,7 +326,7 @@ API path: `/v1/convert`
 
 | Field | Description |
 | --- | --- |
-| `decimal` |  |
+| `decimals` |  |
 | `derived` |  |
 | `name` |  |
 | `type` |  |
@@ -339,12 +339,6 @@ API path: `/v1/currencies`
 
 | Field | Description |
 | --- | --- |
-| `base` |  |
-| `end_date` |  |
-| `has_more` |  |
-| `next_cursor` |  |
-| `rate` |  |
-| `start_date` |  |
 
 Operations: load.
 
@@ -355,17 +349,12 @@ API path: `/v1/range`
 | Field | Description |
 | --- | --- |
 | `base` |  |
-| `data_updated_at` |  |
 | `derivation_bps_max` |  |
 | `derived` |  |
-| `is_forward_filled` |  |
-| `market_session` |  |
-| `notice` |  |
 | `pair` |  |
 | `quote` |  |
 | `rate` |  |
 | `source` |  |
-| `timestamp` |  |
 
 Operations: load.
 
@@ -390,10 +379,9 @@ Create an instance: `const account = client.Account()`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `email` | `string` |  |
-| `key` | `string` |  |
-| `org` | `string` |  |
-| `usage` | `Record<string, any>` |  |
+| `calls_this_month` | `number` |  |
+| `limit` | `number` |  |
+| `resets_on` | `string` |  |
 
 #### Example: Load
 
@@ -418,23 +406,23 @@ Create an instance: `const convert = client.Convert()`
 | Field | Type | Description |
 | --- | --- | --- |
 | `amount` | `number` |  |
-| `conversion` | `any[]` |  |
+| `conversions` | `any[]` |  |
 | `converted` | `number` |  |
 | `from` | `string` |  |
-| `pair` | `any[]` |  |
+| `pairs` | `any[]` |  |
 | `to` | `string` |  |
 
 #### Example: List
 
 ```ts
-const converts = await client.Convert().list()
+const converts = await client.Convert().list({ amount: 1, from: "example", to: "example" })
 ```
 
 #### Example: Create
 
 ```ts
 const convert = await client.Convert().create({
-  pair: [],
+  pairs: [],
 })
 ```
 
@@ -453,7 +441,7 @@ Create an instance: `const currency = client.Currency()`
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `decimal` | `number` |  |
+| `decimals` | `number` |  |
 | `derived` | `boolean` |  |
 | `name` | `string` |  |
 | `type` | `string` |  |
@@ -474,17 +462,6 @@ Create an instance: `const range = client.Range()`
 | Method | Description |
 | --- | --- |
 | `load(match)` | Load a single entity by match criteria. |
-
-#### Fields
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `base` | `string` |  |
-| `end_date` | `string` |  |
-| `has_more` | `boolean` |  |
-| `next_cursor` | `string` |  |
-| `rate` | `Record<string, any>` |  |
-| `start_date` | `string` |  |
 
 #### Example: Load
 
@@ -508,17 +485,12 @@ Create an instance: `const rate = client.Rate()`
 | Field | Type | Description |
 | --- | --- | --- |
 | `base` | `string` |  |
-| `data_updated_at` | `string` |  |
 | `derivation_bps_max` | `number` |  |
 | `derived` | `boolean` |  |
-| `is_forward_filled` | `boolean` |  |
-| `market_session` | `string` |  |
-| `notice` | `string` |  |
 | `pair` | `string` |  |
 | `quote` | `string` |  |
-| `rate` | `Record<string, any>` |  |
+| `rate` | `number` |  |
 | `source` | `string` |  |
-| `timestamp` | `number` |  |
 
 #### Example: Load
 
@@ -596,11 +568,11 @@ stores the returned data and match criteria internally. Subsequent
 calls on the same instance can rely on this state.
 
 ```ts
-const account = client.Account()
-await account.load()
+const currency = client.Currency()
+await currency.load()
 
-// account.data() now returns the account data from the last `load`
-// account.match() returns the last match criteria
+// currency.data() now returns the currency data from the last `load`
+// currency.match() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

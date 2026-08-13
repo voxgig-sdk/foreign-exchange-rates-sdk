@@ -26,8 +26,8 @@ import {
 describe('RangeEntity', async () => {
 
   // Per-test live pacing. Delay is read from sdk-test-control.json's
-  // `test.live.delayMs`; only sleeps when FOREIGNEXCHANGERATES_TEST_LIVE=TRUE.
-  afterEach(liveDelay('FOREIGNEXCHANGERATES_TEST_LIVE'))
+  // `test.live.delayMs`; only sleeps when FOREIGN_EXCHANGE_RATES_TEST_LIVE=TRUE.
+  afterEach(liveDelay('FOREIGN_EXCHANGE_RATES_TEST_LIVE'))
 
   test('instance', async () => {
     const testsdk = ForeignExchangeRatesSDK.test()
@@ -62,7 +62,7 @@ describe('RangeEntity', async () => {
     // LOAD
     const range_ref01_ent = client.Range()
     const range_ref01_match_dt0: any = {}
-    const range_ref01_data_dt0 = await range_ref01_ent.load(range_ref01_match_dt0)
+    const range_ref01_data_dt0 = (await range_ref01_ent.load(range_ref01_match_dt0)).data()
     assert(null != range_ref01_data_dt0)
 
 
