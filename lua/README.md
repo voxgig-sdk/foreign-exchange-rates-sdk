@@ -4,7 +4,7 @@
 
 The Lua SDK for the ForeignExchangeRates API — an entity-oriented client using Lua conventions.
 
-It exposes the API as capitalised, semantic **Entities** — e.g. `client:Account()` — each with the same small set of operations (`list`, `load`, `create`) instead of raw URL paths and query strings. You call meaning, not endpoints, which keeps the cognitive load low.
+It exposes the API as capitalised, semantic **Entities** — e.g. `client:Account()` — each with the same small set of operations (`load`, `create`) instead of raw URL paths and query strings. You call meaning, not endpoints, which keeps the cognitive load low.
 
 > Other languages, the CLI, and MCP server live alongside this one — see
 > the [top-level README](../README.md).
@@ -35,12 +35,14 @@ local client = sdk.new({
 })
 ```
 
-### 3. Load an account
+### 3. Load a convert
+
+Convert is nested under amount, so provide the `amount`.
 
 ```lua
-local account, err = client:Account():load()
+local convert, err = client:Convert():load({ amount = 1, from = "example_from", to = "example_to" })
 if err then error(err) end
-print(account)
+print(convert)
 ```
 
 
@@ -50,7 +52,7 @@ Entity operations return `(value, err)`. Check `err` before using
 the value:
 
 ```lua
-local currency, err = client:Currency():load()
+local account, err = client:Account():load()
 if err then error(err) end
 ```
 
@@ -108,7 +110,7 @@ Create a mock client for unit testing — no server required:
 ```lua
 local client = sdk.test()
 
-local result, err = client:Currency():load()
+local result, err = client:Account():load()
 -- result is the returned data; err is set on failure
 ```
 
@@ -202,7 +204,6 @@ All entities share the same interface.
 | Method | Signature | Description |
 | --- | --- | --- |
 | `load` | `(reqmatch, ctrl) -> any, err` | Load a single entity by match criteria. |
-| `list` | `(reqmatch, ctrl) -> any, err` | List entities matching the criteria. |
 | `create` | `(reqdata, ctrl) -> any, err` | Create a new entity. |
 | `data_get` | `() -> table` | Get entity data. |
 | `data_set` | `(data)` | Set entity data. |
@@ -219,7 +220,6 @@ data **directly** — there is no wrapper:
 | Operation | `value` |
 | --- | --- |
 | `load` / `create` | the entity record (a `table`) |
-| `list` | an array (`table`) of entity records |
 
 Check `err` first (it is non-`nil` on failure), then use `value`:
 
@@ -248,14 +248,11 @@ API path: `/v1/account`
 
 | Field | Description |
 | --- | --- |
-| `amount` |  |
 | `conversions` |  |
-| `converted` |  |
 | `from` |  |
 | `pairs` |  |
-| `to` |  |
 
-Operations: Create, List.
+Operations: Create, Load.
 
 API path: `/v1/convert`
 
@@ -336,23 +333,20 @@ Create an instance: `local convert = client:Convert(nil)`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
-| `list(match)` | List entities matching the criteria. |
+| `load(match)` | Load a single entity by match criteria. |
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `amount` | `number` |  |
 | `conversions` | `table` |  |
-| `converted` | `number` |  |
 | `from` | `string` |  |
 | `pairs` | `table` |  |
-| `to` | `string` |  |
 
-#### Example: List
+#### Example: Load
 
 ```lua
-local converts, err = client:Convert():list()
+local convert, err = client:Convert():load({ amount = 1, from = "from", to = "to" })
 ```
 
 #### Example: Create
@@ -432,7 +426,7 @@ Create an instance: `local rate = client:Rate(nil)`
 #### Example: Load
 
 ```lua
-local rate, err = client:Rate():load({ id = "rate_id" })
+local rate, err = client:Rate():load({ date = "date" })
 ```
 
 
@@ -512,11 +506,11 @@ Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```lua
-local currency = client:Currency()
-currency:load()
+local account = client:Account()
+account:load()
 
--- currency:data_get() now returns the currency data from the last load
--- currency:match_get() returns the last match criteria
+-- account:data_get() now returns the account data from the last load
+-- account:match_get() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

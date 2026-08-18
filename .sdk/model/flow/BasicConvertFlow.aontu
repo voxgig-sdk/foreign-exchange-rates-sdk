@@ -12,7 +12,6 @@ main: kit: flow: BasicConvertFlow:
       }
 
       match: {
-        amount: "amount01",
         from: "from01",
         to: "to01"
       }
@@ -21,18 +20,24 @@ main: kit: flow: BasicConvertFlow:
     }
 
     {
+      input: {
+        ref: "convert_ref01",
+        srcdatavar: "convert_ref01_data",
+        suffix: "_dt0"
+      }
+
       match: {
-        amount: "amount01",
         from: "from01",
+        id: "convert01",
         to: "to01"
       }
 
-      op: "list",
+      op: "load",
       valid: [
         {
-          apply: "ItemExists",
+          apply: "TextFieldMark",
           def: {
-            ref: "convert_ref01"
+            mark: "Mark01-convert_ref01"
           }
         }
       ]

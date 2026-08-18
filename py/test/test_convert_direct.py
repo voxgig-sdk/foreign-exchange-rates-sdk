@@ -11,53 +11,41 @@ from test import runner
 
 class TestConvertDirect:
 
-    def test_should_direct_list_convert(self):
-        setup = _convert_direct_setup([
-            {"id": "direct01"},
-            {"id": "direct02"},
-        ])
-        _skip, _reason = runner.is_control_skipped("direct", "direct-list-convert", "live" if setup["live"] else "unit")
+    def test_should_direct_load_convert(self):
+        setup = _convert_direct_setup({"id": "direct01"})
+        _skip, _reason = runner.is_control_skipped("direct", "direct-load-convert", "live" if setup["live"] else "unit")
         if _skip:
             # pytest already imported at module scope
             pytest.skip(_reason or "skipped via sdk-test-control.json")
             return
-        if setup["live"]:
-            for _live_key in ["amount01", "from01", "to01"]:
-                if setup["idmap"].get(_live_key) is None:
-                    # pytest already imported at module scope
-                    pytest.skip(f"live test needs {_live_key} via *_ENTID env var (synthetic IDs only)")
-                    return
-
         client = setup["client"]
 
         params = {}
+        query = {}
         if setup["live"]:
-            params["amount"] = setup["idmap"]["amount01"]
+            params["amount"] = 100
+            params["from"] = "USD"
+            params["to"] = "EUR"
         else:
             params["amount"] = "direct01"
-        if setup["live"]:
-            params["from"] = setup["idmap"]["from01"]
-        else:
-            params["from"] = "direct01"
-        if setup["live"]:
-            params["to"] = setup["idmap"]["to01"]
-        else:
-            params["to"] = "direct01"
+            params["from"] = "direct02"
+            params["to"] = "direct03"
 
         result = client.direct({
             "path": "v1/convert/{from}/{to}/{amount}",
             "method": "GET",
             "params": params,
+            "query": query,
         })
         if setup["live"]:
-            # Live mode is lenient: synthetic IDs frequently 4xx and the
-            # list-response shape varies wildly across public APIs. Skip
-            # rather than fail when the call doesn't return a usable list.
+            # Live mode is lenient: synthetic IDs frequently 4xx. Skip
+            # rather than fail when the load endpoint isn't reachable
+            # with the IDs we can construct from setup.idmap.
             if result.get("err") is not None:
-                pytest.skip(f"list call failed (likely synthetic IDs against live API): {result.get('err')}")
+                pytest.skip(f"load call failed (likely synthetic IDs against live API): {result.get('err')}")
                 return
             if not result.get("ok"):
-                pytest.skip("list call not ok (likely synthetic IDs against live API)")
+                pytest.skip("load call not ok (likely synthetic IDs against live API)")
                 return
             status = helpers.to_int(result["status"])
             if status < 200 or status >= 300:
@@ -66,8 +54,9 @@ class TestConvertDirect:
         else:
             assert result["ok"] is True
             assert helpers.to_int(result["status"]) == 200
-            assert isinstance(result["data"], list)
-            assert len(result["data"]) == 2
+            assert result["data"] is not None
+            if isinstance(result["data"], dict):
+                assert result["data"]["id"] == "direct01"
             assert len(setup["calls"]) == 1
 
 

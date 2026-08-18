@@ -1,5 +1,8 @@
 -- ForeignExchangeRates SDK configuration
 
+-- Build a fresh, fully materialised config table. Every call rebuilds the
+-- whole structure, so prefer require("config_shared") unless you need a
+-- private copy you intend to mutate.
 local function make_config()
   return {
     main = {
@@ -32,25 +35,16 @@ local function make_config()
       ["account"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "calls_this_month",
-            ["req"] = false,
             ["type"] = "`$INTEGER`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "limit",
-            ["req"] = false,
             ["type"] = "`$INTEGER`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
             ["name"] = "resets_on",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 2,
           },
         },
         ["name"] = "account",
@@ -60,7 +54,6 @@ local function make_config()
             ["name"] = "load",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "GET",
@@ -74,10 +67,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body.usage`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "load",
           },
         },
         ["relations"] = {
@@ -87,28 +78,10 @@ local function make_config()
       ["convert"] = {
         ["fields"] = {
           {
-            ["active"] = true,
-            ["name"] = "amount",
-            ["req"] = false,
-            ["type"] = "`$NUMBER`",
-            ["index$"] = 0,
-          },
-          {
-            ["active"] = true,
             ["name"] = "conversions",
-            ["req"] = false,
             ["type"] = "`$ARRAY`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
-            ["name"] = "converted",
-            ["req"] = false,
-            ["type"] = "`$NUMBER`",
-            ["index$"] = 2,
-          },
-          {
-            ["active"] = true,
             ["name"] = "from",
             ["op"] = {
               ["create"] = {
@@ -116,23 +89,12 @@ local function make_config()
                 ["type"] = "`$STRING`",
               },
             },
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 3,
           },
           {
-            ["active"] = true,
             ["name"] = "pairs",
             ["req"] = true,
             ["type"] = "`$ARRAY`",
-            ["index$"] = 4,
-          },
-          {
-            ["active"] = true,
-            ["name"] = "to",
-            ["req"] = false,
-            ["type"] = "`$STRING`",
-            ["index$"] = 5,
           },
         },
         ["name"] = "convert",
@@ -142,7 +104,6 @@ local function make_config()
             ["name"] = "create",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {},
                 ["kind"] = "http",
                 ["method"] = "POST",
@@ -156,48 +117,39 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "create",
           },
-          ["list"] = {
+          ["load"] = {
             ["input"] = "data",
-            ["name"] = "list",
+            ["name"] = "load",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["example"] = 100,
                       ["kind"] = "param",
                       ["name"] = "amount",
                       ["orig"] = "amount",
                       ["reqd"] = true,
                       ["type"] = "`$NUMBER`",
-                      ["index$"] = 0,
                     },
                     {
-                      ["active"] = true,
                       ["example"] = "USD",
                       ["kind"] = "param",
                       ["name"] = "from",
                       ["orig"] = "from",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 1,
                     },
                     {
-                      ["active"] = true,
                       ["example"] = "EUR",
                       ["kind"] = "param",
                       ["name"] = "to",
                       ["orig"] = "to",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 2,
                     },
                   },
                 },
@@ -220,12 +172,10 @@ local function make_config()
                 },
                 ["transform"] = {
                   ["req"] = "`reqdata`",
-                  ["res"] = "`body.conversions`",
+                  ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "list",
           },
         },
         ["relations"] = {
@@ -239,32 +189,20 @@ local function make_config()
       ["currency"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "decimals",
-            ["req"] = false,
             ["type"] = "`$INTEGER`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "derived",
-            ["req"] = false,
             ["type"] = "`$BOOLEAN`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
             ["name"] = "name",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 2,
           },
           {
-            ["active"] = true,
             ["name"] = "type",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 3,
           },
         },
         ["name"] = "currency",
@@ -274,16 +212,13 @@ local function make_config()
             ["name"] = "load",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["example"] = "fiat",
                       ["kind"] = "query",
                       ["name"] = "type",
                       ["orig"] = "type",
-                      ["reqd"] = false,
                       ["type"] = "`$STRING`",
                     },
                   },
@@ -304,10 +239,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "load",
           },
         },
         ["relations"] = {
@@ -323,20 +256,16 @@ local function make_config()
             ["name"] = "load",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["example"] = "USD",
                       ["kind"] = "query",
                       ["name"] = "base",
                       ["orig"] = "base",
-                      ["reqd"] = false,
                       ["type"] = "`$STRING`",
                     },
                     {
-                      ["active"] = true,
                       ["example"] = "2020-01-31",
                       ["kind"] = "query",
                       ["name"] = "end_date",
@@ -345,16 +274,13 @@ local function make_config()
                       ["type"] = "`$STRING`",
                     },
                     {
-                      ["active"] = true,
                       ["example"] = "json",
                       ["kind"] = "query",
                       ["name"] = "format",
                       ["orig"] = "format",
-                      ["reqd"] = false,
                       ["type"] = "`$STRING`",
                     },
                     {
-                      ["active"] = true,
                       ["example"] = "2020-01-01",
                       ["kind"] = "query",
                       ["name"] = "start_date",
@@ -363,12 +289,10 @@ local function make_config()
                       ["type"] = "`$STRING`",
                     },
                     {
-                      ["active"] = true,
                       ["example"] = "EUR,GBP",
                       ["kind"] = "query",
                       ["name"] = "symbol",
                       ["orig"] = "symbol",
-                      ["reqd"] = false,
                       ["type"] = "`$STRING`",
                     },
                   },
@@ -393,10 +317,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body.rates`",
                 },
-                ["index$"] = 0,
               },
             },
-            ["key$"] = "load",
           },
         },
         ["relations"] = {
@@ -406,53 +328,32 @@ local function make_config()
       ["rate"] = {
         ["fields"] = {
           {
-            ["active"] = true,
             ["name"] = "base",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 0,
           },
           {
-            ["active"] = true,
             ["name"] = "derivation_bps_max",
-            ["req"] = false,
             ["type"] = "`$NUMBER`",
-            ["index$"] = 1,
           },
           {
-            ["active"] = true,
             ["name"] = "derived",
-            ["req"] = false,
             ["type"] = "`$BOOLEAN`",
-            ["index$"] = 2,
           },
           {
-            ["active"] = true,
             ["name"] = "pair",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 3,
           },
           {
-            ["active"] = true,
             ["name"] = "quote",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 4,
           },
           {
-            ["active"] = true,
             ["name"] = "rate",
-            ["req"] = false,
             ["type"] = "`$NUMBER`",
-            ["index$"] = 5,
           },
           {
-            ["active"] = true,
             ["name"] = "source",
-            ["req"] = false,
             ["type"] = "`$STRING`",
-            ["index$"] = 6,
           },
         },
         ["name"] = "rate",
@@ -462,25 +363,20 @@ local function make_config()
             ["name"] = "load",
             ["points"] = {
               {
-                ["active"] = true,
                 ["args"] = {
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["example"] = "USD",
                       ["kind"] = "query",
                       ["name"] = "base",
                       ["orig"] = "base",
-                      ["reqd"] = false,
                       ["type"] = "`$STRING`",
                     },
                     {
-                      ["active"] = true,
                       ["example"] = "EUR,GBP",
                       ["kind"] = "query",
                       ["name"] = "symbol",
                       ["orig"] = "symbol",
-                      ["reqd"] = false,
                       ["type"] = "`$STRING`",
                     },
                   },
@@ -502,31 +398,25 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body.rates`",
                 },
-                ["index$"] = 0,
               },
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["example"] = "2020-01-15",
                       ["kind"] = "param",
                       ["name"] = "date",
                       ["orig"] = "date",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                   ["query"] = {
                     {
-                      ["active"] = true,
                       ["example"] = "EUR,GBP",
                       ["kind"] = "query",
                       ["name"] = "symbol",
                       ["orig"] = "symbol",
-                      ["reqd"] = false,
                       ["type"] = "`$STRING`",
                     },
                   },
@@ -548,21 +438,17 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body.rates`",
                 },
-                ["index$"] = 1,
               },
               {
-                ["active"] = true,
                 ["args"] = {
                   ["params"] = {
                     {
-                      ["active"] = true,
                       ["example"] = "eur-usd",
                       ["kind"] = "param",
                       ["name"] = "id",
                       ["orig"] = "slug",
                       ["reqd"] = true,
                       ["type"] = "`$STRING`",
-                      ["index$"] = 0,
                     },
                   },
                 },
@@ -588,10 +474,8 @@ local function make_config()
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
                 },
-                ["index$"] = 2,
               },
             },
-            ["key$"] = "load",
           },
         },
         ["relations"] = {

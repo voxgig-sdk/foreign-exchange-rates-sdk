@@ -35,18 +35,17 @@ describe('ConvertDirect', async () => {
   })
 
 
-  test('direct-list-convert', async (t: any) => {
-    const setup = directSetup([{ id: 'direct01' }, { id: 'direct02' }])
-    if (maybeSkipControl(t, 'direct', 'direct-list-convert', setup.live)) return
-    if (skipIfMissingIds(t, setup, ["amount01","from01","to01"])) return
+  test('direct-load-convert', async (t: any) => {
+    const setup = directSetup({ id: 'direct01' })
+    if (maybeSkipControl(t, 'direct', 'direct-load-convert', setup.live)) return
     const { client, calls } = setup
 
     const params: any = {}
     const query: any = {}
     if (setup.live) {
-      params.amount = setup.idmap['amount01']
-      params.from = setup.idmap['from01']
-      params.to = setup.idmap['to01']
+      params.amount = 100
+      params.from = "USD"
+      params.to = "EUR"
     } else {
       params.amount = 'direct01'
       params.from = 'direct02'
@@ -61,23 +60,17 @@ describe('ConvertDirect', async () => {
     })
 
     if (setup.live) {
-      // Live mode is lenient: synthetic IDs frequently 4xx and the list-
-      // response shape varies wildly across public APIs. Skip rather than
-      // fail when the call doesn't return a usable list.
+      // Live mode is lenient: synthetic IDs frequently 4xx. Skip rather
+      // than fail when the load endpoint isn't reachable with the IDs we
+      // can construct from setup.idmap.
       if (!result.ok || result.status < 200 || result.status >= 300) {
-        return
-      }
-      const listArr = unwrapListData(result.data)
-      if (!Array.isArray(listArr)) {
         return
       }
     } else {
       assert(result.ok === true)
       assert(result.status === 200)
       assert(null != result.data)
-      const listArr = unwrapListData(result.data)
-      assert(Array.isArray(listArr))
-      assert(listArr!.length === 2)
+      assert(result.data.id === 'direct01')
       assert(calls.length === 1)
       assert(calls[0].init.method === 'GET')
       assert(calls[0].url.includes('direct01'))

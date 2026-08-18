@@ -217,23 +217,17 @@ const convert = client.Convert()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `amount` | `number` | No |  |
 | `conversions` | `any[]` | No |  |
-| `converted` | `number` | No |  |
 | `from` | `string` | No |  |
 | `pairs` | `any[]` | Yes |  |
-| `to` | `string` | No |  |
 
 ### Field Usage by Operation
 
-| Field | list | create |
+| Field | load | create |
 | --- | --- | --- |
-| `amount` | - | - |
 | `conversions` | - | - |
-| `converted` | - | - |
 | `from` | - | Yes |
 | `pairs` | - | - |
-| `to` | - | - |
 
 ### Operations
 
@@ -247,12 +241,12 @@ const result = await client.Convert().create({
 })
 ```
 
-#### `list(match: object, ctrl?: object)`
+#### `load(match: object, ctrl?: object)`
 
-List entities matching the given criteria. Returns an array.
+Load a single entity matching the given criteria.
 
 ```ts
-const results = await client.Convert().list({ amount: 1, from: "example", to: "example" })
+const result = await client.Convert().load({ amount: 1, from: 'from', to: 'to' })
 ```
 
 ### Common Methods
@@ -405,7 +399,7 @@ const rate = client.Rate()
 Load a single entity matching the given criteria.
 
 ```ts
-const result = await client.Rate().load({ id: 'rate_id' })
+const result = await client.Rate().load({ date: 'date' })
 ```
 
 ### Common Methods

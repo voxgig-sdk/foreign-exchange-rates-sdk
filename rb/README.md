@@ -4,7 +4,7 @@
 
 The Ruby SDK for the ForeignExchangeRates API — an entity-oriented client using idiomatic Ruby conventions.
 
-The SDK exposes the API as capitalised, semantic **Entities** — for example `client.Account` — with named operations (`list`/`load`/`create`) instead of raw URL paths and query strings. Working with resources and verbs keeps call sites self-describing and reduces cognitive load.
+The SDK exposes the API as capitalised, semantic **Entities** — for example `client.Account` — with named operations (`load`/`create`) instead of raw URL paths and query strings. Working with resources and verbs keeps call sites self-describing and reduces cognitive load.
 
 > Other languages, the CLI, and MCP server live alongside this one — see
 > the [top-level README](../README.md).
@@ -32,13 +32,15 @@ client = ForeignExchangeRatesSDK.new({
 })
 ```
 
-### 3. Load an account
+### 3. Load a convert
+
+Convert is nested under amount, so provide the `amount`.
 
 ```ruby
 begin
-  # load returns the ENTITY — call data_get for the Account record (raises on error).
-  account = client.Account.load()
-  puts account
+  # load returns the ENTITY — call data_get for the Convert record (raises on error).
+  convert = client.Convert.load({ "amount" => 1, "from" => "example_from", "to" => "example_to" })
+  puts convert
 rescue => err
   warn "load failed: #{err}"
 end
@@ -51,7 +53,7 @@ Entity operations raise on failure, so rescue them:
 
 ```ruby
 begin
-  currency = client.Currency.load()
+  account = client.Account.load()
 rescue => err
   warn "load failed: #{err}"
 end
@@ -121,8 +123,8 @@ client = ForeignExchangeRatesSDK.test
 
 # Entity ops return the ENTITY (raises on error);
 # call data_get for the mock record.
-currency = client.Currency.load()
-puts currency
+account = client.Account.load()
+puts account
 ```
 
 ### Use a custom fetch function
@@ -213,7 +215,6 @@ All entities share the same interface.
 | Method | Signature | Description |
 | --- | --- | --- |
 | `load` | `(reqmatch, ctrl) -> any` | Load a single entity by match criteria. Raises on error. |
-| `list` | `(reqmatch = nil, ctrl) -> Array` | List entities matching the criteria (call with no argument to list all). Raises on error. |
 | `create` | `(reqdata, ctrl) -> any` | Create a new entity. Raises on error. |
 | `data_get` | `() -> Hash` | Get entity data. |
 | `data_set` | `(data)` | Set entity data. |
@@ -257,14 +258,11 @@ API path: `/v1/account`
 
 | Field | Description |
 | --- | --- |
-| `amount` |  |
 | `conversions` |  |
-| `converted` |  |
 | `from` |  |
 | `pairs` |  |
-| `to` |  |
 
-Operations: Create, List.
+Operations: Create, Load.
 
 API path: `/v1/convert`
 
@@ -346,24 +344,21 @@ Create an instance: `convert = client.Convert`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
-| `list(match)` | List entities matching the criteria. |
+| `load(match)` | Load a single entity by match criteria. |
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `amount` | `Float` |  |
 | `conversions` | `Array` |  |
-| `converted` | `Float` |  |
 | `from` | `String` |  |
 | `pairs` | `Array` |  |
-| `to` | `String` |  |
 
-#### Example: List
+#### Example: Load
 
 ```ruby
-# list returns an Array of Convert records (raises on error).
-converts = client.Convert.list
+# load returns the ENTITY — call data_get for the Convert record (raises on error).
+convert = client.Convert.load({ "amount" => 1, "from" => "from", "to" => "to" })
 ```
 
 #### Example: Create
@@ -446,7 +441,7 @@ Create an instance: `rate = client.Rate`
 
 ```ruby
 # load returns the ENTITY — call data_get for the Rate record (raises on error).
-rate = client.Rate.load({ "id" => "rate_id" })
+rate = client.Rate.load({ "date" => "date" })
 ```
 
 
@@ -526,11 +521,11 @@ Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```ruby
-currency = client.Currency
-currency.load()
+account = client.Account
+account.load()
 
-# currency.data_get now returns the currency data from the last load
-# currency.match_get returns the last match criteria
+# account.data_get now returns the account data from the last load
+# account.match_get returns the last match criteria
 ```
 
 Call `make` to create a fresh instance with the same configuration

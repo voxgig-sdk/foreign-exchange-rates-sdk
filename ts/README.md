@@ -5,7 +5,7 @@
 The TypeScript SDK for the ForeignExchangeRates API — a type-safe, entity-oriented client with full async/await support.
 
 The API is exposed as capitalised, semantic **Entities** — e.g.
-`client.Account()` — each with a small set of operations (`list`, `load`, `create`)
+`client.Account()` — each with a small set of operations (`load`, `create`)
 instead of raw URL paths and query parameters. This keeps the surface
 predictable and low-friction for both humans and AI agents.
 
@@ -35,14 +35,19 @@ const client = new ForeignExchangeRatesSDK({
 })
 ```
 
-### 3. Load an account
+### 3. Load a convert
 
+Convert is nested under amount, so provide the `amount`.
 `load()` returns the entity directly and throws on failure:
 
 ```ts
 try {
-  const account = await client.Account().load()
-  console.log(account)
+  const convert = await client.Convert().load({
+    amount: 1,
+    from: 'example_from',
+    to: 'example_to',
+  })
+  console.log(convert)
 } catch (err) {
   console.error('load failed:', err)
 }
@@ -55,8 +60,8 @@ Entity operations reject on failure, so wrap them in `try` / `catch`:
 
 ```ts
 try {
-  const currency = await client.Currency().load()
-  console.log(currency)
+  const account = await client.Account().load()
+  console.log(account)
 } catch (err) {
   console.error('load failed:', err)
 }
@@ -122,10 +127,10 @@ Create a mock client for unit testing — no server required:
 ```ts
 const client = ForeignExchangeRatesSDK.test()
 
-const currency = await client.Currency().load()
-// currency is the entity, populated with mock response data
-// — call currency.data() for the record itself
-console.log(currency)
+const account = await client.Account().load()
+// account is the entity, populated with mock response data
+// — call account.data() for the record itself
+console.log(account)
 ```
 
 You can also use the instance method:
@@ -140,7 +145,7 @@ const testClient = client.tester()
 Entity instances remember their last match and data:
 
 ```ts
-const entity = client.Currency()
+const entity = client.Account()
 
 // First call runs the operation and stores its result
 await entity.load()
@@ -244,7 +249,6 @@ All entities share the same interface.
 | Method | Signature | Description |
 | --- | --- | --- |
 | `load` | `load(reqmatch?, ctrl?): Promise<Entity>` | Load a single entity by match criteria. |
-| `list` | `list(reqmatch?, ctrl?): Promise<Entity[]>` | List entities matching the criteria. |
 | `create` | `create(reqdata?, ctrl?): Promise<Entity>` | Create a new entity. |
 | `data` | `data(data?: Partial<Entity>): Entity` | Get or set entity data. |
 | `match` | `match(match?: Partial<Entity>): Partial<Entity>` | Get or set entity match criteria. |
@@ -258,8 +262,6 @@ Entity operations resolve to the entity data directly — there is no
 result envelope:
 
 - `load` and `create` resolve to a single entity object.
-- `list` resolves to an **array** of entity objects (iterate it directly;
-  there is no `.data` and no `.ok`).
 
 On a failed request these methods **throw**, so wrap calls in
 `try`/`catch` to handle errors. Only `direct()` returns the result
@@ -311,14 +313,11 @@ API path: `/v1/account`
 
 | Field | Description |
 | --- | --- |
-| `amount` |  |
 | `conversions` |  |
-| `converted` |  |
 | `from` |  |
 | `pairs` |  |
-| `to` |  |
 
-Operations: create, list.
+Operations: create, load.
 
 API path: `/v1/convert`
 
@@ -399,23 +398,20 @@ Create an instance: `const convert = client.Convert()`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
-| `list(match)` | List entities matching the criteria. |
+| `load(match)` | Load a single entity by match criteria. |
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `amount` | `number` |  |
 | `conversions` | `any[]` |  |
-| `converted` | `number` |  |
 | `from` | `string` |  |
 | `pairs` | `any[]` |  |
-| `to` | `string` |  |
 
-#### Example: List
+#### Example: Load
 
 ```ts
-const converts = await client.Convert().list({ amount: 1, from: "example", to: "example" })
+const convert = await client.Convert().load({ amount: 1, from: 'from', to: 'to' })
 ```
 
 #### Example: Create
@@ -495,7 +491,7 @@ Create an instance: `const rate = client.Rate()`
 #### Example: Load
 
 ```ts
-const rate = await client.Rate().load({ id: 'rate_id' })
+const rate = await client.Rate().load({ date: 'date' })
 ```
 
 
@@ -568,11 +564,11 @@ stores the returned data and match criteria internally. Subsequent
 calls on the same instance can rely on this state.
 
 ```ts
-const currency = client.Currency()
-await currency.load()
+const account = client.Account()
+await account.load()
 
-// currency.data() now returns the currency data from the last `load`
-// currency.match() returns the last match criteria
+// account.data() now returns the account data from the last `load`
+// account.match() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

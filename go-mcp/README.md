@@ -27,8 +27,8 @@ Tool-call arguments (what an agent sends):
 
 ```jsonc
 // foreign-exchange-rates_list: first page of records
-{ "entity": "convert" }
-{ "entity": "convert", "query": { } }
+{ "entity": "account" }
+{ "entity": "account", "query": { } }
 
 // foreign-exchange-rates_load: one record by id
 { "entity": "account", "query": { "id": 1 } }
@@ -60,8 +60,8 @@ Tool-call arguments (what an agent sends):
    ```
 
 4. **Restart Claude Code.** The `foreign-exchange-rates_list` and `foreign-exchange-rates_load` tools now appear
-   in new sessions. Ask the agent to *"list convert using foreign-exchange-rates"*
-   and it calls `foreign-exchange-rates_list` with `{"entity":"convert"}`.
+   in new sessions. Ask the agent to *"list account using foreign-exchange-rates"*
+   and it calls `foreign-exchange-rates_list` with `{"entity":"account"}`.
 
 ## How-to guides
 
@@ -92,7 +92,7 @@ Args: `entity` (required), `query` (optional filter map). Returns the first
 page of records as JSON:
 
 ```jsonc
-{ "entity": "convert" }
+{ "entity": "account" }
 ```
 
 ### Call the `foreign-exchange-rates_load` tool

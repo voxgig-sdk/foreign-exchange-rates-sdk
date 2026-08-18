@@ -157,23 +157,17 @@ convert = client.Convert()
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `amount` | `float` | No |  |
 | `conversions` | `list` | No |  |
-| `converted` | `float` | No |  |
 | `from` | `str` | No |  |
 | `pairs` | `list` | Yes |  |
-| `to` | `str` | No |  |
 
 ### Field Usage by Operation
 
-| Field | list | create |
+| Field | load | create |
 | --- | --- | --- |
-| `amount` | - | - |
 | `conversions` | - | - |
-| `converted` | - | - |
 | `from` | - | Yes |
 | `pairs` | - | - |
-| `to` | - | - |
 
 ### Operations
 
@@ -187,14 +181,12 @@ result = client.Convert().create({
 })
 ```
 
-#### `list(reqmatch=None, ctrl=None) -> list`
+#### `load(reqmatch, ctrl=None) -> dict`
 
-List entities matching the given criteria. The match is optional — call `list()` with no argument to list all records. Returns a list and raises on error.
+Load a single entity matching the given criteria. Returns the entity data and raises on error.
 
 ```python
-results = client.Convert().list({"amount": 1, "from": "example", "to": "example"})
-for convert in results:
-    print(convert)
+result = client.Convert().load({"amount": 1, "from": "from", "to": "to"})
 ```
 
 ### Common Methods
@@ -350,7 +342,7 @@ rate = client.Rate()
 Load a single entity matching the given criteria. Returns the entity data and raises on error.
 
 ```python
-result = client.Rate().load({"id": "rate_id"})
+result = client.Rate().load({"date": "date"})
 ```
 
 ### Common Methods

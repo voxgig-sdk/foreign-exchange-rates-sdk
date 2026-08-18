@@ -36,7 +36,7 @@ class Config {
 
 
   options = {
-    base: 'https://api.exchangerate.dev',
+    base: "https://api.exchangerate.dev",
 
     auth: {
       prefix: 'Bearer',
@@ -71,25 +71,16 @@ class Config {
     "account": {
       "fields": [
         {
-          "active": true,
           "name": "calls_this_month",
-          "req": false,
-          "type": "`$INTEGER`",
-          "index$": 0
+          "type": "`$INTEGER`"
         },
         {
-          "active": true,
           "name": "limit",
-          "req": false,
-          "type": "`$INTEGER`",
-          "index$": 1
+          "type": "`$INTEGER`"
         },
         {
-          "active": true,
           "name": "resets_on",
-          "req": false,
-          "type": "`$STRING`",
-          "index$": 2
+          "type": "`$STRING`"
         }
       ],
       "name": "account",
@@ -99,7 +90,6 @@ class Config {
           "name": "load",
           "points": [
             {
-              "active": true,
               "args": {},
               "kind": "http",
               "method": "GET",
@@ -112,11 +102,9 @@ class Config {
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.usage`"
-              },
-              "index$": 0
+              }
             }
-          ],
-          "key$": "load"
+          ]
         }
       },
       "relations": {
@@ -126,28 +114,10 @@ class Config {
     "convert": {
       "fields": [
         {
-          "active": true,
-          "name": "amount",
-          "req": false,
-          "type": "`$NUMBER`",
-          "index$": 0
-        },
-        {
-          "active": true,
           "name": "conversions",
-          "req": false,
-          "type": "`$ARRAY`",
-          "index$": 1
+          "type": "`$ARRAY`"
         },
         {
-          "active": true,
-          "name": "converted",
-          "req": false,
-          "type": "`$NUMBER`",
-          "index$": 2
-        },
-        {
-          "active": true,
           "name": "from",
           "op": {
             "create": {
@@ -155,23 +125,12 @@ class Config {
               "type": "`$STRING`"
             }
           },
-          "req": false,
-          "type": "`$STRING`",
-          "index$": 3
+          "type": "`$STRING`"
         },
         {
-          "active": true,
           "name": "pairs",
           "req": true,
-          "type": "`$ARRAY`",
-          "index$": 4
-        },
-        {
-          "active": true,
-          "name": "to",
-          "req": false,
-          "type": "`$STRING`",
-          "index$": 5
+          "type": "`$ARRAY`"
         }
       ],
       "name": "convert",
@@ -181,7 +140,6 @@ class Config {
           "name": "create",
           "points": [
             {
-              "active": true,
               "args": {},
               "kind": "http",
               "method": "POST",
@@ -194,49 +152,40 @@ class Config {
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body`"
-              },
-              "index$": 0
+              }
             }
-          ],
-          "key$": "create"
+          ]
         },
-        "list": {
+        "load": {
           "input": "data",
-          "name": "list",
+          "name": "load",
           "points": [
             {
-              "active": true,
               "args": {
                 "params": [
                   {
-                    "active": true,
                     "example": 100,
                     "kind": "param",
                     "name": "amount",
                     "orig": "amount",
                     "reqd": true,
-                    "type": "`$NUMBER`",
-                    "index$": 0
+                    "type": "`$NUMBER`"
                   },
                   {
-                    "active": true,
                     "example": "USD",
                     "kind": "param",
                     "name": "from",
                     "orig": "from",
                     "reqd": true,
-                    "type": "`$STRING`",
-                    "index$": 1
+                    "type": "`$STRING`"
                   },
                   {
-                    "active": true,
                     "example": "EUR",
                     "kind": "param",
                     "name": "to",
                     "orig": "to",
                     "reqd": true,
-                    "type": "`$STRING`",
-                    "index$": 2
+                    "type": "`$STRING`"
                   }
                 ]
               },
@@ -259,12 +208,10 @@ class Config {
               },
               "transform": {
                 "req": "`reqdata`",
-                "res": "`body.conversions`"
-              },
-              "index$": 0
+                "res": "`body`"
+              }
             }
-          ],
-          "key$": "list"
+          ]
         }
       },
       "relations": {
@@ -278,32 +225,20 @@ class Config {
     "currency": {
       "fields": [
         {
-          "active": true,
           "name": "decimals",
-          "req": false,
-          "type": "`$INTEGER`",
-          "index$": 0
+          "type": "`$INTEGER`"
         },
         {
-          "active": true,
           "name": "derived",
-          "req": false,
-          "type": "`$BOOLEAN`",
-          "index$": 1
+          "type": "`$BOOLEAN`"
         },
         {
-          "active": true,
           "name": "name",
-          "req": false,
-          "type": "`$STRING`",
-          "index$": 2
+          "type": "`$STRING`"
         },
         {
-          "active": true,
           "name": "type",
-          "req": false,
-          "type": "`$STRING`",
-          "index$": 3
+          "type": "`$STRING`"
         }
       ],
       "name": "currency",
@@ -313,16 +248,13 @@ class Config {
           "name": "load",
           "points": [
             {
-              "active": true,
               "args": {
                 "query": [
                   {
-                    "active": true,
                     "example": "fiat",
                     "kind": "query",
                     "name": "type",
                     "orig": "type",
-                    "reqd": false,
                     "type": "`$STRING`"
                   }
                 ]
@@ -342,11 +274,9 @@ class Config {
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body`"
-              },
-              "index$": 0
+              }
             }
-          ],
-          "key$": "load"
+          ]
         }
       },
       "relations": {
@@ -362,20 +292,16 @@ class Config {
           "name": "load",
           "points": [
             {
-              "active": true,
               "args": {
                 "query": [
                   {
-                    "active": true,
                     "example": "USD",
                     "kind": "query",
                     "name": "base",
                     "orig": "base",
-                    "reqd": false,
                     "type": "`$STRING`"
                   },
                   {
-                    "active": true,
                     "example": "2020-01-31",
                     "kind": "query",
                     "name": "end_date",
@@ -384,16 +310,13 @@ class Config {
                     "type": "`$STRING`"
                   },
                   {
-                    "active": true,
                     "example": "json",
                     "kind": "query",
                     "name": "format",
                     "orig": "format",
-                    "reqd": false,
                     "type": "`$STRING`"
                   },
                   {
-                    "active": true,
                     "example": "2020-01-01",
                     "kind": "query",
                     "name": "start_date",
@@ -402,12 +325,10 @@ class Config {
                     "type": "`$STRING`"
                   },
                   {
-                    "active": true,
                     "example": "EUR,GBP",
                     "kind": "query",
                     "name": "symbol",
                     "orig": "symbol",
-                    "reqd": false,
                     "type": "`$STRING`"
                   }
                 ]
@@ -431,11 +352,9 @@ class Config {
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.rates`"
-              },
-              "index$": 0
+              }
             }
-          ],
-          "key$": "load"
+          ]
         }
       },
       "relations": {
@@ -445,53 +364,32 @@ class Config {
     "rate": {
       "fields": [
         {
-          "active": true,
           "name": "base",
-          "req": false,
-          "type": "`$STRING`",
-          "index$": 0
+          "type": "`$STRING`"
         },
         {
-          "active": true,
           "name": "derivation_bps_max",
-          "req": false,
-          "type": "`$NUMBER`",
-          "index$": 1
+          "type": "`$NUMBER`"
         },
         {
-          "active": true,
           "name": "derived",
-          "req": false,
-          "type": "`$BOOLEAN`",
-          "index$": 2
+          "type": "`$BOOLEAN`"
         },
         {
-          "active": true,
           "name": "pair",
-          "req": false,
-          "type": "`$STRING`",
-          "index$": 3
+          "type": "`$STRING`"
         },
         {
-          "active": true,
           "name": "quote",
-          "req": false,
-          "type": "`$STRING`",
-          "index$": 4
+          "type": "`$STRING`"
         },
         {
-          "active": true,
           "name": "rate",
-          "req": false,
-          "type": "`$NUMBER`",
-          "index$": 5
+          "type": "`$NUMBER`"
         },
         {
-          "active": true,
           "name": "source",
-          "req": false,
-          "type": "`$STRING`",
-          "index$": 6
+          "type": "`$STRING`"
         }
       ],
       "name": "rate",
@@ -501,25 +399,20 @@ class Config {
           "name": "load",
           "points": [
             {
-              "active": true,
               "args": {
                 "query": [
                   {
-                    "active": true,
                     "example": "USD",
                     "kind": "query",
                     "name": "base",
                     "orig": "base",
-                    "reqd": false,
                     "type": "`$STRING`"
                   },
                   {
-                    "active": true,
                     "example": "EUR,GBP",
                     "kind": "query",
                     "name": "symbol",
                     "orig": "symbol",
-                    "reqd": false,
                     "type": "`$STRING`"
                   }
                 ]
@@ -540,32 +433,26 @@ class Config {
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.rates`"
-              },
-              "index$": 0
+              }
             },
             {
-              "active": true,
               "args": {
                 "params": [
                   {
-                    "active": true,
                     "example": "2020-01-15",
                     "kind": "param",
                     "name": "date",
                     "orig": "date",
                     "reqd": true,
-                    "type": "`$STRING`",
-                    "index$": 0
+                    "type": "`$STRING`"
                   }
                 ],
                 "query": [
                   {
-                    "active": true,
                     "example": "EUR,GBP",
                     "kind": "query",
                     "name": "symbol",
                     "orig": "symbol",
-                    "reqd": false,
                     "type": "`$STRING`"
                   }
                 ]
@@ -586,22 +473,18 @@ class Config {
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.rates`"
-              },
-              "index$": 1
+              }
             },
             {
-              "active": true,
               "args": {
                 "params": [
                   {
-                    "active": true,
                     "example": "eur-usd",
                     "kind": "param",
                     "name": "id",
                     "orig": "slug",
                     "reqd": true,
-                    "type": "`$STRING`",
-                    "index$": 0
+                    "type": "`$STRING`"
                   }
                 ]
               },
@@ -626,11 +509,9 @@ class Config {
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body`"
-              },
-              "index$": 2
+              }
             }
-          ],
-          "key$": "load"
+          ]
         }
       },
       "relations": {

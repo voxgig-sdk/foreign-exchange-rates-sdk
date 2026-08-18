@@ -6,19 +6,9 @@ main: kit: entity: convert: {
 
   fields: [
     {
-      name: "amount"
-      req: false
-      type: "`$NUMBER`"
-    }
-    {
       name: "conversions"
       req: false
       type: "`$ARRAY`"
-    }
-    {
-      name: "converted"
-      req: false
-      type: "`$NUMBER`"
     }
     {
       name: "from"
@@ -35,11 +25,6 @@ main: kit: entity: convert: {
       name: "pairs"
       req: true
       type: "`$ARRAY`"
-    }
-    {
-      name: "to"
-      req: false
-      type: "`$STRING`"
     }
   ]
 
@@ -62,8 +47,8 @@ main: kit: entity: convert: {
         }
       ]
     }
-    list: {
-      name: "list"
+    load: {
+      name: "load"
       points: [
         {
           args: {
@@ -112,7 +97,7 @@ main: kit: entity: convert: {
           }
           transform: {
             req: "`reqdata`"
-            res: "`body.conversions`"
+            res: "`body`"
           }
         }
       ]

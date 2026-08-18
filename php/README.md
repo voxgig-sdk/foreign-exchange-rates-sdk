@@ -4,7 +4,7 @@
 
 The PHP SDK for the ForeignExchangeRates API — an entity-oriented client using PHP conventions.
 
-The SDK exposes the API as capitalised, semantic **Entities** — for example `$client->Account()` — with named operations (`list`/`load`/`create`) instead of raw URL paths and query strings. Working with resources and verbs keeps call sites self-describing and reduces cognitive load.
+The SDK exposes the API as capitalised, semantic **Entities** — for example `$client->Account()` — with named operations (`load`/`create`) instead of raw URL paths and query strings. Working with resources and verbs keeps call sites self-describing and reduces cognitive load.
 
 > Other languages, the CLI, and MCP server live alongside this one — see
 > the [top-level README](../README.md).
@@ -33,13 +33,15 @@ $client = new ForeignExchangeRatesSDK([
 ]);
 ```
 
-### 3. Load an account
+### 3. Load a convert
+
+Convert is nested under amount, so provide the `amount`.
 
 ```php
 try {
-    // load() returns the ENTITY — call data_get() for the Account record (throws on error).
-    $account = $client->Account()->load();
-    print_r($account);
+    // load() returns the ENTITY — call data_get() for the Convert record (throws on error).
+    $convert = $client->Convert()->load(["amount" => 1, "from" => "example_from", "to" => "example_to"]);
+    print_r($convert);
 } catch (\Throwable $err) {
     echo "Error: " . $err->getMessage();
 }
@@ -53,7 +55,7 @@ Entity operations throw a `\Throwable` on failure, so wrap them in
 
 ```php
 try {
-    $currency = $client->Currency()->load();
+    $account = $client->Account()->load();
 } catch (\Throwable $err) {
     echo "Error: " . $err->getMessage();
 }
@@ -127,8 +129,8 @@ $client = ForeignExchangeRatesSDK::test();
 
 // Entity ops return the ENTITY (throws on error);
 // call data_get() for the mock record.
-$currency = $client->Currency()->load();
-print_r($currency);
+$account = $client->Account()->load();
+print_r($account);
 ```
 
 ### Use a custom fetch function
@@ -222,7 +224,6 @@ All entities share the same interface.
 | Method | Signature | Description |
 | --- | --- | --- |
 | `load` | `($reqmatch, $ctrl): array` | Load a single entity by match criteria. |
-| `list` | `(?array $reqmatch = null, $ctrl): array` | List entities matching the criteria (call with no argument to list all). |
 | `create` | `($reqdata, $ctrl): array` | Create a new entity. |
 | `data_get` | `(): array` | Get entity data. |
 | `data_set` | `($data): void` | Set entity data. |
@@ -267,14 +268,11 @@ API path: `/v1/account`
 
 | Field | Description |
 | --- | --- |
-| `amount` |  |
 | `conversions` |  |
-| `converted` |  |
 | `from` |  |
 | `pairs` |  |
-| `to` |  |
 
-Operations: Create, List.
+Operations: Create, Load.
 
 API path: `/v1/convert`
 
@@ -356,24 +354,21 @@ Create an instance: `$convert = $client->Convert();`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
-| `list(match)` | List entities matching the criteria. |
+| `load(match)` | Load a single entity by match criteria. |
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `amount` | `float` |  |
 | `conversions` | `array` |  |
-| `converted` | `float` |  |
 | `from` | `string` |  |
 | `pairs` | `array` |  |
-| `to` | `string` |  |
 
-#### Example: List
+#### Example: Load
 
 ```php
-// list() returns an array of Convert records (throws on error).
-$converts = $client->Convert()->list();
+// load() returns the ENTITY — call data_get() for the Convert record (throws on error).
+$convert = $client->Convert()->load(["amount" => 1, "from" => "from", "to" => "to"]);
 ```
 
 #### Example: Create
@@ -456,7 +451,7 @@ Create an instance: `$rate = $client->Rate();`
 
 ```php
 // load() returns the ENTITY — call data_get() for the Rate record (throws on error).
-$rate = $client->Rate()->load(["id" => "rate_id"]);
+$rate = $client->Rate()->load(["date" => "date"]);
 ```
 
 
@@ -536,11 +531,11 @@ Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```php
-$currency = $client->Currency();
-$currency->load();
+$account = $client->Account();
+$account->load();
 
-// $currency->data_get() now returns the currency data from the last load
-// $currency->match_get() returns the last match criteria
+// $account->data_get() now returns the account data from the last load
+// $account->match_get() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

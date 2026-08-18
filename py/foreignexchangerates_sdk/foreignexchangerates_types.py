@@ -33,13 +33,10 @@ class ConvertRequired(TypedDict):
 
 
 class Convert(ConvertRequired, total=False):
-    amount: float
     conversions: list
-    converted: float
-    to: str
 
 
-class ConvertListMatch(TypedDict):
+class ConvertLoadMatch(TypedDict):
     amount: float
     to: str
 
@@ -49,10 +46,7 @@ class ConvertCreateDataRequired(TypedDict):
 
 
 class ConvertCreateData(ConvertCreateDataRequired, total=False):
-    amount: float
     conversions: list
-    converted: float
-    to: str
 
 
 class Currency(TypedDict, total=False):
@@ -87,6 +81,5 @@ class Rate(TypedDict, total=False):
     source: str
 
 
-class RateLoadMatch(TypedDict, total=False):
+class RateLoadMatch(TypedDict):
     date: str
-    id: str

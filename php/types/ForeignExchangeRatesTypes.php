@@ -31,16 +31,13 @@ class AccountLoadMatch
 /** Convert entity data model. */
 class Convert
 {
-    public ?float $amount = null;
     public ?array $conversions = null;
-    public ?float $converted = null;
     public ?string $from = null;
     public array $pairs;
-    public ?string $to = null;
 }
 
-/** Request payload for Convert#list. */
-class ConvertListMatch
+/** Request payload for Convert#load. */
+class ConvertLoadMatch
 {
     public float $amount;
     public string $from;
@@ -50,12 +47,9 @@ class ConvertListMatch
 /** Request payload for Convert#create. */
 class ConvertCreateData
 {
-    public ?float $amount = null;
     public ?array $conversions = null;
-    public ?float $converted = null;
     public ?string $from = null;
     public array $pairs;
-    public ?string $to = null;
 }
 
 /** Currency entity data model. */
@@ -101,7 +95,6 @@ class Rate
 /** Request payload for Rate#load. */
 class RateLoadMatch
 {
-    public ?string $date = null;
-    public ?string $id = null;
+    public string $date;
 }
 

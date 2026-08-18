@@ -19,7 +19,7 @@ Metadata kindly supplied by [www.freepublicapis.com](https://www.freepublicapis.
 This SDK exposes the API as a small set of **semantic entities** — Account, Convert, Currency, Range and Rate — that you
 call directly, instead of assembling URL paths and query strings. Entities are
 **Capitalised** to mark them as the primary surface, each with the operations they
-support (`list`, `load`, `create`):
+support (`load`, `create`):
 
 ```ts
 const client = new ForeignExchangeRatesSDK()
@@ -42,23 +42,23 @@ network, and no credentials:
 // Shape: { entity: { <entity-name>: { <id>: <record> } } }
 const client = ForeignExchangeRatesSDK.test({
   entity: {
-    currency: {
+    account: {
       test01: { id: 'test01' },
     },
   },
 })
-const currency = await client.Currency().load()
-// currency is the Currency entity, populated with mock data
-// — call currency.data() for the record itself
-console.log(currency)
+const account = await client.Account().load()
+// account is the Account entity, populated with mock data
+// — call account.data() for the record itself
+console.log(account)
 ```
 
 ### Python
 
 ```python
 client = ForeignExchangeRatesSDK.test()
-currency = client.Currency().load()
-print(currency)
+account = client.Account().load()
+print(account)
 ```
 
 ### PHP
@@ -66,16 +66,16 @@ print(currency)
 ```php
 // Seed fixture data so offline calls resolve without a live server.
 $client = ForeignExchangeRatesSDK::test([
-    "entity" => ["currency" => ["test01" => []]],
+    "entity" => ["account" => ["test01" => []]],
 ]);
-$currency = $client->Currency()->load();
+$account = $client->Account()->load();
 ```
 
 ### Golang
 
 ```go
 client := sdk.Test()
-result, err := client.Currency(nil).Load(
+result, err := client.Account(nil).Load(
     nil, nil,
 )
 ```
@@ -85,16 +85,16 @@ result, err := client.Currency(nil).Load(
 ```ruby
 # Seed fixture data so offline calls resolve without a live server.
 client = ForeignExchangeRatesSDK.test({
-  "entity" => { "currency" => { "test01" => {} } },
+  "entity" => { "account" => { "test01" => {} } },
 })
-currency = client.Currency.load()
+account = client.Account.load()
 ```
 
 ### Lua
 
 ```lua
 local client = sdk.test()
-local result, err = client:Currency():load()
+local result, err = client:Account():load()
 ```
 
 ## Packages
@@ -121,9 +121,14 @@ const client = new ForeignExchangeRatesSDK({
   apikey: process.env.FOREIGN_EXCHANGE_RATES_APIKEY,
 })
 
-// Load account data (returns a Account)
-const account = await client.Account().load()
-console.log(account)
+
+// Load a specific convert (returns a Convert)
+const convert = await client.Convert().load({
+  amount: 1,
+  from: 'example_from',
+  to: 'example_to',
+})
+console.log(convert)
 ```
 
 See the [TypeScript README](ts/README.md) for the full guide.
@@ -165,12 +170,12 @@ The API exposes 5 entities:
 | Entity | Description | API path |
 | --- | --- | --- |
 | **Account** | The Account entity (load). | `/v1/account` |
-| **Convert** | The Convert entity (create, list). | `/v1/convert/{from}/{to}/{amount}` |
+| **Convert** | The Convert entity (create, load). | `/v1/convert/{from}/{to}/{amount}` |
 | **Currency** | The Currency entity (load). | `/v1/currencies` |
 | **Range** | The Range entity (load). | `/v1/range` |
 | **Rate** | The Rate entity (load). | `/v1/latest` |
 
-The operations available across these entities are **load**, **list**, **create** — see each entity's
+The operations available across these entities are **load**, **create** — see each entity's
 own list above for exactly which it supports.
 
 ## Quickstart in other languages
@@ -216,12 +221,15 @@ client := sdk.NewForeignExchangeRatesSDK(map[string]any{
     "apikey": os.Getenv("FOREIGN_EXCHANGE_RATES_APIKEY"),
 })
 
-// Load account data
-account, err := client.Account(nil).Load(nil, nil)
+
+// Load a specific convert
+convert, err := client.Convert(nil).Load(
+    map[string]any{"amount": 1, "from": "example_from", "to": "example_to"}, nil,
+)
 if err != nil {
     panic(err)
 }
-fmt.Println(account)
+fmt.Println(convert)
 ```
 
 ### Ruby

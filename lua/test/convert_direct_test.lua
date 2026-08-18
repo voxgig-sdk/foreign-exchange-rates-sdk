@@ -7,58 +7,43 @@ local helpers = require("core.helpers")
 local runner = require("test.runner")
 
 describe("ConvertDirect", function()
-  it("should direct-list-convert", function()
-    local setup = convert_direct_setup({
-      { id = "direct01" },
-      { id = "direct02" },
-    })
-    local _should_skip, _reason = runner.is_control_skipped("direct", "direct-list-convert", setup.live and "live" or "unit")
+  it("should direct-load-convert", function()
+    local setup = convert_direct_setup({ id = "direct01" })
+    local _should_skip, _reason = runner.is_control_skipped("direct", "direct-load-convert", setup.live and "live" or "unit")
     if _should_skip then
       pending(_reason or "skipped via sdk-test-control.json")
       return
     end
-    if setup.live then
-      for _, _live_key in ipairs({"amount01", "from01", "to01"}) do
-        if setup.idmap[_live_key] == nil then
-          pending("live test needs " .. _live_key .. " via *_ENTID env var (synthetic IDs only)")
-          return
-        end
-      end
-    end
     local client = setup.client
 
     local params = {}
+    local query = {}
     if setup.live then
-      params["amount"] = setup.idmap["amount01"]
+      params["amount"] = 100
+      params["from"] = "USD"
+      params["to"] = "EUR"
     else
       params["amount"] = "direct01"
-    end
-    if setup.live then
-      params["from"] = setup.idmap["from01"]
-    else
-      params["from"] = "direct01"
-    end
-    if setup.live then
-      params["to"] = setup.idmap["to01"]
-    else
-      params["to"] = "direct01"
+      params["from"] = "direct02"
+      params["to"] = "direct03"
     end
 
     local result, err = client:direct({
       path = "v1/convert/{from}/{to}/{amount}",
       method = "GET",
       params = params,
+      query = query,
     })
     if setup.live then
-      -- Live mode is lenient: synthetic IDs frequently 4xx and the list-
-      -- response shape varies wildly across public APIs. Skip rather than
-      -- fail when the call doesn't return a usable list.
+      -- Live mode is lenient: synthetic IDs frequently 4xx. Skip rather
+      -- than fail when the load endpoint isn't reachable with the IDs we
+      -- can construct from setup.idmap.
       if err ~= nil then
-        pending("list call failed (likely synthetic IDs against live API): " .. tostring(err))
+        pending("load call failed (likely synthetic IDs against live API): " .. tostring(err))
         return
       end
       if not result["ok"] then
-        pending("list call not ok (likely synthetic IDs against live API)")
+        pending("load call not ok (likely synthetic IDs against live API)")
         return
       end
       local status = helpers.to_int(result["status"])
@@ -70,8 +55,10 @@ describe("ConvertDirect", function()
       assert.is_nil(err)
       assert.is_true(result["ok"])
       assert.are.equal(200, helpers.to_int(result["status"]))
-      assert.is_table(result["data"])
-      assert.are.equal(2, #result["data"])
+      assert.is_not_nil(result["data"])
+      if type(result["data"]) == "table" then
+        assert.are.equal("direct01", result["data"]["id"])
+      end
       assert.are.equal(1, #setup.calls)
     end
   end)

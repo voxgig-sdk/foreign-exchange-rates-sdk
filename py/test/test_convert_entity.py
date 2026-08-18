@@ -21,47 +21,13 @@ class TestConvertEntity:
         ent = testsdk.Convert(None)
         assert ent is not None
 
-    def test_should_stream(self):
-        # Feature #4: the entity stream(action, ...) method runs the op
-        # pipeline and yields result items. With the streaming feature active
-        # it yields the feature's incremental output; otherwise it falls back
-        # to the materialised list so stream always yields.
-        seed = {
-            "entity": {
-                "convert": {
-                    "s1": {"id": "s1"},
-                    "s2": {"id": "s2"},
-                    "s3": {"id": "s3"},
-                }
-            }
-        }
-
-        # Fallback: streaming inactive -> yields the materialised list items.
-        base = ForeignExchangeRatesSDK.test(seed, None)
-        seen = list(base.Convert(None).stream("list", None, None))
-        assert len(seen) == 3
-
-        # Inbound: streaming active -> yields each item from the feature.
-        from foreignexchangerates_sdk.config import make_config
-        cfg = make_config()
-        if isinstance(cfg.get("feature"), dict) and "streaming" in cfg["feature"]:
-            sdk = ForeignExchangeRatesSDK.test(
-                seed, {"feature": {"streaming": {"active": True}}})
-            got = []
-            for item in sdk.Convert(None).stream("list", None, None):
-                if isinstance(item, list):
-                    got.extend(item)
-                else:
-                    got.append(item)
-            assert len(got) == 3
-
     def test_should_run_basic_flow(self):
         setup = _convert_basic_setup(None)
         # Per-op sdk-test-control.json skip — basic test exercises a flow with
         # multiple ops; skipping any one skips the whole flow (steps depend
         # on each other).
         _live = setup.get("live", False)
-        for _op in ["create", "list"]:
+        for _op in ["create", "load"]:
             _skip, _reason = runner.is_control_skipped("entityOp", "convert." + _op, "live" if _live else "unit")
             if _skip:
                 pytest.skip(_reason or "skipped via sdk-test-control.json")
@@ -77,22 +43,16 @@ class TestConvertEntity:
         convert_ref01_ent = client.Convert(None)
         convert_ref01_data = helpers.to_map(vs.getprop(
             vs.getpath(setup["data"], "new.convert"), "convert_ref01"))
-        convert_ref01_data["amount"] = setup["idmap"]["amount01"]
         convert_ref01_data["from"] = setup["idmap"]["from01"]
         convert_ref01_data["to"] = setup["idmap"]["to01"]
 
         convert_ref01_data = helpers.to_map(runner.entity_data(convert_ref01_ent.create(convert_ref01_data, None)))
         assert convert_ref01_data is not None
 
-        # LIST
-        convert_ref01_match = {
-            "amount": setup["idmap"]["amount01"],
-            "from": setup["idmap"]["from01"],
-            "to": setup["idmap"]["to01"],
-        }
-
-        convert_ref01_list_result = convert_ref01_ent.list(convert_ref01_match, None)
-        assert isinstance(convert_ref01_list_result, list)
+        # LOAD
+        convert_ref01_match_dt0 = {}
+        convert_ref01_data_dt0_loaded = convert_ref01_ent.load(convert_ref01_match_dt0, None)
+        assert convert_ref01_data_dt0_loaded is not None
 
 
 
@@ -112,7 +72,7 @@ def _convert_basic_setup(extra):
 
     # Generate idmap via transform.
     idmap = vs.transform(
-        ["convert01", "convert02", "convert03", "amount01", "from01", "to01"],
+        ["convert01", "convert02", "convert03", "from01", "to01"],
         {
             "`$PACK`": ["", {
                 "`$KEY`": "`$COPY`",

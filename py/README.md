@@ -5,7 +5,7 @@
 The Python SDK for the ForeignExchangeRates API — an entity-oriented client following Pythonic conventions.
 
 The SDK exposes the API as capitalised, semantic **Entities** — for example `client.Account()` — each
-carrying a small, uniform set of operations (`list`, `load`, `create`) instead of raw URL
+carrying a small, uniform set of operations (`load`, `create`) instead of raw URL
 paths and query strings. You work with named resources and verbs, which
 keeps the cognitive load low.
 
@@ -39,14 +39,15 @@ client = ForeignExchangeRatesSDK({
 })
 ```
 
-### 3. Load an account
+### 3. Load a convert
 
+Convert is nested under amount, so provide the `amount`.
 `load()` returns the ENTITY — call data_get() for the record — and raises on error.
 
 ```python
 try:
-    account = client.Account().load()
-    print(account)
+    convert = client.Convert().load({"amount": 1, "from": "example_from", "to": "example_to"})
+    print(convert)
 except Exception as err:
     print(f"load failed: {err}")
 ```
@@ -58,8 +59,8 @@ Entity operations raise on failure, so wrap them in `try` / `except`:
 
 ```python
 try:
-    currency = client.Currency().load()
-    print(currency)
+    account = client.Account().load()
+    print(account)
 except Exception as err:
     print(f"load failed: {err}")
 ```
@@ -127,8 +128,8 @@ client = ForeignExchangeRatesSDK.test()
 
 # Entity ops return the ENTITY and raises on error;
 # call data_get() for the record.
-currency = client.Currency().load()
-# currency contains the mock response record
+account = client.Account().load()
+# account contains the mock response record
 ```
 
 ### Use a custom fetch function
@@ -219,7 +220,6 @@ All entities share the same interface.
 | Method | Signature | Description |
 | --- | --- | --- |
 | `load` | `(reqmatch, ctrl) -> any` | Load a single entity by match criteria. Raises on error. |
-| `list` | `(reqmatch, ctrl) -> list` | List entities matching the criteria. Raises on error. |
 | `create` | `(reqdata, ctrl) -> any` | Create a new entity. Raises on error. |
 | `data_get` | `() -> dict` | Get entity data. |
 | `data_set` | `(data)` | Set entity data. |
@@ -264,14 +264,11 @@ API path: `/v1/account`
 
 | Field | Description |
 | --- | --- |
-| `amount` |  |
 | `conversions` |  |
-| `converted` |  |
 | `from` |  |
 | `pairs` |  |
-| `to` |  |
 
-Operations: Create, List.
+Operations: Create, Load.
 
 API path: `/v1/convert`
 
@@ -352,23 +349,20 @@ Create an instance: `convert = client.Convert()`
 | Method | Description |
 | --- | --- |
 | `create(data)` | Create a new entity with the given data. |
-| `list()` | List entities, optionally matching the given criteria. |
+| `load(match)` | Load a single entity by match criteria. |
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `amount` | `float` |  |
 | `conversions` | `list` |  |
-| `converted` | `float` |  |
 | `from` | `str` |  |
 | `pairs` | `list` |  |
-| `to` | `str` |  |
 
-#### Example: List
+#### Example: Load
 
 ```python
-converts = client.Convert().list({"amount": 1, "from": "example", "to": "example"})
+convert = client.Convert().load({"amount": 1, "from": "from", "to": "to"})
 ```
 
 #### Example: Create
@@ -448,7 +442,7 @@ Create an instance: `rate = client.Rate()`
 #### Example: Load
 
 ```python
-rate = client.Rate().load({"id": "rate_id"})
+rate = client.Rate().load({"date": "date"})
 ```
 
 
@@ -527,11 +521,11 @@ Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```python
-currency = client.Currency()
-currency.load()
+account = client.Account()
+account.load()
 
-# currency.data_get() now returns the currency data from the last load
-# currency.match_get() returns the last match criteria
+# account.data_get() now returns the account data from the last load
+# account.match_get() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

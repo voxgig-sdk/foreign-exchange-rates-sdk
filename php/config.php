@@ -5,6 +5,29 @@ declare(strict_types=1);
 
 class ForeignExchangeRatesConfig
 {
+    /** @var array<string,mixed>|null */
+    private static ?array $shared_config = null;
+
+    /**
+     * Return the process-wide config, built once on first use. The SDK reads
+     * the config on every request and never writes to it, so one instance is
+     * shared by every client rather than rebuilt per client.
+     *
+     * PHP arrays are copy-on-write, so callers that do mutate the result get
+     * their own copy and cannot disturb the shared one.
+     */
+    public static function shared_config(): array
+    {
+        if (self::$shared_config === null) {
+            self::$shared_config = self::make_config();
+        }
+        return self::$shared_config;
+    }
+
+    /**
+     * Build a fresh, fully materialised config array. Every call rebuilds the
+     * whole structure, so prefer shared_config unless you need a private copy.
+     */
     public static function make_config(): array
     {
         return [
@@ -38,25 +61,16 @@ class ForeignExchangeRatesConfig
         'account' => [
           'fields' => [
             [
-              'active' => true,
               'name' => 'calls_this_month',
-              'req' => false,
               'type' => '`$INTEGER`',
-              'index$' => 0,
             ],
             [
-              'active' => true,
               'name' => 'limit',
-              'req' => false,
               'type' => '`$INTEGER`',
-              'index$' => 1,
             ],
             [
-              'active' => true,
               'name' => 'resets_on',
-              'req' => false,
               'type' => '`$STRING`',
-              'index$' => 2,
             ],
           ],
           'name' => 'account',
@@ -66,7 +80,6 @@ class ForeignExchangeRatesConfig
               'name' => 'load',
               'points' => [
                 [
-                  'active' => true,
                   'args' => [],
                   'kind' => 'http',
                   'method' => 'GET',
@@ -80,10 +93,8 @@ class ForeignExchangeRatesConfig
                     'req' => '`reqdata`',
                     'res' => '`body.usage`',
                   ],
-                  'index$' => 0,
                 ],
               ],
-              'key$' => 'load',
             ],
           ],
           'relations' => [
@@ -93,28 +104,10 @@ class ForeignExchangeRatesConfig
         'convert' => [
           'fields' => [
             [
-              'active' => true,
-              'name' => 'amount',
-              'req' => false,
-              'type' => '`$NUMBER`',
-              'index$' => 0,
-            ],
-            [
-              'active' => true,
               'name' => 'conversions',
-              'req' => false,
               'type' => '`$ARRAY`',
-              'index$' => 1,
             ],
             [
-              'active' => true,
-              'name' => 'converted',
-              'req' => false,
-              'type' => '`$NUMBER`',
-              'index$' => 2,
-            ],
-            [
-              'active' => true,
               'name' => 'from',
               'op' => [
                 'create' => [
@@ -122,23 +115,12 @@ class ForeignExchangeRatesConfig
                   'type' => '`$STRING`',
                 ],
               ],
-              'req' => false,
               'type' => '`$STRING`',
-              'index$' => 3,
             ],
             [
-              'active' => true,
               'name' => 'pairs',
               'req' => true,
               'type' => '`$ARRAY`',
-              'index$' => 4,
-            ],
-            [
-              'active' => true,
-              'name' => 'to',
-              'req' => false,
-              'type' => '`$STRING`',
-              'index$' => 5,
             ],
           ],
           'name' => 'convert',
@@ -148,7 +130,6 @@ class ForeignExchangeRatesConfig
               'name' => 'create',
               'points' => [
                 [
-                  'active' => true,
                   'args' => [],
                   'kind' => 'http',
                   'method' => 'POST',
@@ -162,48 +143,39 @@ class ForeignExchangeRatesConfig
                     'req' => '`reqdata`',
                     'res' => '`body`',
                   ],
-                  'index$' => 0,
                 ],
               ],
-              'key$' => 'create',
             ],
-            'list' => [
+            'load' => [
               'input' => 'data',
-              'name' => 'list',
+              'name' => 'load',
               'points' => [
                 [
-                  'active' => true,
                   'args' => [
                     'params' => [
                       [
-                        'active' => true,
                         'example' => 100,
                         'kind' => 'param',
                         'name' => 'amount',
                         'orig' => 'amount',
                         'reqd' => true,
                         'type' => '`$NUMBER`',
-                        'index$' => 0,
                       ],
                       [
-                        'active' => true,
                         'example' => 'USD',
                         'kind' => 'param',
                         'name' => 'from',
                         'orig' => 'from',
                         'reqd' => true,
                         'type' => '`$STRING`',
-                        'index$' => 1,
                       ],
                       [
-                        'active' => true,
                         'example' => 'EUR',
                         'kind' => 'param',
                         'name' => 'to',
                         'orig' => 'to',
                         'reqd' => true,
                         'type' => '`$STRING`',
-                        'index$' => 2,
                       ],
                     ],
                   ],
@@ -226,12 +198,10 @@ class ForeignExchangeRatesConfig
                   ],
                   'transform' => [
                     'req' => '`reqdata`',
-                    'res' => '`body.conversions`',
+                    'res' => '`body`',
                   ],
-                  'index$' => 0,
                 ],
               ],
-              'key$' => 'list',
             ],
           ],
           'relations' => [
@@ -245,32 +215,20 @@ class ForeignExchangeRatesConfig
         'currency' => [
           'fields' => [
             [
-              'active' => true,
               'name' => 'decimals',
-              'req' => false,
               'type' => '`$INTEGER`',
-              'index$' => 0,
             ],
             [
-              'active' => true,
               'name' => 'derived',
-              'req' => false,
               'type' => '`$BOOLEAN`',
-              'index$' => 1,
             ],
             [
-              'active' => true,
               'name' => 'name',
-              'req' => false,
               'type' => '`$STRING`',
-              'index$' => 2,
             ],
             [
-              'active' => true,
               'name' => 'type',
-              'req' => false,
               'type' => '`$STRING`',
-              'index$' => 3,
             ],
           ],
           'name' => 'currency',
@@ -280,16 +238,13 @@ class ForeignExchangeRatesConfig
               'name' => 'load',
               'points' => [
                 [
-                  'active' => true,
                   'args' => [
                     'query' => [
                       [
-                        'active' => true,
                         'example' => 'fiat',
                         'kind' => 'query',
                         'name' => 'type',
                         'orig' => 'type',
-                        'reqd' => false,
                         'type' => '`$STRING`',
                       ],
                     ],
@@ -310,10 +265,8 @@ class ForeignExchangeRatesConfig
                     'req' => '`reqdata`',
                     'res' => '`body`',
                   ],
-                  'index$' => 0,
                 ],
               ],
-              'key$' => 'load',
             ],
           ],
           'relations' => [
@@ -329,20 +282,16 @@ class ForeignExchangeRatesConfig
               'name' => 'load',
               'points' => [
                 [
-                  'active' => true,
                   'args' => [
                     'query' => [
                       [
-                        'active' => true,
                         'example' => 'USD',
                         'kind' => 'query',
                         'name' => 'base',
                         'orig' => 'base',
-                        'reqd' => false,
                         'type' => '`$STRING`',
                       ],
                       [
-                        'active' => true,
                         'example' => '2020-01-31',
                         'kind' => 'query',
                         'name' => 'end_date',
@@ -351,16 +300,13 @@ class ForeignExchangeRatesConfig
                         'type' => '`$STRING`',
                       ],
                       [
-                        'active' => true,
                         'example' => 'json',
                         'kind' => 'query',
                         'name' => 'format',
                         'orig' => 'format',
-                        'reqd' => false,
                         'type' => '`$STRING`',
                       ],
                       [
-                        'active' => true,
                         'example' => '2020-01-01',
                         'kind' => 'query',
                         'name' => 'start_date',
@@ -369,12 +315,10 @@ class ForeignExchangeRatesConfig
                         'type' => '`$STRING`',
                       ],
                       [
-                        'active' => true,
                         'example' => 'EUR,GBP',
                         'kind' => 'query',
                         'name' => 'symbol',
                         'orig' => 'symbol',
-                        'reqd' => false,
                         'type' => '`$STRING`',
                       ],
                     ],
@@ -399,10 +343,8 @@ class ForeignExchangeRatesConfig
                     'req' => '`reqdata`',
                     'res' => '`body.rates`',
                   ],
-                  'index$' => 0,
                 ],
               ],
-              'key$' => 'load',
             ],
           ],
           'relations' => [
@@ -412,53 +354,32 @@ class ForeignExchangeRatesConfig
         'rate' => [
           'fields' => [
             [
-              'active' => true,
               'name' => 'base',
-              'req' => false,
               'type' => '`$STRING`',
-              'index$' => 0,
             ],
             [
-              'active' => true,
               'name' => 'derivation_bps_max',
-              'req' => false,
               'type' => '`$NUMBER`',
-              'index$' => 1,
             ],
             [
-              'active' => true,
               'name' => 'derived',
-              'req' => false,
               'type' => '`$BOOLEAN`',
-              'index$' => 2,
             ],
             [
-              'active' => true,
               'name' => 'pair',
-              'req' => false,
               'type' => '`$STRING`',
-              'index$' => 3,
             ],
             [
-              'active' => true,
               'name' => 'quote',
-              'req' => false,
               'type' => '`$STRING`',
-              'index$' => 4,
             ],
             [
-              'active' => true,
               'name' => 'rate',
-              'req' => false,
               'type' => '`$NUMBER`',
-              'index$' => 5,
             ],
             [
-              'active' => true,
               'name' => 'source',
-              'req' => false,
               'type' => '`$STRING`',
-              'index$' => 6,
             ],
           ],
           'name' => 'rate',
@@ -468,25 +389,20 @@ class ForeignExchangeRatesConfig
               'name' => 'load',
               'points' => [
                 [
-                  'active' => true,
                   'args' => [
                     'query' => [
                       [
-                        'active' => true,
                         'example' => 'USD',
                         'kind' => 'query',
                         'name' => 'base',
                         'orig' => 'base',
-                        'reqd' => false,
                         'type' => '`$STRING`',
                       ],
                       [
-                        'active' => true,
                         'example' => 'EUR,GBP',
                         'kind' => 'query',
                         'name' => 'symbol',
                         'orig' => 'symbol',
-                        'reqd' => false,
                         'type' => '`$STRING`',
                       ],
                     ],
@@ -508,31 +424,25 @@ class ForeignExchangeRatesConfig
                     'req' => '`reqdata`',
                     'res' => '`body.rates`',
                   ],
-                  'index$' => 0,
                 ],
                 [
-                  'active' => true,
                   'args' => [
                     'params' => [
                       [
-                        'active' => true,
                         'example' => '2020-01-15',
                         'kind' => 'param',
                         'name' => 'date',
                         'orig' => 'date',
                         'reqd' => true,
                         'type' => '`$STRING`',
-                        'index$' => 0,
                       ],
                     ],
                     'query' => [
                       [
-                        'active' => true,
                         'example' => 'EUR,GBP',
                         'kind' => 'query',
                         'name' => 'symbol',
                         'orig' => 'symbol',
-                        'reqd' => false,
                         'type' => '`$STRING`',
                       ],
                     ],
@@ -554,21 +464,17 @@ class ForeignExchangeRatesConfig
                     'req' => '`reqdata`',
                     'res' => '`body.rates`',
                   ],
-                  'index$' => 1,
                 ],
                 [
-                  'active' => true,
                   'args' => [
                     'params' => [
                       [
-                        'active' => true,
                         'example' => 'eur-usd',
                         'kind' => 'param',
                         'name' => 'id',
                         'orig' => 'slug',
                         'reqd' => true,
                         'type' => '`$STRING`',
-                        'index$' => 0,
                       ],
                     ],
                   ],
@@ -594,10 +500,8 @@ class ForeignExchangeRatesConfig
                     'req' => '`reqdata`',
                     'res' => '`body`',
                   ],
-                  'index$' => 2,
                 ],
               ],
-              'key$' => 'load',
             ],
           ],
           'relations' => [

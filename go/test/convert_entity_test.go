@@ -24,54 +24,6 @@ func TestConvertEntity(t *testing.T) {
 		}
 	})
 
-	// Feature #4: the entity Stream(action, ...) method runs the op pipeline and
-	// returns a channel over result items. With the streaming feature active it
-	// yields the feature's incremental output; otherwise it falls back to the
-	// materialised list so Stream always yields.
-	t.Run("stream", func(t *testing.T) {
-		seed := map[string]any{
-			"entity": map[string]any{
-				"convert": map[string]any{
-					"s1": map[string]any{"id": "s1"},
-					"s2": map[string]any{"id": "s2"},
-					"s3": map[string]any{"id": "s3"},
-				},
-			},
-		}
-
-		// Fallback: streaming inactive -> yields the materialised list items.
-		base := sdk.TestSDK(seed, nil)
-		var seen []any
-		for item := range base.Convert(nil).Stream("list", nil, nil) {
-			seen = append(seen, item)
-		}
-		if len(seen) != 3 {
-			t.Fatalf("expected 3 streamed items, got %d", len(seen))
-		}
-
-		// Inbound: streaming active -> yields each item from the feature iterator.
-		hasStreaming := false
-		if fm, ok := core.MakeConfig()["feature"].(map[string]any); ok {
-			_, hasStreaming = fm["streaming"]
-		}
-		if hasStreaming {
-			streamSdk := sdk.TestSDK(seed, map[string]any{
-				"feature": map[string]any{"streaming": map[string]any{"active": true}},
-			})
-			var got []any
-			for item := range streamSdk.Convert(nil).Stream("list", nil, nil) {
-				if sub, ok := item.([]any); ok {
-					got = append(got, sub...)
-				} else {
-					got = append(got, item)
-				}
-			}
-			if len(got) != 3 {
-				t.Fatalf("expected 3 items via streaming feature, got %d", len(got))
-			}
-		}
-	})
-
 	t.Run("basic", func(t *testing.T) {
 		setup := convertBasicSetup(nil)
 		// Per-op sdk-test-control.json skip — basic test exercises a flow
@@ -80,7 +32,7 @@ func TestConvertEntity(t *testing.T) {
 		if setup.live {
 			_mode = "live"
 		}
-		for _, _op := range []string{"create", "list"} {
+		for _, _op := range []string{"create", "load"} {
 			if _shouldSkip, _reason := isControlSkipped("entityOp", "convert." + _op, _mode); _shouldSkip {
 				if _reason == "" {
 					_reason = "skipped via sdk-test-control.json"
@@ -101,7 +53,6 @@ func TestConvertEntity(t *testing.T) {
 		convertRef01Ent := client.Convert(nil)
 		convertRef01Data := core.ToMapAny(vs.GetProp(
 			vs.GetPath([]any{"new", "convert"}, setup.data), "convert_ref01"))
-		convertRef01Data["amount"] = setup.idmap["amount01"]
 		convertRef01Data["from"] = setup.idmap["from01"]
 		convertRef01Data["to"] = setup.idmap["to01"]
 
@@ -114,20 +65,14 @@ func TestConvertEntity(t *testing.T) {
 			t.Fatal("expected create result to be a map")
 		}
 
-		// LIST
-		convertRef01Match := map[string]any{
-			"amount": setup.idmap["amount01"],
-			"from": setup.idmap["from01"],
-			"to": setup.idmap["to01"],
-		}
-
-		convertRef01ListResult, err := convertRef01Ent.List(convertRef01Match, nil)
+		// LOAD
+		convertRef01MatchDt0 := map[string]any{}
+		convertRef01DataDt0Loaded, err := convertRef01Ent.Load(convertRef01MatchDt0, nil)
 		if err != nil {
-			t.Fatalf("list failed: %v", err)
+			t.Fatalf("load failed: %v", err)
 		}
-		_, convertRef01ListOk := convertRef01ListResult.([]any)
-		if !convertRef01ListOk {
-			t.Fatalf("expected list result to be an array, got %T", convertRef01ListResult)
+		if convertRef01DataDt0Loaded == nil {
+			t.Fatal("expected load result to be non-nil")
 		}
 
 	})
@@ -158,7 +103,7 @@ func convertBasicSetup(extra map[string]any) *entityTestSetup {
 
 	// Generate idmap via transform, matching TS pattern.
 	idmap := vs.Transform(
-		[]any{"convert01", "convert02", "convert03", "amount01", "from01", "to01"},
+		[]any{"convert01", "convert02", "convert03", "from01", "to01"},
 		map[string]any{
 			"`$PACK`": []any{"", map[string]any{
 				"`$KEY`": "`$COPY`",

@@ -28,16 +28,13 @@ type AccountLoadMatch struct {
 
 // Convert is the typed data model for the convert entity.
 type Convert struct {
-	Amount *float64 `json:"amount,omitempty"`
 	Conversions *[]any `json:"conversions,omitempty"`
-	Converted *float64 `json:"converted,omitempty"`
 	From *string `json:"from,omitempty"`
 	Pairs []any `json:"pairs"`
-	To *string `json:"to,omitempty"`
 }
 
-// ConvertListMatch is the typed request payload for Convert.ListTyped.
-type ConvertListMatch struct {
+// ConvertLoadMatch is the typed request payload for Convert.LoadTyped.
+type ConvertLoadMatch struct {
 	Amount float64 `json:"amount"`
 	From string `json:"from"`
 	To string `json:"to"`
@@ -45,12 +42,9 @@ type ConvertListMatch struct {
 
 // ConvertCreateData is the typed request payload for Convert.CreateTyped.
 type ConvertCreateData struct {
-	Amount *float64 `json:"amount,omitempty"`
 	Conversions *[]any `json:"conversions,omitempty"`
-	Converted *float64 `json:"converted,omitempty"`
 	From *string `json:"from,omitempty"`
 	Pairs []any `json:"pairs"`
-	To *string `json:"to,omitempty"`
 }
 
 // Currency is the typed data model for the currency entity.
@@ -90,8 +84,7 @@ type Rate struct {
 
 // RateLoadMatch is the typed request payload for Rate.LoadTyped.
 type RateLoadMatch struct {
-	Date *string `json:"date,omitempty"`
-	Id *string `json:"id,omitempty"`
+	Date string `json:"date"`
 }
 
 // asMap turns a typed request/data struct into the map[string]any the

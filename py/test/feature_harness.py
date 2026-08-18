@@ -14,7 +14,7 @@ from __future__ import annotations
 
 from urllib.parse import quote
 
-from foreignexchangerates_sdk.config import make_config
+from foreignexchangerates_sdk.config import shared_config
 from foreignexchangerates_sdk.features import _make_feature
 from foreignexchangerates_sdk.core.control import ForeignExchangeRatesControl
 from foreignexchangerates_sdk.core.error import ForeignExchangeRatesError
@@ -24,7 +24,7 @@ from foreignexchangerates_sdk.core.spec import ForeignExchangeRatesSpec
 
 # True when this SDK was generated with the named feature.
 def has_feature(name):
-    feature = make_config().get("feature")
+    feature = shared_config().get("feature")
     return isinstance(feature, dict) and feature.get(name) is not None
 
 

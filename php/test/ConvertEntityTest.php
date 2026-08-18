@@ -18,51 +18,12 @@ class ConvertEntityTest extends TestCase
         $this->assertNotNull($ent);
     }
 
-    // Feature #4: the entity stream(action, ...) method runs the op pipeline
-    // and yields result items. With the streaming feature active it yields the
-    // feature's incremental output; otherwise it falls back to the materialised
-    // list so stream always yields.
-    public function test_stream(): void
-    {
-        $seed = [
-            "entity" => [
-                "convert" => [
-                    "s1" => ["id" => "s1"],
-                    "s2" => ["id" => "s2"],
-                    "s3" => ["id" => "s3"],
-                ],
-            ],
-        ];
-
-        // Fallback: streaming inactive -> yields the materialised list items.
-        $base = ForeignExchangeRatesSDK::test($seed, null);
-        $seen = iterator_to_array($base->Convert(null)->stream("list", null, null), false);
-        $this->assertCount(3, $seen);
-
-        // Inbound: streaming active -> yields each item from the feature.
-        $cfg = ForeignExchangeRatesConfig::make_config();
-        if (isset($cfg["feature"]) && is_array($cfg["feature"]) && isset($cfg["feature"]["streaming"])) {
-            $sdk = ForeignExchangeRatesSDK::test($seed, ["feature" => ["streaming" => ["active" => true]]]);
-            $got = [];
-            foreach ($sdk->Convert(null)->stream("list", null, null) as $item) {
-                if (is_array($item) && array_is_list($item)) {
-                    foreach ($item as $sub) {
-                        $got[] = $sub;
-                    }
-                } else {
-                    $got[] = $item;
-                }
-            }
-            $this->assertCount(3, $got);
-        }
-    }
-
     public function test_basic_flow(): void
     {
         $setup = convert_basic_setup(null);
         // Per-op sdk-test-control.json skip.
         $_live = !empty($setup["live"]);
-        foreach (["create", "list"] as $_op) {
+        foreach (["create", "load"] as $_op) {
             [$_shouldSkip, $_reason] = Runner::is_control_skipped("entityOp", "convert." . $_op, $_live ? "live" : "unit");
             if ($_shouldSkip) {
                 $this->markTestSkipped($_reason ?? "skipped via sdk-test-control.json");
@@ -81,7 +42,6 @@ class ConvertEntityTest extends TestCase
         $convert_ref01_ent = $client->Convert(null);
         $convert_ref01_data = Helpers::to_map(Vs::getprop(
             Vs::getpath($setup["data"], "new.convert"), "convert_ref01"));
-        $convert_ref01_data["amount"] = $setup["idmap"]["amount01"];
         $convert_ref01_data["from"] = $setup["idmap"]["from01"];
         $convert_ref01_data["to"] = $setup["idmap"]["to01"];
 
@@ -89,15 +49,10 @@ class ConvertEntityTest extends TestCase
         $convert_ref01_data = Helpers::to_map(is_object($convert_ref01_data_result) && method_exists($convert_ref01_data_result, 'data_get') ? $convert_ref01_data_result->data_get() : $convert_ref01_data_result);
         $this->assertNotNull($convert_ref01_data);
 
-        // LIST
-        $convert_ref01_match = [
-            "amount" => $setup["idmap"]["amount01"],
-            "from" => $setup["idmap"]["from01"],
-            "to" => $setup["idmap"]["to01"],
-        ];
-
-        $convert_ref01_list_result = $convert_ref01_ent->list($convert_ref01_match, null);
-        $this->assertIsArray($convert_ref01_list_result);
+        // LOAD
+        $convert_ref01_match_dt0 = [];
+        $convert_ref01_data_dt0_loaded = $convert_ref01_ent->load($convert_ref01_match_dt0, null);
+        $this->assertNotNull($convert_ref01_data_dt0_loaded);
 
     }
 }
@@ -117,7 +72,7 @@ function convert_basic_setup($extra)
 
     // Generate idmap.
     $idmap = [];
-    foreach (["convert01", "convert02", "convert03", "amount01", "from01", "to01"] as $k) {
+    foreach (["convert01", "convert02", "convert03", "from01", "to01"] as $k) {
         $idmap[$k] = strtoupper($k);
     }
 

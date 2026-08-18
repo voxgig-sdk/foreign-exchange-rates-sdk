@@ -161,23 +161,17 @@ local convert = client:Convert(nil)
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `amount` | `number` | No |  |
 | `conversions` | `table` | No |  |
-| `converted` | `number` | No |  |
 | `from` | `string` | No |  |
 | `pairs` | `table` | Yes |  |
-| `to` | `string` | No |  |
 
 ### Field Usage by Operation
 
-| Field | list | create |
+| Field | load | create |
 | --- | --- | --- |
-| `amount` | - | - |
 | `conversions` | - | - |
-| `converted` | - | - |
 | `from` | - | Yes |
 | `pairs` | - | - |
-| `to` | - | - |
 
 ### Operations
 
@@ -191,12 +185,12 @@ local result, err = client:Convert():create({
 })
 ```
 
-#### `list(reqmatch, ctrl) -> any, err`
+#### `load(reqmatch, ctrl) -> any, err`
 
-List entities matching the given criteria. Returns an array.
+Load a single entity matching the given criteria.
 
 ```lua
-local results, err = client:Convert():list()
+local result, err = client:Convert():load({ amount = 1, from = "from", to = "to" })
 ```
 
 ### Common Methods
@@ -355,7 +349,7 @@ local rate = client:Rate(nil)
 Load a single entity matching the given criteria.
 
 ```lua
-local result, err = client:Rate():load({ id = "rate_id" })
+local result, err = client:Rate():load({ date = "date" })
 ```
 
 ### Common Methods

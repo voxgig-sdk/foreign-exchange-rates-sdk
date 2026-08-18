@@ -17,25 +17,19 @@
 ---@field resets_on? string
 
 ---@class Convert
----@field amount? number
 ---@field conversions? table
----@field converted? number
 ---@field from? string
 ---@field pairs table
----@field to? string
 
----@class ConvertListMatch
+---@class ConvertLoadMatch
 ---@field amount number
 ---@field from string
 ---@field to string
 
 ---@class ConvertCreateData
----@field amount? number
 ---@field conversions? table
----@field converted? number
 ---@field from? string
 ---@field pairs table
----@field to? string
 
 ---@class Currency
 ---@field decimals? number
@@ -63,8 +57,7 @@
 ---@field source? string
 
 ---@class RateLoadMatch
----@field date? string
----@field id? string
+---@field date string
 
 local M = {}
 

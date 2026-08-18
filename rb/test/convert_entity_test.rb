@@ -12,47 +12,11 @@ class ConvertEntityTest < Minitest::Test
     assert !ent.nil?
   end
 
-  # Feature #4: the entity stream(action, ...) method runs the op pipeline and
-  # returns an Enumerator over result items. With the streaming feature active
-  # it yields the feature's incremental output; otherwise it falls back to the
-  # materialised list so stream always yields.
-  def test_stream
-    seed = {
-      "entity" => {
-        "convert" => {
-          "s1" => { "id" => "s1" },
-          "s2" => { "id" => "s2" },
-          "s3" => { "id" => "s3" },
-        },
-      },
-    }
-
-    # Fallback: streaming inactive -> yields the materialised list items.
-    base = ForeignExchangeRatesSDK.test(seed, nil)
-    seen = base.Convert(nil).stream("list", nil, nil).to_a
-    assert_equal 3, seen.length
-
-    # Inbound: streaming active -> yields each item from the feature.
-    cfg = ForeignExchangeRatesConfig.make_config
-    if cfg["feature"].is_a?(Hash) && cfg["feature"].key?("streaming")
-      sdk = ForeignExchangeRatesSDK.test(seed, { "feature" => { "streaming" => { "active" => true } } })
-      got = []
-      sdk.Convert(nil).stream("list", nil, nil).each do |item|
-        if item.is_a?(Array)
-          got.concat(item)
-        else
-          got << item
-        end
-      end
-      assert_equal 3, got.length
-    end
-  end
-
   def test_basic_flow
     setup = convert_basic_setup(nil)
     # Per-op sdk-test-control.json skip.
     _live = setup[:live] || false
-    ["create", "list"].each do |_op|
+    ["create", "load"].each do |_op|
       _should_skip, _reason = Runner.is_control_skipped("entityOp", "convert." + _op, _live ? "live" : "unit")
       if _should_skip
         skip(_reason || "skipped via sdk-test-control.json")
@@ -71,7 +35,6 @@ class ConvertEntityTest < Minitest::Test
     convert_ref01_ent = client.Convert(nil)
     convert_ref01_data = Helpers.to_map(Vs.getprop(
       Vs.getpath(setup[:data], "new.convert"), "convert_ref01"))
-    convert_ref01_data["amount"] = setup[:idmap]["amount01"]
     convert_ref01_data["from"] = setup[:idmap]["from01"]
     convert_ref01_data["to"] = setup[:idmap]["to01"]
 
@@ -79,15 +42,10 @@ class ConvertEntityTest < Minitest::Test
     convert_ref01_data = Helpers.to_map(convert_ref01_data_result.respond_to?(:data_get) ? convert_ref01_data_result.data_get : convert_ref01_data_result)
     assert !convert_ref01_data.nil?
 
-    # LIST
-    convert_ref01_match = {
-      "amount" => setup[:idmap]["amount01"],
-      "from" => setup[:idmap]["from01"],
-      "to" => setup[:idmap]["to01"],
-    }
-
-    convert_ref01_list_result = convert_ref01_ent.list(convert_ref01_match, nil)
-    assert convert_ref01_list_result.is_a?(Array)
+    # LOAD
+    convert_ref01_match_dt0 = {}
+    convert_ref01_data_dt0_loaded = convert_ref01_ent.load(convert_ref01_match_dt0, nil)
+    assert !convert_ref01_data_dt0_loaded.nil?
 
   end
 end
@@ -106,7 +64,7 @@ def convert_basic_setup(extra)
 
   # Generate idmap via transform.
   idmap = Vs.transform(
-    ["convert01", "convert02", "convert03", "amount01", "from01", "to01"],
+    ["convert01", "convert02", "convert03", "from01", "to01"],
     {
       "`$PACK`" => ["", {
         "`$KEY`" => "`$COPY`",

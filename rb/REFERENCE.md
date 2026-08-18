@@ -164,23 +164,17 @@ convert = client.Convert
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `amount` | `Float` | No |  |
 | `conversions` | `Array` | No |  |
-| `converted` | `Float` | No |  |
 | `from` | `String` | No |  |
 | `pairs` | `Array` | Yes |  |
-| `to` | `String` | No |  |
 
 ### Field Usage by Operation
 
-| Field | list | create |
+| Field | load | create |
 | --- | --- | --- |
-| `amount` | - | - |
 | `conversions` | - | - |
-| `converted` | - | - |
 | `from` | - | Yes |
 | `pairs` | - | - |
-| `to` | - | - |
 
 ### Operations
 
@@ -194,12 +188,12 @@ result = client.Convert.create({
 })
 ```
 
-#### `list(reqmatch = nil, ctrl = nil) -> Array`
+#### `load(reqmatch, ctrl = nil) -> result`
 
-List entities matching the given criteria (call with no argument to list all). Returns an array. Raises on error.
+Load a single entity matching the given criteria. Raises on error.
 
 ```ruby
-results = client.Convert.list
+result = client.Convert.load({ "amount" => 1, "from" => "from", "to" => "to" })
 ```
 
 ### Common Methods
@@ -358,7 +352,7 @@ rate = client.Rate
 Load a single entity matching the given criteria. Raises on error.
 
 ```ruby
-result = client.Rate.load({ "id" => "rate_id" })
+result = client.Rate.load({ "date" => "date" })
 ```
 
 ### Common Methods

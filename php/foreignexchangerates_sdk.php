@@ -40,7 +40,7 @@ class ForeignExchangeRatesSDK
         $utility = new ForeignExchangeRatesUtility();
         $this->_utility = $utility;
 
-        $config = ForeignExchangeRatesConfig::make_config();
+        $config = ForeignExchangeRatesConfig::shared_config();
 
         $this->_rootctx = ($utility->make_context)([
             "client" => $this,

@@ -171,44 +171,36 @@ class ConvertEntity
   end
 
   
-
-  
-  # List Convert items matching the given filter.
+  # Load a single Convert.
   #
-  # @param reqmatch [ConvertListMatch, Hash, nil] match filter (any subset of
-  #   Convert fields); defaults to nil, treated as an empty match that lists all.
+  # @param reqmatch [ConvertLoadMatch, Hash, nil] match criteria (id/query fields);
+  #   optional — an entity with no id-like key loads with no match (nil is treated
+  #   as an empty match, so client.Convert.load works with no args).
   # @param ctrl [Object, nil] optional per-call control
-  # @return [Array<Convert>, Array] the matching Convert items; raises ForeignExchangeRatesError on failure
-  def list(reqmatch = nil, ctrl = nil)
+  # @return [Convert, Hash] the loaded Convert; raises ForeignExchangeRatesError on failure
+  def load(reqmatch = nil, ctrl = nil)
     utility = @_utility
     ctx = utility.make_context.call({
-      "opname" => "list",
+      "opname" => "load",
       "ctrl" => ctrl,
       "match" => @_match,
       "data" => @_data,
       "reqmatch" => reqmatch,
     }, @_entctx)
 
-    records = _run_op(ctx) do
+    _run_op(ctx) do
       if ctx.result
         @_match = ctx.result.resmatch if ctx.result.resmatch
+        if ctx.result.resdata
+          @_data = ForeignExchangeRatesHelpers.to_map(VoxgigStruct.clone(ctx.result.resdata)) || {}
+        end
       end
     end
-
-    # list yields the BARE Array of records — each an accessible Hash — so
-    # callers can index item["id"] directly, matching py/lua/go. make_result
-    # wraps each entry as an Entity instance for internal use; unwrap those
-    # back to their bare record Hashes here (load/create/etc. are unaffected).
-    if records.is_a?(Array)
-      records = records.map do |item|
-        item.respond_to?(:data_get) ? item.data_get : item
-      end
-    end
-
-    records
   end
 
 
+
+  
 
   
   # Create a new Convert.

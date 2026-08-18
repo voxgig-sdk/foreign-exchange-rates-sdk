@@ -168,36 +168,30 @@ fmt.Println(convert.GetName()) // "convert"
 
 | Field | Type | Required | Description |
 | --- | --- | --- | --- |
-| `amount` | `float64` | No |  |
 | `conversions` | `[]any` | No |  |
-| `converted` | `float64` | No |  |
 | `from` | `string` | No |  |
 | `pairs` | `[]any` | Yes |  |
-| `to` | `string` | No |  |
 
 ### Field Usage by Operation
 
-| Field | list | create |
+| Field | load | create |
 | --- | --- | --- |
-| `amount` | - | - |
 | `conversions` | - | - |
-| `converted` | - | - |
 | `from` | - | Yes |
 | `pairs` | - | - |
-| `to` | - | - |
 
 ### Operations
 
-#### `List(reqmatch, ctrl map[string]any) (any, error)`
+#### `Load(reqmatch, ctrl map[string]any) (any, error)`
 
-List entities matching the given criteria. Returns an array.
+Load a single entity matching the given criteria.
 
 ```go
-results, err := client.Convert(nil).List(nil, nil)
+result, err := client.Convert(nil).Load(map[string]any{"amount": 1, "from": "from", "to": "to"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(results)
+fmt.Println(result)
 ```
 
 #### `Create(reqdata, ctrl map[string]any) (any, error)`
@@ -363,7 +357,7 @@ fmt.Println(rate.GetName()) // "rate"
 Load a single entity matching the given criteria.
 
 ```go
-result, err := client.Rate(nil).Load(map[string]any{"id": "rate_id"}, nil)
+result, err := client.Rate(nil).Load(map[string]any{"date": "date"}, nil)
 if err != nil {
     panic(err)
 }

@@ -44,34 +44,22 @@ AccountLoadMatch = Struct.new(
 
 # Convert entity data model.
 #
-# @!attribute [rw] amount
-#   @return [Float, nil]
-#
 # @!attribute [rw] conversions
 #   @return [Array, nil]
-#
-# @!attribute [rw] converted
-#   @return [Float, nil]
 #
 # @!attribute [rw] from
 #   @return [String, nil]
 #
 # @!attribute [rw] pairs
 #   @return [Array]
-#
-# @!attribute [rw] to
-#   @return [String, nil]
 Convert = Struct.new(
-  :amount,
   :conversions,
-  :converted,
   :from,
   :pairs,
-  :to,
   keyword_init: true
 )
 
-# Request payload for Convert#list.
+# Request payload for Convert#load.
 #
 # @!attribute [rw] amount
 #   @return [Float]
@@ -81,7 +69,7 @@ Convert = Struct.new(
 #
 # @!attribute [rw] to
 #   @return [String]
-ConvertListMatch = Struct.new(
+ConvertLoadMatch = Struct.new(
   :amount,
   :from,
   :to,
@@ -90,30 +78,18 @@ ConvertListMatch = Struct.new(
 
 # Request payload for Convert#create.
 #
-# @!attribute [rw] amount
-#   @return [Float, nil]
-#
 # @!attribute [rw] conversions
 #   @return [Array, nil]
-#
-# @!attribute [rw] converted
-#   @return [Float, nil]
 #
 # @!attribute [rw] from
 #   @return [String, nil]
 #
 # @!attribute [rw] pairs
 #   @return [Array]
-#
-# @!attribute [rw] to
-#   @return [String, nil]
 ConvertCreateData = Struct.new(
-  :amount,
   :conversions,
-  :converted,
   :from,
   :pairs,
-  :to,
   keyword_init: true
 )
 
@@ -203,13 +179,9 @@ Rate = Struct.new(
 # Request payload for Rate#load.
 #
 # @!attribute [rw] date
-#   @return [String, nil]
-#
-# @!attribute [rw] id
-#   @return [String, nil]
+#   @return [String]
 RateLoadMatch = Struct.new(
   :date,
-  :id,
   keyword_init: true
 )
 

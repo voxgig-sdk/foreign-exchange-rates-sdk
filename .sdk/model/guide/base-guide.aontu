@@ -17,8 +17,7 @@ guide: {
       op: create: method: *POST
     }
     path: "/v1/convert/{from}/{to}/{amount}": {
-      op: list: method: *GET
-      op: list: transform: res: *("`body.conversions`")|top
+      op: load: method: *GET
     }
   }
 

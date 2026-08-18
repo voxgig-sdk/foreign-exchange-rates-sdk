@@ -39,7 +39,7 @@ describe('ConvertEntity', async () => {
   test('basic', async (t) => {
 
     const live = 'TRUE' === process.env.FOREIGN_EXCHANGE_RATES_TEST_LIVE
-    for (const op of ['create', 'list']) {
+    for (const op of ['create', 'load']) {
       if (maybeSkipControl(t, 'entityOp', 'convert.' + op, live)) return
     }
 
@@ -61,21 +61,12 @@ describe('ConvertEntity', async () => {
     // CREATE
     const convert_ref01_ent = client.Convert()
     let convert_ref01_data = setup.data.new.convert['convert_ref01']
-    convert_ref01_data['amount'] = setup.idmap['amount01']
     convert_ref01_data['from'] = setup.idmap['from01']
     convert_ref01_data['to'] = setup.idmap['to01']
 
     convert_ref01_data = (await convert_ref01_ent.create(convert_ref01_data)).data()
     assert(null != convert_ref01_data)
 
-
-    // LIST
-    const convert_ref01_match: any = {}
-    convert_ref01_match['amount'] = setup.idmap['amount01']
-    convert_ref01_match['from'] = setup.idmap['from01']
-    convert_ref01_match['to'] = setup.idmap['to01']
-
-    const convert_ref01_list = (await convert_ref01_ent.list(convert_ref01_match)).map((e: any) => e.data())
 
 
   })

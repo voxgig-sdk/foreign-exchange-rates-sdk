@@ -4,7 +4,7 @@
 
 The Golang SDK for the ForeignExchangeRates API — an entity-oriented client using standard Go conventions. No generics required; data flows as `map[string]any`.
 
-It exposes the API as capitalised, semantic **Entities** — e.g. `client.Account(nil)` — each with the same small set of operations (`List`, `Load`, `Create`) instead of raw URL paths and query strings. You call meaning, not endpoints, which keeps the cognitive load low.
+It exposes the API as capitalised, semantic **Entities** — e.g. `client.Account(nil)` — each with the same small set of operations (`Load`, `Create`) instead of raw URL paths and query strings. You call meaning, not endpoints, which keeps the cognitive load low.
 
 > Other languages, the CLI, and MCP server live alongside this one — see
 > the [top-level README](../README.md).
@@ -69,12 +69,12 @@ Every entity operation returns `(value, error)`. Check `err` before
 using the value — there is no exception to catch:
 
 ```go
-currency, err := client.Currency(nil).Load(nil, nil)
+account, err := client.Account(nil).Load(nil, nil)
 if err != nil {
     // handle err
     return
 }
-_ = currency
+_ = account
 ```
 
 `Direct` follows the same `(value, error)` convention:
@@ -138,13 +138,13 @@ Create a mock client for unit testing — no server required:
 ```go
 client := sdk.Test()
 
-currency, err := client.Currency(nil).Load(
+account, err := client.Account(nil).Load(
     nil, nil,
 )
 if err != nil {
     panic(err)
 }
-fmt.Println(currency) // the returned mock data
+fmt.Println(account) // the returned mock data
 ```
 
 ### Use a custom fetch function
@@ -236,7 +236,6 @@ All entities implement the `ForeignExchangeRatesEntity` interface.
 | Method | Signature | Description |
 | --- | --- | --- |
 | `Load` | `(reqmatch, ctrl map[string]any) (any, error)` | Load a single entity by match criteria. |
-| `List` | `(reqmatch, ctrl map[string]any) (any, error)` | List entities matching the criteria. |
 | `Create` | `(reqdata, ctrl map[string]any) (any, error)` | Create a new entity. |
 | `Data` | `(args ...any) any` | Get or set entity data. |
 | `Match` | `(args ...any) any` | Get or set entity match criteria. |
@@ -251,7 +250,6 @@ operation's data **directly** — there is no wrapper:
 | Operation | `value` |
 | --- | --- |
 | `Load` / `Create` | the entity record (`map[string]any`) |
-| `List` | a `[]any` of entity records |
 
 Check `err` first, then use the value directly (or the typed
 `...Typed` variants, which return the entity's model struct and a typed
@@ -282,14 +280,11 @@ API path: `/v1/account`
 
 | Field | Description |
 | --- | --- |
-| `"amount"` |  |
 | `"conversions"` |  |
-| `"converted"` |  |
 | `"from"` |  |
 | `"pairs"` |  |
-| `"to"` |  |
 
-Operations: Create, List.
+Operations: Create, Load.
 
 API path: `/v1/convert`
 
@@ -373,28 +368,25 @@ Create an instance: `convert := client.Convert(nil)`
 
 | Method | Description |
 | --- | --- |
-| `List(match, ctrl)` | List entities matching the criteria. |
+| `Load(match, ctrl)` | Load a single entity by match criteria. |
 | `Create(data, ctrl)` | Create a new entity with the given data. |
 
 #### Fields
 
 | Field | Type | Description |
 | --- | --- | --- |
-| `amount` | `float64` |  |
 | `conversions` | `[]any` |  |
-| `converted` | `float64` |  |
 | `from` | `string` |  |
 | `pairs` | `[]any` |  |
-| `to` | `string` |  |
 
-#### Example: List
+#### Example: Load
 
 ```go
-converts, err := client.Convert(nil).List(nil, nil)
+convert, err := client.Convert(nil).Load(map[string]any{"amount": 1, "from": "from", "to": "to"}, nil)
 if err != nil {
     panic(err)
 }
-fmt.Println(converts) // the array of records
+fmt.Println(convert) // the loaded record
 ```
 
 #### Example: Create
@@ -486,7 +478,7 @@ Create an instance: `rate := client.Rate(nil)`
 #### Example: Load
 
 ```go
-rate, err := client.Rate(nil).Load(map[string]any{"id": "rate_id"}, nil)
+rate, err := client.Rate(nil).Load(map[string]any{"date": "date"}, nil)
 if err != nil {
     panic(err)
 }
@@ -567,11 +559,11 @@ Entity instances are stateful. After a successful `Load`, the entity
 stores the returned data and match criteria internally.
 
 ```go
-currency := client.Currency(nil)
-currency.Load(nil, nil)
+account := client.Account(nil)
+account.Load(nil, nil)
 
-// currency.Data() now returns the currency data from the last load
-// currency.Match() returns the last match criteria
+// account.Data() now returns the account data from the last load
+// account.Match() returns the last match criteria
 ```
 
 Call `Make()` to create a fresh instance with the same configuration

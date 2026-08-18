@@ -28,7 +28,7 @@ class ForeignExchangeRatesSDK
     utility = ForeignExchangeRatesUtility.new
     @_utility = utility
 
-    config = ForeignExchangeRatesConfig.make_config
+    config = ForeignExchangeRatesConfig.shared_config
 
     @_rootctx = utility.make_context.call({
       "client" => self,

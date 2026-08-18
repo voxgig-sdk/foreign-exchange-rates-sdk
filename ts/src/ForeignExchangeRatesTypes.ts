@@ -18,27 +18,21 @@ export interface AccountLoadMatch {
 }
 
 export interface Convert {
-  amount?: number
   conversions?: any[]
-  converted?: number
   from?: string
   pairs: any[]
-  to?: string
 }
 
-export interface ConvertListMatch {
+export interface ConvertLoadMatch {
   amount: number
   from: string
   to: string
 }
 
 export interface ConvertCreateData {
-  amount?: number
   conversions?: any[]
-  converted?: number
   from?: string
   pairs: any[]
-  to?: string
 }
 
 export interface Currency {
@@ -72,7 +66,6 @@ export interface Rate {
 }
 
 export interface RateLoadMatch {
-  date?: string
-  id?: string
+  date: string
 }
 
