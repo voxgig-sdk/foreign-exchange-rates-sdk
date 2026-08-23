@@ -6,7 +6,7 @@ The Golang SDK for the ForeignExchangeRates API — an entity-oriented client us
 
 It exposes the API as capitalised, semantic **Entities** — e.g. `client.Account(nil)` — each with the same small set of operations (`Load`, `Create`) instead of raw URL paths and query strings. You call meaning, not endpoints, which keeps the cognitive load low.
 
-> Other languages, the CLI, and MCP server live alongside this one — see
+> Also generated from this model: `go-cli`, `go-mcp`, `lua`, `php`, `py`, `rb`, `ts` — see
 > the [top-level README](../README.md).
 
 
@@ -282,7 +282,7 @@ API path: `/v1/account`
 | --- | --- |
 | `"conversions"` |  |
 | `"from"` |  |
-| `"pairs"` |  |
+| `"pairs"` | Array of [targetCurrency, amount] tuples. |
 
 Operations: Create, Load.
 
@@ -377,7 +377,7 @@ Create an instance: `convert := client.Convert(nil)`
 | --- | --- | --- |
 | `conversions` | `[]any` |  |
 | `from` | `string` |  |
-| `pairs` | `[]any` |  |
+| `pairs` | `[]any` | Array of [targetCurrency, amount] tuples. |
 
 #### Example: Load
 

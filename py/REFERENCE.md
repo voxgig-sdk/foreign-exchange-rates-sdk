@@ -159,7 +159,7 @@ convert = client.Convert()
 | --- | --- | --- | --- |
 | `conversions` | `list` | No |  |
 | `from` | `str` | No |  |
-| `pairs` | `list` | Yes |  |
+| `pairs` | `list` | Yes | Array of [targetCurrency, amount] tuples. |
 
 ### Field Usage by Operation
 

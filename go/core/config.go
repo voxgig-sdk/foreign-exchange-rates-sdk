@@ -11,6 +11,9 @@ func MakeConfig() map[string]any {
 	return map[string]any{
 		"main": map[string]any{
 			"name": "ForeignExchangeRates",
+			"slug": "foreign-exchange-rates",
+			"version": "0.0.1",
+			"target": "go",
 		},
 		"feature": map[string]any{
 			"test": map[string]any{
@@ -98,6 +101,7 @@ func MakeConfig() map[string]any {
 					map[string]any{
 						"name": "pairs",
 						"req": true,
+						"short": "Array of [targetCurrency, amount] tuples.",
 						"type": "`$ARRAY`",
 					},
 				},

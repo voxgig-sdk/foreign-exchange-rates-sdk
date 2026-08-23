@@ -165,7 +165,7 @@ $convert = $client->Convert();
 | --- | --- | --- | --- |
 | `conversions` | `array` | No |  |
 | `from` | `string` | No |  |
-| `pairs` | `array` | Yes |  |
+| `pairs` | `array` | Yes | Array of [targetCurrency, amount] tuples. |
 
 ### Field Usage by Operation
 

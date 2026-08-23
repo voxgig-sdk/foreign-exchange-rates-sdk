@@ -170,7 +170,7 @@ fmt.Println(convert.GetName()) // "convert"
 | --- | --- | --- | --- |
 | `conversions` | `[]any` | No |  |
 | `from` | `string` | No |  |
-| `pairs` | `[]any` | Yes |  |
+| `pairs` | `[]any` | Yes | Array of [targetCurrency, amount] tuples. |
 
 ### Field Usage by Operation
 

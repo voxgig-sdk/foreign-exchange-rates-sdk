@@ -163,7 +163,7 @@ local convert = client:Convert(nil)
 | --- | --- | --- | --- |
 | `conversions` | `table` | No |  |
 | `from` | `string` | No |  |
-| `pairs` | `table` | Yes |  |
+| `pairs` | `table` | Yes | Array of [targetCurrency, amount] tuples. |
 
 ### Field Usage by Operation
 

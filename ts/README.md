@@ -9,7 +9,7 @@ The API is exposed as capitalised, semantic **Entities** — e.g.
 instead of raw URL paths and query parameters. This keeps the surface
 predictable and low-friction for both humans and AI agents.
 
-> Other languages, the CLI, and MCP server live alongside this one — see
+> Also generated from this model: `go`, `go-cli`, `go-mcp`, `lua`, `php`, `py`, `rb` — see
 > the [top-level README](../README.md).
 
 
@@ -315,7 +315,7 @@ API path: `/v1/account`
 | --- | --- |
 | `conversions` |  |
 | `from` |  |
-| `pairs` |  |
+| `pairs` | Array of [targetCurrency, amount] tuples. |
 
 Operations: create, load.
 
@@ -406,7 +406,7 @@ Create an instance: `const convert = client.Convert()`
 | --- | --- | --- |
 | `conversions` | `any[]` |  |
 | `from` | `string` |  |
-| `pairs` | `any[]` |  |
+| `pairs` | `any[]` | Array of [targetCurrency, amount] tuples. |
 
 #### Example: Load
 

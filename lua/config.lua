@@ -7,6 +7,9 @@ local function make_config()
   return {
     main = {
       name = "ForeignExchangeRates",
+      slug = "foreign-exchange-rates",
+      version = "0.0.1",
+      target = "lua",
     },
     feature = {
       ["test"] = {
@@ -94,6 +97,7 @@ local function make_config()
           {
             ["name"] = "pairs",
             ["req"] = true,
+            ["short"] = "Array of [targetCurrency, amount] tuples.",
             ["type"] = "`$ARRAY`",
           },
         },

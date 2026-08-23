@@ -250,7 +250,7 @@ API path: `/v1/account`
 | --- | --- |
 | `conversions` |  |
 | `from` |  |
-| `pairs` |  |
+| `pairs` | Array of [targetCurrency, amount] tuples. |
 
 Operations: Create, Load.
 
@@ -341,7 +341,7 @@ Create an instance: `local convert = client:Convert(nil)`
 | --- | --- | --- |
 | `conversions` | `table` |  |
 | `from` | `string` |  |
-| `pairs` | `table` |  |
+| `pairs` | `table` | Array of [targetCurrency, amount] tuples. |
 
 #### Example: Load
 

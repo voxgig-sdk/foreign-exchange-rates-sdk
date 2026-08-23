@@ -28,6 +28,9 @@ def make_config():
     return {
         "main": {
             "name": "ForeignExchangeRates",
+            "slug": "foreign-exchange-rates",
+            "version": "0.0.1",
+            "target": "py",
         },
         "feature": {
             "test": {
@@ -115,6 +118,7 @@ def make_config():
           {
             "name": "pairs",
             "req": True,
+            "short": "Array of [targetCurrency, amount] tuples.",
             "type": "`$ARRAY`",
           },
         ],

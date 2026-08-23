@@ -260,7 +260,7 @@ API path: `/v1/account`
 | --- | --- |
 | `conversions` |  |
 | `from` |  |
-| `pairs` |  |
+| `pairs` | Array of [targetCurrency, amount] tuples. |
 
 Operations: Create, Load.
 
@@ -352,7 +352,7 @@ Create an instance: `convert = client.Convert`
 | --- | --- | --- |
 | `conversions` | `Array` |  |
 | `from` | `String` |  |
-| `pairs` | `Array` |  |
+| `pairs` | `Array` | Array of [targetCurrency, amount] tuples. |
 
 #### Example: Load
 

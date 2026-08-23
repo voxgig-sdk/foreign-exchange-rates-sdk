@@ -108,6 +108,7 @@
               "active": true,
               "name": "pairs",
               "req": true,
+              "short": "Array of [targetCurrency, amount] tuples.",
               "type": "`$ARRAY`"
             }
           ],

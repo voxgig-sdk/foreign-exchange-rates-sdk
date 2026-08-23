@@ -33,6 +33,9 @@ class ForeignExchangeRatesConfig
         return [
             "main" => [
                 "name" => "ForeignExchangeRates",
+                "slug" => "foreign-exchange-rates",
+                "version" => "0.0.1",
+                "target" => "php",
             ],
             "feature" => [
                 "test" => [
@@ -120,6 +123,7 @@ class ForeignExchangeRatesConfig
             [
               'name' => 'pairs',
               'req' => true,
+              'short' => 'Array of [targetCurrency, amount] tuples.',
               'type' => '`$ARRAY`',
             ],
           ],

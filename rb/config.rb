@@ -19,6 +19,9 @@ module ForeignExchangeRatesConfig
     {
       "main" => {
         "name" => "ForeignExchangeRates",
+        "slug" => "foreign-exchange-rates",
+        "version" => "0.0.1",
+        "target" => "rb",
       },
       "feature" => {
         "test" => {
@@ -106,6 +109,7 @@ module ForeignExchangeRatesConfig
             {
               "name" => "pairs",
               "req" => true,
+              "short" => "Array of [targetCurrency, amount] tuples.",
               "type" => "`$ARRAY`",
             },
           ],
