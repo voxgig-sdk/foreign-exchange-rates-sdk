@@ -59,6 +59,7 @@ export interface Rate {
   base?: string
   derivation_bps_max?: number
   derived?: boolean
+  id?: string
   pair?: string
   quote?: string
   rate?: number

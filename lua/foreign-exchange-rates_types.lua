@@ -51,6 +51,7 @@
 ---@field base? string
 ---@field derivation_bps_max? number
 ---@field derived? boolean
+---@field id? string
 ---@field pair? string
 ---@field quote? string
 ---@field rate? number

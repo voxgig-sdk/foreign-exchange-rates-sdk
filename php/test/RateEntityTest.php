@@ -48,9 +48,13 @@ class RateEntityTest extends TestCase
 
         // LOAD
         $rate_ref01_ent = $client->Rate(null);
-        $rate_ref01_match_dt0 = [];
+        $rate_ref01_match_dt0 = [
+            "id" => $rate_ref01_data["id"],
+        ];
         $rate_ref01_data_dt0_loaded = $rate_ref01_ent->load($rate_ref01_match_dt0, null);
-        $this->assertNotNull($rate_ref01_data_dt0_loaded);
+        $rate_ref01_data_dt0_load_result = Helpers::to_map(is_object($rate_ref01_data_dt0_loaded) && method_exists($rate_ref01_data_dt0_loaded, 'data_get') ? $rate_ref01_data_dt0_loaded->data_get() : $rate_ref01_data_dt0_loaded);
+        $this->assertNotNull($rate_ref01_data_dt0_load_result);
+        $this->assertEquals($rate_ref01_data_dt0_load_result["id"], $rate_ref01_data["id"]);
 
     }
 }

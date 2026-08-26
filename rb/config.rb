@@ -28,6 +28,7 @@ module ForeignExchangeRatesConfig
           "options" => {
             "active" => false,
           },
+          "transport" => "base",
         },
       },
       "options" => {
@@ -354,6 +355,10 @@ module ForeignExchangeRatesConfig
             {
               "name" => "derived",
               "type" => "`$BOOLEAN`",
+            },
+            {
+              "name" => "id",
+              "type" => "`$STRING`",
             },
             {
               "name" => "pair",

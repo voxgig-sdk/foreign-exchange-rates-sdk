@@ -154,6 +154,9 @@ end
 # @!attribute [rw] derived
 #   @return [Boolean, nil]
 #
+# @!attribute [rw] id
+#   @return [String, nil]
+#
 # @!attribute [rw] pair
 #   @return [String, nil]
 #
@@ -169,6 +172,7 @@ Rate = Struct.new(
   :base,
   :derivation_bps_max,
   :derived,
+  :id,
   :pair,
   :quote,
   :rate,

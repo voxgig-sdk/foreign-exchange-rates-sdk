@@ -295,6 +295,7 @@ API path: `/v1/range`
 | `base` |  |
 | `derivation_bps_max` |  |
 | `derived` |  |
+| `id` |  |
 | `pair` |  |
 | `quote` |  |
 | `rate` |  |
@@ -432,6 +433,7 @@ Create an instance: `rate = client.Rate`
 | `base` | `String` |  |
 | `derivation_bps_max` | `Float` |  |
 | `derived` | `Boolean` |  |
+| `id` | `String` |  |
 | `pair` | `String` |  |
 | `quote` | `String` |  |
 | `rate` | `Float` |  |

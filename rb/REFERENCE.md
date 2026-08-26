@@ -340,6 +340,7 @@ rate = client.Rate
 | `base` | `String` | No |  |
 | `derivation_bps_max` | `Float` | No |  |
 | `derived` | `Boolean` | No |  |
+| `id` | `String` | No |  |
 | `pair` | `String` | No |  |
 | `quote` | `String` | No |  |
 | `rate` | `Float` | No |  |

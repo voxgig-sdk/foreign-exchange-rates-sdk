@@ -75,6 +75,7 @@ class Rate(TypedDict, total=False):
     base: str
     derivation_bps_max: float
     derived: bool
+    id: str
     pair: str
     quote: str
     rate: float

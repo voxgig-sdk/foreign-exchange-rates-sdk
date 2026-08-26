@@ -339,6 +339,7 @@ $rate = $client->Rate();
 | `base` | `string` | No |  |
 | `derivation_bps_max` | `float` | No |  |
 | `derived` | `bool` | No |  |
+| `id` | `string` | No |  |
 | `pair` | `string` | No |  |
 | `quote` | `string` | No |  |
 | `rate` | `float` | No |  |

@@ -345,6 +345,7 @@ fmt.Println(rate.GetName()) // "rate"
 | `base` | `string` | No |  |
 | `derivation_bps_max` | `float64` | No |  |
 | `derived` | `bool` | No |  |
+| `id` | `string` | No |  |
 | `pair` | `string` | No |  |
 | `quote` | `string` | No |  |
 | `rate` | `float64` | No |  |

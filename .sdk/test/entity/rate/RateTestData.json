@@ -2,50 +2,50 @@
   "existing": {
     "rate": {
       "RATE00": {
-        "base": "s46",
-        "derivation_bps_max": 71,
+        "base": "s50",
+        "derivation_bps_max": 81,
         "derived": true,
-        "pair": "s49",
-        "quote": "s4a",
-        "rate": 75,
-        "source": "s4c",
-        "date": "DATE01",
-        "id": "RATE00"
+        "id": "RATE00",
+        "pair": "s54",
+        "quote": "s55",
+        "rate": 86,
+        "source": "s57",
+        "date": "DATE01"
       },
       "RATE01": {
-        "base": "s8c",
-        "derivation_bps_max": 141,
+        "base": "sa0",
+        "derivation_bps_max": 161,
         "derived": true,
-        "pair": "s8f",
-        "quote": "s90",
-        "rate": 145,
-        "source": "s92",
-        "date": "DATE01",
-        "id": "RATE01"
+        "id": "RATE01",
+        "pair": "sa4",
+        "quote": "sa5",
+        "rate": 166,
+        "source": "sa7",
+        "date": "DATE01"
       },
       "RATE02": {
-        "base": "sd2",
-        "derivation_bps_max": 211,
+        "base": "sf0",
+        "derivation_bps_max": 241,
         "derived": true,
-        "pair": "sd5",
-        "quote": "sd6",
-        "rate": 215,
-        "source": "sd8",
-        "date": "DATE01",
-        "id": "RATE02"
+        "id": "RATE02",
+        "pair": "sf4",
+        "quote": "sf5",
+        "rate": 246,
+        "source": "sf7",
+        "date": "DATE01"
       }
     }
   },
   "new": {
     "rate": {
       "rate_ref01": {
-        "base": "s118",
-        "derivation_bps_max": 281,
+        "base": "s140",
+        "derivation_bps_max": 321,
         "derived": true,
-        "pair": "s11b",
-        "quote": "s11c",
-        "rate": 285,
-        "source": "s11e"
+        "pair": "s144",
+        "quote": "s145",
+        "rate": 326,
+        "source": "s147"
       }
     }
   }

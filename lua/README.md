@@ -285,6 +285,7 @@ API path: `/v1/range`
 | `base` |  |
 | `derivation_bps_max` |  |
 | `derived` |  |
+| `id` |  |
 | `pair` |  |
 | `quote` |  |
 | `rate` |  |
@@ -418,6 +419,7 @@ Create an instance: `local rate = client:Rate(nil)`
 | `base` | `string` |  |
 | `derivation_bps_max` | `number` |  |
 | `derived` | `boolean` |  |
+| `id` | `string` |  |
 | `pair` | `string` |  |
 | `quote` | `string` |  |
 | `rate` | `number` |  |

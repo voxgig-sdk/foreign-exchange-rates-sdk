@@ -76,6 +76,7 @@ type Rate struct {
 	Base *string `json:"base,omitempty"`
 	DerivationBpsMax *float64 `json:"derivation_bps_max,omitempty"`
 	Derived *bool `json:"derived,omitempty"`
+	Id *string `json:"id,omitempty"`
 	Pair *string `json:"pair,omitempty"`
 	Quote *string `json:"quote,omitempty"`
 	Rate *float64 `json:"rate,omitempty"`

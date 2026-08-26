@@ -21,6 +21,11 @@ main: kit: entity: rate: {
       type: "`$BOOLEAN`"
     }
     {
+      name: "id"
+      req: false
+      type: "`$STRING`"
+    }
+    {
       name: "pair"
       req: false
       type: "`$STRING`"
@@ -41,6 +46,11 @@ main: kit: entity: rate: {
       type: "`$STRING`"
     }
   ]
+
+  id: {
+    field: "id"
+    name: "id"
+  }
 
   name: "rate"
   op: {

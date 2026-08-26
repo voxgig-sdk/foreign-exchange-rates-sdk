@@ -305,6 +305,7 @@ API path: `/v1/range`
 | `base` |  |
 | `derivation_bps_max` |  |
 | `derived` |  |
+| `id` |  |
 | `pair` |  |
 | `quote` |  |
 | `rate` |  |
@@ -442,6 +443,7 @@ Create an instance: `$rate = $client->Rate();`
 | `base` | `string` |  |
 | `derivation_bps_max` | `float` |  |
 | `derived` | `bool` |  |
+| `id` | `string` |  |
 | `pair` | `string` |  |
 | `quote` | `string` |  |
 | `rate` | `float` |  |

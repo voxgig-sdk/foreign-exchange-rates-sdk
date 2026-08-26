@@ -330,6 +330,7 @@ rate = client.Rate()
 | `base` | `str` | No |  |
 | `derivation_bps_max` | `float` | No |  |
 | `derived` | `bool` | No |  |
+| `id` | `str` | No |  |
 | `pair` | `str` | No |  |
 | `quote` | `str` | No |  |
 | `rate` | `float` | No |  |

@@ -62,8 +62,9 @@ describe('RateEntity', async () => {
     // LOAD
     const rate_ref01_ent = client.Rate()
     const rate_ref01_match_dt0: any = {}
+    rate_ref01_match_dt0.id = rate_ref01_data.id
     const rate_ref01_data_dt0 = (await rate_ref01_ent.load(rate_ref01_match_dt0)).data()
-    assert(null != rate_ref01_data_dt0)
+    assert(rate_ref01_data_dt0.id === rate_ref01_data.id)
 
 
   })

@@ -86,6 +86,7 @@ class Rate
     public ?string $base = null;
     public ?float $derivation_bps_max = null;
     public ?bool $derived = null;
+    public ?string $id = null;
     public ?string $pair = null;
     public ?string $quote = null;
     public ?float $rate = null;

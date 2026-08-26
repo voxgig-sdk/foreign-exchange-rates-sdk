@@ -42,6 +42,7 @@ class ForeignExchangeRatesConfig
           'options' => [
             'active' => false,
           ],
+          'transport' => 'base',
         ],
             ],
             "options" => [
@@ -368,6 +369,10 @@ class ForeignExchangeRatesConfig
             [
               'name' => 'derived',
               'type' => '`$BOOLEAN`',
+            ],
+            [
+              'name' => 'id',
+              'type' => '`$STRING`',
             ],
             [
               'name' => 'pair',

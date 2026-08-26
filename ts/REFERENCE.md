@@ -387,6 +387,7 @@ const rate = client.Rate()
 | `base` | `string` | No |  |
 | `derivation_bps_max` | `number` | No |  |
 | `derived` | `boolean` | No |  |
+| `id` | `string` | No |  |
 | `pair` | `string` | No |  |
 | `quote` | `string` | No |  |
 | `rate` | `number` | No |  |

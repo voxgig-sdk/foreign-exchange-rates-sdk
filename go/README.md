@@ -317,6 +317,7 @@ API path: `/v1/range`
 | `"base"` |  |
 | `"derivation_bps_max"` |  |
 | `"derived"` |  |
+| `"id"` |  |
 | `"pair"` |  |
 | `"quote"` |  |
 | `"rate"` |  |
@@ -470,6 +471,7 @@ Create an instance: `rate := client.Rate(nil)`
 | `base` | `string` |  |
 | `derivation_bps_max` | `float64` |  |
 | `derived` | `bool` |  |
+| `id` | `string` |  |
 | `pair` | `string` |  |
 | `quote` | `string` |  |
 | `rate` | `float64` |  |

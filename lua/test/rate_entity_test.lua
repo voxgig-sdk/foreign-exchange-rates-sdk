@@ -44,10 +44,14 @@ describe("RateEntity", function()
 
     -- LOAD
     local rate_ref01_ent = client:Rate(nil)
-    local rate_ref01_match_dt0 = {}
+    local rate_ref01_match_dt0 = {
+      id = rate_ref01_data["id"],
+    }
     local rate_ref01_data_dt0_loaded, err = rate_ref01_ent:load(rate_ref01_match_dt0, nil)
     assert.is_nil(err)
-    assert.is_not_nil(rate_ref01_data_dt0_loaded)
+    local rate_ref01_data_dt0_load_result = helpers.to_map(type(rate_ref01_data_dt0_loaded) == 'table' and rate_ref01_data_dt0_loaded.data_get and rate_ref01_data_dt0_loaded:data_get() or rate_ref01_data_dt0_loaded)
+    assert.is_not_nil(rate_ref01_data_dt0_load_result)
+    assert.are.equal(rate_ref01_data_dt0_load_result["id"], rate_ref01_data["id"])
 
   end)
 end)

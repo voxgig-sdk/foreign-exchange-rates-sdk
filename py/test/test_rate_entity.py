@@ -48,9 +48,13 @@ class TestRateEntity:
 
         # LOAD
         rate_ref01_ent = client.Rate(None)
-        rate_ref01_match_dt0 = {}
+        rate_ref01_match_dt0 = {
+            "id": rate_ref01_data["id"],
+        }
         rate_ref01_data_dt0_loaded = rate_ref01_ent.load(rate_ref01_match_dt0, None)
-        assert rate_ref01_data_dt0_loaded is not None
+        rate_ref01_data_dt0_load_result = helpers.to_map(runner.entity_data(rate_ref01_data_dt0_loaded))
+        assert rate_ref01_data_dt0_load_result is not None
+        assert rate_ref01_data_dt0_load_result["id"] == rate_ref01_data["id"]
 
 
 
