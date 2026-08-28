@@ -64,9 +64,6 @@ class Currency
 /** Request payload for Currency#load. */
 class CurrencyLoadMatch
 {
-    public ?int $decimals = null;
-    public ?bool $derived = null;
-    public ?string $name = null;
     public ?string $type = null;
 }
 
@@ -78,6 +75,11 @@ class Range
 /** Request payload for Range#load. */
 class RangeLoadMatch
 {
+    public ?string $base = null;
+    public string $end_date;
+    public ?string $format = null;
+    public string $start_date;
+    public ?string $symbol = null;
 }
 
 /** Rate entity data model. */
@@ -97,5 +99,6 @@ class Rate
 class RateLoadMatch
 {
     public string $date;
+    public ?string $symbol = null;
 }
 

@@ -43,9 +43,6 @@ export interface Currency {
 }
 
 export interface CurrencyLoadMatch {
-  decimals?: number
-  derived?: boolean
-  name?: string
   type?: string
 }
 
@@ -53,6 +50,11 @@ export interface Range {
 }
 
 export interface RangeLoadMatch {
+  base?: string
+  end_date: string
+  format?: string
+  start_date: string
+  symbol?: string
 }
 
 export interface Rate {
@@ -68,5 +70,6 @@ export interface Rate {
 
 export interface RateLoadMatch {
   date: string
+  symbol?: string
 }
 

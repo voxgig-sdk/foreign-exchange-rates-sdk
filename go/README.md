@@ -446,7 +446,7 @@ Create an instance: `range_ := client.Range(nil)`
 #### Example: Load
 
 ```go
-range_, err := client.Range(nil).Load(nil, nil)
+range_, err := client.Range(nil).Load(map[string]any{"end_date": "end_date", "start_date": "start_date"}, nil)
 if err != nil {
     panic(err)
 }
@@ -486,6 +486,29 @@ if err != nil {
 }
 fmt.Println(rate) // the loaded record
 ```
+
+## Features
+
+This SDK ships 1 optional features. Each is **inactive until you
+switch it on**, so an SDK you have not configured behaves exactly as if none of
+them existed — no retries, no cache, no logging, no measurable overhead.
+
+Activate a feature by name in the client options, alongside the options shown
+above:
+
+| Feature | What it does |
+|---|---|
+| [`test`](#test) | In-memory mock transport for testing without a live server |
+
+### test
+
+In-memory mock transport for testing without a live server.
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+
+Set `feature.test.active` to enable it, then override any of the options above.
 
 
 ## Advanced

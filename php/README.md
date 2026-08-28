@@ -422,7 +422,7 @@ Create an instance: `$range = $client->Range();`
 
 ```php
 // load() returns the ENTITY — call data_get() for the Range record (throws on error).
-$range = $client->Range()->load();
+$range = $client->Range()->load(["end_date" => "end_date", "start_date" => "start_date"]);
 ```
 
 
@@ -455,6 +455,29 @@ Create an instance: `$rate = $client->Rate();`
 // load() returns the ENTITY — call data_get() for the Rate record (throws on error).
 $rate = $client->Rate()->load(["date" => "date"]);
 ```
+
+## Features
+
+This SDK ships 1 optional features. Each is **inactive until you
+switch it on**, so an SDK you have not configured behaves exactly as if none of
+them existed — no retries, no cache, no logging, no measurable overhead.
+
+Activate a feature by name in the client options, alongside the options shown
+above:
+
+| Feature | What it does |
+|---|---|
+| [`test`](#test) | In-memory mock transport for testing without a live server |
+
+### test
+
+In-memory mock transport for testing without a live server.
+
+| Option | Default |
+|---|---|
+| `active` | `false` |
+
+Set `feature.test.active` to enable it, then override any of the options above.
 
 
 ## Advanced

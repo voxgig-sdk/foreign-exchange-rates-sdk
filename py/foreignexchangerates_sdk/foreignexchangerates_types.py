@@ -57,9 +57,6 @@ class Currency(TypedDict, total=False):
 
 
 class CurrencyLoadMatch(TypedDict, total=False):
-    decimals: int
-    derived: bool
-    name: str
     type: str
 
 
@@ -67,8 +64,15 @@ class Range(TypedDict):
     pass
 
 
-class RangeLoadMatch(TypedDict):
-    pass
+class RangeLoadMatchRequired(TypedDict):
+    end_date: str
+    start_date: str
+
+
+class RangeLoadMatch(RangeLoadMatchRequired, total=False):
+    base: str
+    format: str
+    symbol: str
 
 
 class Rate(TypedDict, total=False):
@@ -82,5 +86,9 @@ class Rate(TypedDict, total=False):
     source: str
 
 
-class RateLoadMatch(TypedDict):
+class RateLoadMatchRequired(TypedDict):
     date: str
+
+
+class RateLoadMatch(RateLoadMatchRequired, total=False):
+    symbol: str

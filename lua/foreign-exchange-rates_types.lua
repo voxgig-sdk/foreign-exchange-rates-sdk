@@ -38,14 +38,16 @@
 ---@field type? string
 
 ---@class CurrencyLoadMatch
----@field decimals? number
----@field derived? boolean
----@field name? string
 ---@field type? string
 
 ---@class Range
 
 ---@class RangeLoadMatch
+---@field base? string
+---@field end_date string
+---@field format? string
+---@field start_date string
+---@field symbol? string
 
 ---@class Rate
 ---@field base? string
@@ -59,6 +61,7 @@
 
 ---@class RateLoadMatch
 ---@field date string
+---@field symbol? string
 
 local M = {}
 

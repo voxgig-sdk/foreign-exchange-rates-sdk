@@ -57,9 +57,6 @@ type Currency struct {
 
 // CurrencyLoadMatch is the typed request payload for Currency.LoadTyped.
 type CurrencyLoadMatch struct {
-	Decimals *int `json:"decimals,omitempty"`
-	Derived *bool `json:"derived,omitempty"`
-	Name *string `json:"name,omitempty"`
 	Type *string `json:"type,omitempty"`
 }
 
@@ -69,6 +66,11 @@ type Range struct {
 
 // RangeLoadMatch is the typed request payload for Range.LoadTyped.
 type RangeLoadMatch struct {
+	Base *string `json:"base,omitempty"`
+	EndDate string `json:"end_date"`
+	Format *string `json:"format,omitempty"`
+	StartDate string `json:"start_date"`
+	Symbol *string `json:"symbol,omitempty"`
 }
 
 // Rate is the typed data model for the rate entity.
@@ -86,6 +88,7 @@ type Rate struct {
 // RateLoadMatch is the typed request payload for Rate.LoadTyped.
 type RateLoadMatch struct {
 	Date string `json:"date"`
+	Symbol *string `json:"symbol,omitempty"`
 }
 
 // asMap turns a typed request/data struct into the map[string]any the

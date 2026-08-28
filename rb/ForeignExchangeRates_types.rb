@@ -116,21 +116,9 @@ Currency = Struct.new(
 
 # Request payload for Currency#load.
 #
-# @!attribute [rw] decimals
-#   @return [Integer, nil]
-#
-# @!attribute [rw] derived
-#   @return [Boolean, nil]
-#
-# @!attribute [rw] name
-#   @return [String, nil]
-#
 # @!attribute [rw] type
 #   @return [String, nil]
 CurrencyLoadMatch = Struct.new(
-  :decimals,
-  :derived,
-  :name,
   :type,
   keyword_init: true
 )
@@ -140,8 +128,29 @@ class RangeType
 end
 
 # Request payload for Range#load.
-class RangeLoadMatch
-end
+#
+# @!attribute [rw] base
+#   @return [String, nil]
+#
+# @!attribute [rw] end_date
+#   @return [String]
+#
+# @!attribute [rw] format
+#   @return [String, nil]
+#
+# @!attribute [rw] start_date
+#   @return [String]
+#
+# @!attribute [rw] symbol
+#   @return [String, nil]
+RangeLoadMatch = Struct.new(
+  :base,
+  :end_date,
+  :format,
+  :start_date,
+  :symbol,
+  keyword_init: true
+)
 
 # Rate entity data model.
 #
@@ -184,8 +193,12 @@ Rate = Struct.new(
 #
 # @!attribute [rw] date
 #   @return [String]
+#
+# @!attribute [rw] symbol
+#   @return [String, nil]
 RateLoadMatch = Struct.new(
   :date,
+  :symbol,
   keyword_init: true
 )
 
