@@ -56,9 +56,13 @@ main: kit: entity: range: {
           }
           method: "GET"
           orig: "/v1/range"
-          parts: [
-            "v1"
-            "range"
+          segments: [
+            {
+              lit: "v1"
+            }
+            {
+              lit: "range"
+            }
           ]
           select: {
             exist: [

@@ -59,8 +59,8 @@ Entity operations raise on failure, so wrap them in `try` / `except`:
 
 ```python
 try:
-    account = client.Account().load()
-    print(account)
+    convert = client.Convert().load({"amount": 1, "from": "example", "to": "example"})
+    print(convert)
 except Exception as err:
     print(f"load failed: {err}")
 ```
@@ -128,8 +128,8 @@ client = ForeignExchangeRatesSDK.test()
 
 # Entity ops return the ENTITY and raises on error;
 # call data_get() for the record.
-account = client.Account().load()
-# account contains the mock response record
+convert = client.Convert().load({"amount": 1, "from": "example", "to": "example"})
+# convert contains the mock response record
 ```
 
 ### Use a custom fetch function
@@ -266,6 +266,7 @@ API path: `/v1/account`
 | --- | --- |
 | `conversions` |  |
 | `from` |  |
+| `id` |  |
 | `pairs` | Array of [targetCurrency, amount] tuples. |
 
 Operations: Create, Load.
@@ -358,6 +359,7 @@ Create an instance: `convert = client.Convert()`
 | --- | --- | --- |
 | `conversions` | `list` |  |
 | `from` | `str` |  |
+| `id` | `str` |  |
 | `pairs` | `list` | Array of [targetCurrency, amount] tuples. |
 
 #### Example: Load
@@ -546,11 +548,11 @@ Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```python
-account = client.Account()
-account.load()
+convert = client.Convert()
+convert.load({"amount": 1, "from": "example", "to": "example"})
 
-# account.data_get() now returns the account data from the last load
-# account.match_get() returns the last match criteria
+# convert.data_get() now returns the convert data from the last load
+# convert.match_get() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

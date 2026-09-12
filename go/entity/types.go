@@ -30,6 +30,7 @@ type AccountLoadMatch struct {
 type Convert struct {
 	Conversions *[]any `json:"conversions,omitempty"`
 	From *string `json:"from,omitempty"`
+	Id *string `json:"id,omitempty"`
 	Pairs []any `json:"pairs"`
 }
 
@@ -44,6 +45,7 @@ type ConvertLoadMatch struct {
 type ConvertCreateData struct {
 	Conversions *[]any `json:"conversions,omitempty"`
 	From *string `json:"from,omitempty"`
+	Id *string `json:"id,omitempty"`
 	Pairs []any `json:"pairs"`
 }
 

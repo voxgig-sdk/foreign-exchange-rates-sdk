@@ -16,6 +16,7 @@ main: kit: entity: account: {
       type: "`$INTEGER`"
     }
     {
+      format: "date"
       name: "resets_on"
       req: false
       type: "`$STRING`"
@@ -30,9 +31,13 @@ main: kit: entity: account: {
         {
           method: "GET"
           orig: "/v1/account"
-          parts: [
-            "v1"
-            "account"
+          segments: [
+            {
+              lit: "v1"
+            }
+            {
+              lit: "account"
+            }
           ]
           transform: {
             req: "`reqdata`"

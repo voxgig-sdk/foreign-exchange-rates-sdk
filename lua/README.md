@@ -52,7 +52,7 @@ Entity operations return `(value, err)`. Check `err` before using
 the value:
 
 ```lua
-local account, err = client:Account():load()
+local convert, err = client:Convert():load({ amount = 1, from = "example", to = "example" })
 if err then error(err) end
 ```
 
@@ -110,7 +110,7 @@ Create a mock client for unit testing — no server required:
 ```lua
 local client = sdk.test()
 
-local result, err = client:Account():load()
+local result, err = client:Convert():load({ amount = 1, from = "example", to = "example" })
 -- result is the returned data; err is set on failure
 ```
 
@@ -250,6 +250,7 @@ API path: `/v1/account`
 | --- | --- |
 | `conversions` |  |
 | `from` |  |
+| `id` |  |
 | `pairs` | Array of [targetCurrency, amount] tuples. |
 
 Operations: Create, Load.
@@ -342,6 +343,7 @@ Create an instance: `local convert = client:Convert(nil)`
 | --- | --- | --- |
 | `conversions` | `table` |  |
 | `from` | `string` |  |
+| `id` | `string` |  |
 | `pairs` | `table` | Array of [targetCurrency, amount] tuples. |
 
 #### Example: Load
@@ -531,11 +533,11 @@ Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```lua
-local account = client:Account()
-account:load()
+local convert = client:Convert()
+convert:load({ amount = 1, from = "example", to = "example" })
 
--- account:data_get() now returns the account data from the last load
--- account:match_get() returns the last match criteria
+-- convert:data_get() now returns the convert data from the last load
+-- convert:match_get() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

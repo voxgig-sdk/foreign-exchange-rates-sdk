@@ -45,12 +45,17 @@ describe("ConvertEntity", function()
     assert.is_nil(err)
     convert_ref01_data = helpers.to_map(type(convert_ref01_data_result) == 'table' and convert_ref01_data_result.data_get and convert_ref01_data_result:data_get() or convert_ref01_data_result)
     assert.is_not_nil(convert_ref01_data)
+    assert.is_not_nil(convert_ref01_data["id"])
 
     -- LOAD
-    local convert_ref01_match_dt0 = {}
+    local convert_ref01_match_dt0 = {
+      id = convert_ref01_data["id"],
+    }
     local convert_ref01_data_dt0_loaded, err = convert_ref01_ent:load(convert_ref01_match_dt0, nil)
     assert.is_nil(err)
-    assert.is_not_nil(convert_ref01_data_dt0_loaded)
+    local convert_ref01_data_dt0_load_result = helpers.to_map(type(convert_ref01_data_dt0_loaded) == 'table' and convert_ref01_data_dt0_loaded.data_get and convert_ref01_data_dt0_loaded:data_get() or convert_ref01_data_dt0_loaded)
+    assert.is_not_nil(convert_ref01_data_dt0_load_result)
+    assert.are.equal(convert_ref01_data_dt0_load_result["id"], convert_ref01_data["id"])
 
   end)
 end)
@@ -94,7 +99,7 @@ function convert_basic_setup(extra)
     ["FOREIGN_EXCHANGE_RATES_TEST_CONVERT_ENTID"] = idmap,
     ["FOREIGN_EXCHANGE_RATES_TEST_LIVE"] = "FALSE",
     ["FOREIGN_EXCHANGE_RATES_TEST_EXPLAIN"] = "FALSE",
-    ["FOREIGN_EXCHANGE_RATES_APIKEY"] = "NONE",
+    ["FOREIGN_EXCHANGE_RATES_APIKEY"] = "",
   })
 
   local idmap_resolved = helpers.to_map(
@@ -105,6 +110,9 @@ function convert_basic_setup(extra)
 
   if env["FOREIGN_EXCHANGE_RATES_TEST_LIVE"] == "TRUE" then
     local merged_opts = vs.merge({
+      -- FIRST, so the generated fields below win: sdk-test-control.json's
+      -- test.client.options adds to the live client, it does not redirect it.
+      runner.live_client_options(),
       {
         apikey = env["FOREIGN_EXCHANGE_RATES_APIKEY"],
       },

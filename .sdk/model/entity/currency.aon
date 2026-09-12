@@ -47,9 +47,13 @@ main: kit: entity: currency: {
           }
           method: "GET"
           orig: "/v1/currencies"
-          parts: [
-            "v1"
-            "currencies"
+          segments: [
+            {
+              lit: "v1"
+            }
+            {
+              lit: "currencies"
+            }
           ]
           select: {
             exist: [

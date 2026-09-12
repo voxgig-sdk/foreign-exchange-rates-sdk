@@ -10,6 +10,17 @@ const FEATURE_CLASS: Record<string, typeof BaseFeature> = {
 }
 
 
+// Per-feature plugin DEFINITIONS (voxgig/plugin `Definition` values), from
+// the model's active plugin groups. A feature that takes a `plugins` option
+// (secrets over sekreto) reads its own entry; a feature with no plugins has
+// none. Named imports above make each definition statically reachable, so
+// an SDK carries exactly the plugin modules its model selects — the same
+// leanness the old side-effect registry imports bought, without a registry.
+const FEATURE_PLUGINS: Record<string, any[]> = {
+  
+}
+
+
 class Config {
 
   makeFeature(this: any, fn: string) {
@@ -91,6 +102,7 @@ class Config {
           "type": "`$INTEGER`"
         },
         {
+          "format": "date",
           "name": "resets_on",
           "type": "`$STRING`"
         }
@@ -106,15 +118,23 @@ class Config {
               "kind": "http",
               "method": "GET",
               "orig": "/v1/account",
-              "parts": [
-                "v1",
-                "account"
+              "segments": [
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "account"
+                }
               ],
               "select": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.usage`"
-              }
+              },
+              "parts": [
+                "v1",
+                "account"
+              ]
             }
           ]
         }
@@ -140,12 +160,29 @@ class Config {
           "type": "`$STRING`"
         },
         {
+          "name": "id",
+          "type": "`$STRING`"
+        },
+        {
           "name": "pairs",
           "req": true,
           "short": "Array of [targetCurrency, amount] tuples.",
           "type": "`$ARRAY`"
         }
       ],
+      "id": {
+        "field": "id",
+        "from": {
+          "from": "from"
+        },
+        "name": "id",
+        "parts": [
+          "from",
+          "to",
+          "amount"
+        ],
+        "sep": "/"
+      },
       "name": "convert",
       "op": {
         "create": {
@@ -157,15 +194,23 @@ class Config {
               "kind": "http",
               "method": "POST",
               "orig": "/v1/convert",
-              "parts": [
-                "v1",
-                "convert"
+              "segments": [
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "convert"
+                }
               ],
               "select": {},
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body`"
-              }
+              },
+              "parts": [
+                "v1",
+                "convert"
+              ]
             }
           ]
         },
@@ -205,12 +250,22 @@ class Config {
               "kind": "http",
               "method": "GET",
               "orig": "/v1/convert/{from}/{to}/{amount}",
-              "parts": [
-                "v1",
-                "convert",
-                "{from}",
-                "{to}",
-                "{amount}"
+              "segments": [
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "convert"
+                },
+                {
+                  "var": "from"
+                },
+                {
+                  "var": "to"
+                },
+                {
+                  "var": "amount"
+                }
               ],
               "select": {
                 "exist": [
@@ -222,7 +277,14 @@ class Config {
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body`"
-              }
+              },
+              "parts": [
+                "v1",
+                "convert",
+                "{from}",
+                "{to}",
+                "{amount}"
+              ]
             }
           ]
         }
@@ -275,9 +337,13 @@ class Config {
               "kind": "http",
               "method": "GET",
               "orig": "/v1/currencies",
-              "parts": [
-                "v1",
-                "currencies"
+              "segments": [
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "currencies"
+                }
               ],
               "select": {
                 "exist": [
@@ -287,7 +353,11 @@ class Config {
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body`"
-              }
+              },
+              "parts": [
+                "v1",
+                "currencies"
+              ]
             }
           ]
         }
@@ -349,9 +419,13 @@ class Config {
               "kind": "http",
               "method": "GET",
               "orig": "/v1/range",
-              "parts": [
-                "v1",
-                "range"
+              "segments": [
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "range"
+                }
               ],
               "select": {
                 "exist": [
@@ -365,7 +439,11 @@ class Config {
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.rates`"
-              }
+              },
+              "parts": [
+                "v1",
+                "range"
+              ]
             }
           ]
         }
@@ -409,6 +487,10 @@ class Config {
           "type": "`$STRING`"
         }
       ],
+      "id": {
+        "field": "id",
+        "name": "id"
+      },
       "name": "rate",
       "op": {
         "load": {
@@ -437,9 +519,13 @@ class Config {
               "kind": "http",
               "method": "GET",
               "orig": "/v1/latest",
-              "parts": [
-                "v1",
-                "latest"
+              "segments": [
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "latest"
+                }
               ],
               "select": {
                 "exist": [
@@ -450,7 +536,11 @@ class Config {
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.rates`"
-              }
+              },
+              "parts": [
+                "v1",
+                "latest"
+              ]
             },
             {
               "args": {
@@ -477,9 +567,13 @@ class Config {
               "kind": "http",
               "method": "GET",
               "orig": "/v1/{date}",
-              "parts": [
-                "v1",
-                "{date}"
+              "segments": [
+                {
+                  "lit": "v1"
+                },
+                {
+                  "var": "date"
+                }
               ],
               "select": {
                 "exist": [
@@ -490,7 +584,11 @@ class Config {
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body.rates`"
-              }
+              },
+              "parts": [
+                "v1",
+                "{date}"
+              ]
             },
             {
               "args": {
@@ -508,16 +606,22 @@ class Config {
               "kind": "http",
               "method": "GET",
               "orig": "/v1/rate/{slug}",
-              "parts": [
-                "v1",
-                "rate",
-                "{id}"
-              ],
               "rename": {
                 "param": {
                   "slug": "id"
                 }
               },
+              "segments": [
+                {
+                  "lit": "v1"
+                },
+                {
+                  "lit": "rate"
+                },
+                {
+                  "var": "id"
+                }
+              ],
               "select": {
                 "exist": [
                   "id"
@@ -526,7 +630,12 @@ class Config {
               "transform": {
                 "req": "`reqdata`",
                 "res": "`body`"
-              }
+              },
+              "parts": [
+                "v1",
+                "rate",
+                "{id}"
+              ]
             }
           ]
         }
@@ -546,6 +655,7 @@ class Config {
 const config = new Config()
 
 export {
-  config
+  config,
+  FEATURE_PLUGINS,
 }
 

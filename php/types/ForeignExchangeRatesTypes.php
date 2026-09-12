@@ -33,6 +33,7 @@ class Convert
 {
     public ?array $conversions = null;
     public ?string $from = null;
+    public ?string $id = null;
     public array $pairs;
 }
 
@@ -49,6 +50,7 @@ class ConvertCreateData
 {
     public ?array $conversions = null;
     public ?string $from = null;
+    public ?string $id = null;
     public array $pairs;
 }
 

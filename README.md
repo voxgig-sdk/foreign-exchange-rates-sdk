@@ -46,23 +46,23 @@ network, and no credentials:
 // Shape: { entity: { <entity-name>: { <id>: <record> } } }
 const client = ForeignExchangeRatesSDK.test({
   entity: {
-    account: {
-      test01: { id: 'test01' },
+    convert: {
+      test01: { id: 'test01', pairs: [] },
     },
   },
 })
-const account = await client.Account().load()
-// account is the Account entity, populated with mock data
-// — call account.data() for the record itself
-console.log(account)
+const convert = await client.Convert().load({ amount: 1, from: 'example_from', to: 'example_to' })
+// convert is the Convert entity, populated with mock data
+// — call convert.data() for the record itself
+console.log(convert)
 ```
 
 ### Python
 
 ```python
 client = ForeignExchangeRatesSDK.test()
-account = client.Account().load()
-print(account)
+convert = client.Convert().load({"amount": 1, "from": "example", "to": "example"})
+print(convert)
 ```
 
 ### PHP
@@ -70,16 +70,16 @@ print(account)
 ```php
 // Seed fixture data so offline calls resolve without a live server.
 $client = ForeignExchangeRatesSDK::test([
-    "entity" => ["account" => ["test01" => []]],
+    "entity" => ["convert" => ["test01" => []]],
 ]);
-$account = $client->Account()->load();
+$convert = $client->Convert()->load(["amount" => 1, "from" => "example", "to" => "example"]);
 ```
 
 ### Golang
 
 ```go
 client := sdk.Test()
-result, err := client.Account(nil).Load(
+result, err := client.Convert(nil).Load(
     nil, nil,
 )
 ```
@@ -89,16 +89,16 @@ result, err := client.Account(nil).Load(
 ```ruby
 # Seed fixture data so offline calls resolve without a live server.
 client = ForeignExchangeRatesSDK.test({
-  "entity" => { "account" => { "test01" => {} } },
+  "entity" => { "convert" => { "test01" => {} } },
 })
-account = client.Account.load()
+convert = client.Convert.load({ "amount" => 1, "from" => "example", "to" => "example" })
 ```
 
 ### Lua
 
 ```lua
 local client = sdk.test()
-local result, err = client:Account():load()
+local result, err = client:Convert():load({ amount = 1, from = "example", to = "example" })
 ```
 
 ## Packages
@@ -376,7 +376,7 @@ customizable without forking any upstream tool:
 
 - **The model** (`.sdk/model/`) declares everything this project owns:
   package names, versions, active features, per-target settings. It is
-  written in [aontu](https://github.com/aontu-lang/aontu), a JSON-based
+  written in [aontu](https://aontu.dev), a JSON-based
   specification language designed for building ontologies: easy to edit
   by hand, and files unify rather than override, so small declarations
   compose into one model. Regeneration re-reads it every time.

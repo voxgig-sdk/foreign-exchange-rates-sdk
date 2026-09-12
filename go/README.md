@@ -69,12 +69,12 @@ Every entity operation returns `(value, error)`. Check `err` before
 using the value — there is no exception to catch:
 
 ```go
-account, err := client.Account(nil).Load(nil, nil)
+convert, err := client.Convert(nil).Load(map[string]any{"amount": 1, "from": "example", "to": "example"}, nil)
 if err != nil {
     // handle err
     return
 }
-_ = account
+_ = convert
 ```
 
 `Direct` follows the same `(value, error)` convention:
@@ -138,13 +138,13 @@ Create a mock client for unit testing — no server required:
 ```go
 client := sdk.Test()
 
-account, err := client.Account(nil).Load(
-    nil, nil,
+convert, err := client.Convert(nil).Load(
+    map[string]any{"amount": 1, "from": "example", "to": "example"}, nil,
 )
 if err != nil {
     panic(err)
 }
-fmt.Println(account) // the returned mock data
+fmt.Println(convert) // the returned mock data
 ```
 
 ### Use a custom fetch function
@@ -282,6 +282,7 @@ API path: `/v1/account`
 | --- | --- |
 | `"conversions"` |  |
 | `"from"` |  |
+| `"id"` |  |
 | `"pairs"` | Array of [targetCurrency, amount] tuples. |
 
 Operations: Create, Load.
@@ -378,6 +379,7 @@ Create an instance: `convert := client.Convert(nil)`
 | --- | --- | --- |
 | `conversions` | `[]any` |  |
 | `from` | `string` |  |
+| `id` | `string` |  |
 | `pairs` | `[]any` | Array of [targetCurrency, amount] tuples. |
 
 #### Example: Load
@@ -584,11 +586,11 @@ Entity instances are stateful. After a successful `Load`, the entity
 stores the returned data and match criteria internally.
 
 ```go
-account := client.Account(nil)
-account.Load(nil, nil)
+convert := client.Convert(nil)
+convert.Load(map[string]any{"amount": 1, "from": "example", "to": "example"}, nil)
 
-// account.Data() now returns the account data from the last load
-// account.Match() returns the last match criteria
+// convert.Data() now returns the convert data from the last load
+// convert.Match() returns the last match criteria
 ```
 
 Call `Make()` to create a fresh instance with the same configuration

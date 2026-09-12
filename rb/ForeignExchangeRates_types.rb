@@ -50,11 +50,15 @@ AccountLoadMatch = Struct.new(
 # @!attribute [rw] from
 #   @return [String, nil]
 #
+# @!attribute [rw] id
+#   @return [String, nil]
+#
 # @!attribute [rw] pairs
 #   @return [Array]
 Convert = Struct.new(
   :conversions,
   :from,
+  :id,
   :pairs,
   keyword_init: true
 )
@@ -84,11 +88,15 @@ ConvertLoadMatch = Struct.new(
 # @!attribute [rw] from
 #   @return [String, nil]
 #
+# @!attribute [rw] id
+#   @return [String, nil]
+#
 # @!attribute [rw] pairs
 #   @return [Array]
 ConvertCreateData = Struct.new(
   :conversions,
   :from,
+  :id,
   :pairs,
   keyword_init: true
 )

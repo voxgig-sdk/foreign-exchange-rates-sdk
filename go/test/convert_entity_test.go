@@ -52,7 +52,7 @@ func TestConvertEntity(t *testing.T) {
 		// CREATE
 		convertRef01Ent := client.Convert(nil)
 		convertRef01Data := core.ToMapAny(vs.GetProp(
-			vs.GetPath([]any{"new", "convert"}, setup.data), "convert_ref01"))
+			vs.GetPath(setup.data, []any{"new", "convert"}), "convert_ref01"))
 		convertRef01Data["from"] = setup.idmap["from01"]
 		convertRef01Data["to"] = setup.idmap["to01"]
 
@@ -64,15 +64,24 @@ func TestConvertEntity(t *testing.T) {
 		if convertRef01Data == nil {
 			t.Fatal("expected create result to be a map")
 		}
+		if convertRef01Data["id"] == nil {
+			t.Fatal("expected created entity to have an id")
+		}
 
 		// LOAD
-		convertRef01MatchDt0 := map[string]any{}
+		convertRef01MatchDt0 := map[string]any{
+			"id": convertRef01Data["id"],
+		}
 		convertRef01DataDt0Loaded, err := convertRef01Ent.Load(convertRef01MatchDt0, nil)
 		if err != nil {
 			t.Fatalf("load failed: %v", err)
 		}
-		if convertRef01DataDt0Loaded == nil {
-			t.Fatal("expected load result to be non-nil")
+		convertRef01DataDt0LoadResult := core.ToMapAny(entityData(convertRef01DataDt0Loaded))
+		if convertRef01DataDt0LoadResult == nil {
+			t.Fatal("expected load result to be a map")
+		}
+		if convertRef01DataDt0LoadResult["id"] != convertRef01Data["id"] {
+			t.Fatal("expected load result id to match")
 		}
 
 	})
@@ -102,7 +111,7 @@ func convertBasicSetup(extra map[string]any) *entityTestSetup {
 	client := sdk.TestSDK(options, extra)
 
 	// Generate idmap via transform, matching TS pattern.
-	idmap := vs.Transform(
+	idmap, _ := vs.Transform(
 		[]any{"convert01", "convert02", "convert03", "from01", "to01"},
 		map[string]any{
 			"`$PACK`": []any{"", map[string]any{
@@ -122,7 +131,7 @@ func convertBasicSetup(extra map[string]any) *entityTestSetup {
 		"FOREIGN_EXCHANGE_RATES_TEST_CONVERT_ENTID": idmap,
 		"FOREIGN_EXCHANGE_RATES_TEST_LIVE":      "FALSE",
 		"FOREIGN_EXCHANGE_RATES_TEST_EXPLAIN":   "FALSE",
-		"FOREIGN_EXCHANGE_RATES_APIKEY":         "NONE",
+		"FOREIGN_EXCHANGE_RATES_APIKEY":         "",
 	})
 
 	idmapResolved := core.ToMapAny(env["FOREIGN_EXCHANGE_RATES_TEST_CONVERT_ENTID"])
@@ -131,11 +140,23 @@ func convertBasicSetup(extra map[string]any) *entityTestSetup {
 	}
 
 	if env["FOREIGN_EXCHANGE_RATES_TEST_LIVE"] == "TRUE" {
+		// An empty map, not a nil one: Merge returns nil when its last entry
+		// is nil, and BasicSetup is normally called with no extras - so a
+		// bare nil silently discarded the apikey and server values below.
+		extraOpts := extra
+		if extraOpts == nil {
+			extraOpts = map[string]any{}
+		}
+
 		mergedOpts := vs.Merge([]any{
+			// liveClientOptions() FIRST, so the generated fields below win:
+			// sdk-test-control.json's test.client.options adds to the live
+			// client, it does not redirect it.
+			liveClientOptions(),
 			map[string]any{
 				"apikey": env["FOREIGN_EXCHANGE_RATES_APIKEY"],
 			},
-			extra,
+			extraOpts,
 		})
 		client = sdk.NewForeignExchangeRatesSDK(core.ToMapAny(mergedOpts))
 	}

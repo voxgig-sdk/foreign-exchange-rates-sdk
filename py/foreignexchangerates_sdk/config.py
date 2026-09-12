@@ -1,6 +1,14 @@
 # ForeignExchangeRates SDK configuration
 
 
+# The sekreto plugin DEFINITIONS the model selected per feature, imported
+# above by name from the modules the catalogue's active `plugin.def`
+# entries declare. Handed to each feature (secrets builds its Sekreto
+# with them): a provider kind not listed here is unknown to that SDK.
+FEATURE_PLUGINS = {
+}
+
+
 _shared_config = None
 
 
@@ -68,6 +76,7 @@ def make_config():
             "type": "`$INTEGER`",
           },
           {
+            "format": "date",
             "name": "resets_on",
             "type": "`$STRING`",
           },
@@ -83,15 +92,23 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/v1/account",
-                "parts": [
-                  "v1",
-                  "account",
+                "segments": [
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "account",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body.usage`",
                 },
+                "parts": [
+                  "v1",
+                  "account",
+                ],
               },
             ],
           },
@@ -117,12 +134,29 @@ def make_config():
             "type": "`$STRING`",
           },
           {
+            "name": "id",
+            "type": "`$STRING`",
+          },
+          {
             "name": "pairs",
             "req": True,
             "short": "Array of [targetCurrency, amount] tuples.",
             "type": "`$ARRAY`",
           },
         ],
+        "id": {
+          "field": "id",
+          "from": {
+            "from": "from",
+          },
+          "name": "id",
+          "parts": [
+            "from",
+            "to",
+            "amount",
+          ],
+          "sep": "/",
+        },
         "name": "convert",
         "op": {
           "create": {
@@ -134,15 +168,23 @@ def make_config():
                 "kind": "http",
                 "method": "POST",
                 "orig": "/v1/convert",
-                "parts": [
-                  "v1",
-                  "convert",
+                "segments": [
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "convert",
+                  },
                 ],
                 "select": {},
                 "transform": {
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "v1",
+                  "convert",
+                ],
               },
             ],
           },
@@ -182,12 +224,22 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/v1/convert/{from}/{to}/{amount}",
-                "parts": [
-                  "v1",
-                  "convert",
-                  "{from}",
-                  "{to}",
-                  "{amount}",
+                "segments": [
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "convert",
+                  },
+                  {
+                    "var": "from",
+                  },
+                  {
+                    "var": "to",
+                  },
+                  {
+                    "var": "amount",
+                  },
                 ],
                 "select": {
                   "exist": [
@@ -200,6 +252,13 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "v1",
+                  "convert",
+                  "{from}",
+                  "{to}",
+                  "{amount}",
+                ],
               },
             ],
           },
@@ -252,9 +311,13 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/v1/currencies",
-                "parts": [
-                  "v1",
-                  "currencies",
+                "segments": [
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "currencies",
+                  },
                 ],
                 "select": {
                   "exist": [
@@ -265,6 +328,10 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "v1",
+                  "currencies",
+                ],
               },
             ],
           },
@@ -326,9 +393,13 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/v1/range",
-                "parts": [
-                  "v1",
-                  "range",
+                "segments": [
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "range",
+                  },
                 ],
                 "select": {
                   "exist": [
@@ -343,6 +414,10 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body.rates`",
                 },
+                "parts": [
+                  "v1",
+                  "range",
+                ],
               },
             ],
           },
@@ -386,6 +461,10 @@ def make_config():
             "type": "`$STRING`",
           },
         ],
+        "id": {
+          "field": "id",
+          "name": "id",
+        },
         "name": "rate",
         "op": {
           "load": {
@@ -414,9 +493,13 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/v1/latest",
-                "parts": [
-                  "v1",
-                  "latest",
+                "segments": [
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "latest",
+                  },
                 ],
                 "select": {
                   "exist": [
@@ -428,6 +511,10 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body.rates`",
                 },
+                "parts": [
+                  "v1",
+                  "latest",
+                ],
               },
               {
                 "args": {
@@ -454,9 +541,13 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/v1/{date}",
-                "parts": [
-                  "v1",
-                  "{date}",
+                "segments": [
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "var": "date",
+                  },
                 ],
                 "select": {
                   "exist": [
@@ -468,6 +559,10 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body.rates`",
                 },
+                "parts": [
+                  "v1",
+                  "{date}",
+                ],
               },
               {
                 "args": {
@@ -485,16 +580,22 @@ def make_config():
                 "kind": "http",
                 "method": "GET",
                 "orig": "/v1/rate/{slug}",
-                "parts": [
-                  "v1",
-                  "rate",
-                  "{id}",
-                ],
                 "rename": {
                   "param": {
                     "slug": "id",
                   },
                 },
+                "segments": [
+                  {
+                    "lit": "v1",
+                  },
+                  {
+                    "lit": "rate",
+                  },
+                  {
+                    "var": "id",
+                  },
+                ],
                 "select": {
                   "exist": [
                     "id",
@@ -504,6 +605,11 @@ def make_config():
                   "req": "`reqdata`",
                   "res": "`body`",
                 },
+                "parts": [
+                  "v1",
+                  "rate",
+                  "{id}",
+                ],
               },
             ],
           },

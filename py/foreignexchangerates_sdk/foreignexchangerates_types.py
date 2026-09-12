@@ -34,6 +34,7 @@ class ConvertRequired(TypedDict):
 
 class Convert(ConvertRequired, total=False):
     conversions: list
+    id: str
 
 
 class ConvertLoadMatch(TypedDict):
@@ -47,6 +48,7 @@ class ConvertCreateDataRequired(TypedDict):
 
 class ConvertCreateData(ConvertCreateDataRequired, total=False):
     conversions: list
+    id: str
 
 
 class Currency(TypedDict, total=False):

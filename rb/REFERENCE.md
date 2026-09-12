@@ -166,6 +166,7 @@ convert = client.Convert
 | --- | --- | --- | --- |
 | `conversions` | `Array` | No |  |
 | `from` | `String` | No |  |
+| `id` | `String` | No |  |
 | `pairs` | `Array` | Yes | Array of [targetCurrency, amount] tuples. |
 
 ### Field Usage by Operation
@@ -174,6 +175,7 @@ convert = client.Convert
 | --- | --- | --- |
 | `conversions` | - | - |
 | `from` | - | Yes |
+| `id` | - | - |
 | `pairs` | - | - |
 
 ### Operations

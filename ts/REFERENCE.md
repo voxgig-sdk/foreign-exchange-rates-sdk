@@ -219,6 +219,7 @@ const convert = client.Convert()
 | --- | --- | --- | --- |
 | `conversions` | `any[]` | No |  |
 | `from` | `string` | No |  |
+| `id` | `string` | No |  |
 | `pairs` | `any[]` | Yes | Array of [targetCurrency, amount] tuples. |
 
 ### Field Usage by Operation
@@ -227,6 +228,7 @@ const convert = client.Convert()
 | --- | --- | --- |
 | `conversions` | - | - |
 | `from` | - | Yes |
+| `id` | - | - |
 | `pairs` | - | - |
 
 ### Operations

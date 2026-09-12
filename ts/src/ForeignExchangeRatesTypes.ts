@@ -20,6 +20,7 @@ export interface AccountLoadMatch {
 export interface Convert {
   conversions?: any[]
   from?: string
+  id?: string
   pairs: any[]
 }
 
@@ -32,6 +33,7 @@ export interface ConvertLoadMatch {
 export interface ConvertCreateData {
   conversions?: any[]
   from?: string
+  id?: string
   pairs: any[]
 }
 

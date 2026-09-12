@@ -55,7 +55,7 @@ Entity operations throw a `\Throwable` on failure, so wrap them in
 
 ```php
 try {
-    $account = $client->Account()->load();
+    $convert = $client->Convert()->load(["amount" => 1, "from" => "example", "to" => "example"]);
 } catch (\Throwable $err) {
     echo "Error: " . $err->getMessage();
 }
@@ -129,8 +129,8 @@ $client = ForeignExchangeRatesSDK::test();
 
 // Entity ops return the ENTITY (throws on error);
 // call data_get() for the mock record.
-$account = $client->Account()->load();
-print_r($account);
+$convert = $client->Convert()->load(["amount" => 1, "from" => "example", "to" => "example"]);
+print_r($convert);
 ```
 
 ### Use a custom fetch function
@@ -270,6 +270,7 @@ API path: `/v1/account`
 | --- | --- |
 | `conversions` |  |
 | `from` |  |
+| `id` |  |
 | `pairs` | Array of [targetCurrency, amount] tuples. |
 
 Operations: Create, Load.
@@ -363,6 +364,7 @@ Create an instance: `$convert = $client->Convert();`
 | --- | --- | --- |
 | `conversions` | `array` |  |
 | `from` | `string` |  |
+| `id` | `string` |  |
 | `pairs` | `array` | Array of [targetCurrency, amount] tuples. |
 
 #### Example: Load
@@ -556,11 +558,11 @@ Entity instances are stateful. After a successful `load`, the entity
 stores the returned data and match criteria internally.
 
 ```php
-$account = $client->Account();
-$account->load();
+$convert = $client->Convert();
+$convert->load(["amount" => 1, "from" => "example", "to" => "example"]);
 
-// $account->data_get() now returns the account data from the last load
-// $account->match_get() returns the last match criteria
+// $convert->data_get() now returns the convert data from the last load
+// $convert->match_get() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

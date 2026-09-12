@@ -80,9 +80,13 @@ main: kit: entity: rate: {
           }
           method: "GET"
           orig: "/v1/latest"
-          parts: [
-            "v1"
-            "latest"
+          segments: [
+            {
+              lit: "v1"
+            }
+            {
+              lit: "latest"
+            }
           ]
           select: {
             exist: [
@@ -120,9 +124,13 @@ main: kit: entity: rate: {
           }
           method: "GET"
           orig: "/v1/{date}"
-          parts: [
-            "v1"
-            "{date}"
+          segments: [
+            {
+              lit: "v1"
+            }
+            {
+              var: "date"
+            }
           ]
           select: {
             exist: [
@@ -150,16 +158,22 @@ main: kit: entity: rate: {
           }
           method: "GET"
           orig: "/v1/rate/{slug}"
-          parts: [
-            "v1"
-            "rate"
-            "{id}"
-          ]
           rename: {
             param: {
               slug: "id"
             }
           }
+          segments: [
+            {
+              lit: "v1"
+            }
+            {
+              lit: "rate"
+            }
+            {
+              var: "id"
+            }
+          ]
           select: {
             exist: [
               "id"

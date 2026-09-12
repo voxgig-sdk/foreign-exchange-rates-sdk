@@ -48,11 +48,16 @@ class ConvertEntityTest extends TestCase
         $convert_ref01_data_result = $convert_ref01_ent->create($convert_ref01_data, null);
         $convert_ref01_data = Helpers::to_map(is_object($convert_ref01_data_result) && method_exists($convert_ref01_data_result, 'data_get') ? $convert_ref01_data_result->data_get() : $convert_ref01_data_result);
         $this->assertNotNull($convert_ref01_data);
+        $this->assertNotNull($convert_ref01_data["id"]);
 
         // LOAD
-        $convert_ref01_match_dt0 = [];
+        $convert_ref01_match_dt0 = [
+            "id" => $convert_ref01_data["id"],
+        ];
         $convert_ref01_data_dt0_loaded = $convert_ref01_ent->load($convert_ref01_match_dt0, null);
-        $this->assertNotNull($convert_ref01_data_dt0_loaded);
+        $convert_ref01_data_dt0_load_result = Helpers::to_map(is_object($convert_ref01_data_dt0_loaded) && method_exists($convert_ref01_data_dt0_loaded, 'data_get') ? $convert_ref01_data_dt0_loaded->data_get() : $convert_ref01_data_dt0_loaded);
+        $this->assertNotNull($convert_ref01_data_dt0_load_result);
+        $this->assertEquals($convert_ref01_data_dt0_load_result["id"], $convert_ref01_data["id"]);
 
     }
 }
@@ -86,7 +91,7 @@ function convert_basic_setup($extra)
         "FOREIGN_EXCHANGE_RATES_TEST_CONVERT_ENTID" => $idmap,
         "FOREIGN_EXCHANGE_RATES_TEST_LIVE" => "FALSE",
         "FOREIGN_EXCHANGE_RATES_TEST_EXPLAIN" => "FALSE",
-        "FOREIGN_EXCHANGE_RATES_APIKEY" => "NONE",
+        "FOREIGN_EXCHANGE_RATES_APIKEY" => "",
     ]);
 
     $idmap_resolved = Helpers::to_map(
@@ -97,10 +102,17 @@ function convert_basic_setup($extra)
 
     if ($env["FOREIGN_EXCHANGE_RATES_TEST_LIVE"] === "TRUE") {
         $merged_opts = Vs::merge([
+            // FIRST, so the generated fields below win: sdk-test-control.json's
+            // test.client.options adds to the live client, it does not redirect it.
+            Runner::live_client_options(),
             [
                 "apikey" => $env["FOREIGN_EXCHANGE_RATES_APIKEY"],
             ],
-            $extra ?? [],
+            // ismap, not a plain "?? []" default: an empty PHP array is a
+            // LIST, and a non-map later entry REPLACES the accumulated map in
+            // merge - so the no-extras call discarded live_client_options()
+            // and the apikey/server map above it.
+            Vs::ismap($extra) ? $extra : new \stdClass(),
         ]);
         $client = new ForeignExchangeRatesSDK(Helpers::to_map($merged_opts));
     }

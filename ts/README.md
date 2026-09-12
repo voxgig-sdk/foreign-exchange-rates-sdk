@@ -60,8 +60,8 @@ Entity operations reject on failure, so wrap them in `try` / `catch`:
 
 ```ts
 try {
-  const account = await client.Account().load()
-  console.log(account)
+  const convert = await client.Convert().load({ amount: 1, from: "example", to: "example" })
+  console.log(convert)
 } catch (err) {
   console.error('load failed:', err)
 }
@@ -127,10 +127,10 @@ Create a mock client for unit testing — no server required:
 ```ts
 const client = ForeignExchangeRatesSDK.test()
 
-const account = await client.Account().load()
-// account is the entity, populated with mock response data
-// — call account.data() for the record itself
-console.log(account)
+const convert = await client.Convert().load({ amount: 1, from: 'example_from', to: 'example_to' })
+// convert is the entity, populated with mock response data
+// — call convert.data() for the record itself
+console.log(convert)
 ```
 
 You can also use the instance method:
@@ -145,14 +145,14 @@ const testClient = client.tester()
 Entity instances remember their last match and data:
 
 ```ts
-const entity = client.Account()
+const entity = client.Convert()
 
 // First call runs the operation and stores its result
-await entity.load()
+await entity.load({ amount: 1, from: 'example_from', to: 'example_to' })
 
 // Subsequent calls reuse the stored state
 const data = entity.data()
-console.log(data)
+console.log(data.id)
 ```
 
 ### Add custom middleware
@@ -315,6 +315,7 @@ API path: `/v1/account`
 | --- | --- |
 | `conversions` |  |
 | `from` |  |
+| `id` |  |
 | `pairs` | Array of [targetCurrency, amount] tuples. |
 
 Operations: create, load.
@@ -407,6 +408,7 @@ Create an instance: `const convert = client.Convert()`
 | --- | --- | --- |
 | `conversions` | `any[]` |  |
 | `from` | `string` |  |
+| `id` | `string` |  |
 | `pairs` | `any[]` | Array of [targetCurrency, amount] tuples. |
 
 #### Example: Load
@@ -589,11 +591,11 @@ stores the returned data and match criteria internally. Subsequent
 calls on the same instance can rely on this state.
 
 ```ts
-const account = client.Account()
-await account.load()
+const convert = client.Convert()
+await convert.load({ amount: 1, from: "example", to: "example" })
 
-// account.data() now returns the account data from the last `load`
-// account.match() returns the last match criteria
+// convert.data() now returns the convert data from the last `load`
+// convert.match() returns the last match criteria
 ```
 
 Call `make()` to create a fresh instance with the same configuration

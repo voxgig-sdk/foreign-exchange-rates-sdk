@@ -3,27 +3,27 @@
     "convert": {
       "CONVERT00": {
         "conversions": [],
-        "from": "s1f",
+        "from": "s29",
+        "id": "CONVERT00",
         "pairs": [],
         "amount": "AMOUNT01",
-        "to": "TO01",
-        "id": "CONVERT00"
+        "to": "TO01"
       },
       "CONVERT01": {
         "conversions": [],
-        "from": "s3d",
+        "from": "s51",
+        "id": "CONVERT01",
         "pairs": [],
         "amount": "AMOUNT01",
-        "to": "TO01",
-        "id": "CONVERT01"
+        "to": "TO01"
       },
       "CONVERT02": {
         "conversions": [],
-        "from": "s5b",
+        "from": "s79",
+        "id": "CONVERT02",
         "pairs": [],
         "amount": "AMOUNT01",
-        "to": "TO01",
-        "id": "CONVERT02"
+        "to": "TO01"
       }
     }
   },
@@ -31,7 +31,7 @@
     "convert": {
       "convert_ref01": {
         "conversions": [],
-        "from": "s79",
+        "from": "sa1",
         "pairs": []
       }
     }

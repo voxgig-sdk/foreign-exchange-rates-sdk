@@ -47,6 +47,7 @@ local function make_config()
             ["type"] = "`$INTEGER`",
           },
           {
+            ["format"] = "date",
             ["name"] = "resets_on",
             ["type"] = "`$STRING`",
           },
@@ -62,14 +63,22 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/v1/account",
-                ["parts"] = {
-                  "v1",
-                  "account",
+                ["segments"] = {
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "account",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body.usage`",
+                },
+                ["parts"] = {
+                  "v1",
+                  "account",
                 },
               },
             },
@@ -96,11 +105,28 @@ local function make_config()
             ["type"] = "`$STRING`",
           },
           {
+            ["name"] = "id",
+            ["type"] = "`$STRING`",
+          },
+          {
             ["name"] = "pairs",
             ["req"] = true,
             ["short"] = "Array of [targetCurrency, amount] tuples.",
             ["type"] = "`$ARRAY`",
           },
+        },
+        ["id"] = {
+          ["field"] = "id",
+          ["from"] = {
+            ["from"] = "from",
+          },
+          ["name"] = "id",
+          ["parts"] = {
+            "from",
+            "to",
+            "amount",
+          },
+          ["sep"] = "/",
         },
         ["name"] = "convert",
         ["op"] = {
@@ -113,14 +139,22 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "POST",
                 ["orig"] = "/v1/convert",
-                ["parts"] = {
-                  "v1",
-                  "convert",
+                ["segments"] = {
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "convert",
+                  },
                 },
                 ["select"] = {},
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "v1",
+                  "convert",
                 },
               },
             },
@@ -161,12 +195,22 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/v1/convert/{from}/{to}/{amount}",
-                ["parts"] = {
-                  "v1",
-                  "convert",
-                  "{from}",
-                  "{to}",
-                  "{amount}",
+                ["segments"] = {
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "convert",
+                  },
+                  {
+                    ["var"] = "from",
+                  },
+                  {
+                    ["var"] = "to",
+                  },
+                  {
+                    ["var"] = "amount",
+                  },
                 },
                 ["select"] = {
                   ["exist"] = {
@@ -178,6 +222,13 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "v1",
+                  "convert",
+                  "{from}",
+                  "{to}",
+                  "{amount}",
                 },
               },
             },
@@ -231,9 +282,13 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/v1/currencies",
-                ["parts"] = {
-                  "v1",
-                  "currencies",
+                ["segments"] = {
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "currencies",
+                  },
                 },
                 ["select"] = {
                   ["exist"] = {
@@ -243,6 +298,10 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "v1",
+                  "currencies",
                 },
               },
             },
@@ -305,9 +364,13 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/v1/range",
-                ["parts"] = {
-                  "v1",
-                  "range",
+                ["segments"] = {
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "range",
+                  },
                 },
                 ["select"] = {
                   ["exist"] = {
@@ -321,6 +384,10 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body.rates`",
+                },
+                ["parts"] = {
+                  "v1",
+                  "range",
                 },
               },
             },
@@ -365,6 +432,10 @@ local function make_config()
             ["type"] = "`$STRING`",
           },
         },
+        ["id"] = {
+          ["field"] = "id",
+          ["name"] = "id",
+        },
         ["name"] = "rate",
         ["op"] = {
           ["load"] = {
@@ -393,9 +464,13 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/v1/latest",
-                ["parts"] = {
-                  "v1",
-                  "latest",
+                ["segments"] = {
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "latest",
+                  },
                 },
                 ["select"] = {
                   ["exist"] = {
@@ -406,6 +481,10 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body.rates`",
+                },
+                ["parts"] = {
+                  "v1",
+                  "latest",
                 },
               },
               {
@@ -433,9 +512,13 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/v1/{date}",
-                ["parts"] = {
-                  "v1",
-                  "{date}",
+                ["segments"] = {
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["var"] = "date",
+                  },
                 },
                 ["select"] = {
                   ["exist"] = {
@@ -446,6 +529,10 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body.rates`",
+                },
+                ["parts"] = {
+                  "v1",
+                  "{date}",
                 },
               },
               {
@@ -464,14 +551,20 @@ local function make_config()
                 ["kind"] = "http",
                 ["method"] = "GET",
                 ["orig"] = "/v1/rate/{slug}",
-                ["parts"] = {
-                  "v1",
-                  "rate",
-                  "{id}",
-                },
                 ["rename"] = {
                   ["param"] = {
                     ["slug"] = "id",
+                  },
+                },
+                ["segments"] = {
+                  {
+                    ["lit"] = "v1",
+                  },
+                  {
+                    ["lit"] = "rate",
+                  },
+                  {
+                    ["var"] = "id",
                   },
                 },
                 ["select"] = {
@@ -482,6 +575,11 @@ local function make_config()
                 ["transform"] = {
                   ["req"] = "`reqdata`",
                   ["res"] = "`body`",
+                },
+                ["parts"] = {
+                  "v1",
+                  "rate",
+                  "{id}",
                 },
               },
             },

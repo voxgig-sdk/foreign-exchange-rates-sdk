@@ -19,6 +19,7 @@
 ---@class Convert
 ---@field conversions? table
 ---@field from? string
+---@field id? string
 ---@field pairs table
 
 ---@class ConvertLoadMatch
@@ -29,6 +30,7 @@
 ---@class ConvertCreateData
 ---@field conversions? table
 ---@field from? string
+---@field id? string
 ---@field pairs table
 
 ---@class Currency

@@ -22,12 +22,31 @@ main: kit: entity: convert: {
       type: "`$STRING`"
     }
     {
+      name: "id"
+      req: false
+      type: "`$STRING`"
+    }
+    {
       name: "pairs"
       req: true
       short: "Array of [targetCurrency, amount] tuples."
       type: "`$ARRAY`"
     }
   ]
+
+  id: {
+    field: "id"
+    from: {
+      from: "from"
+    }
+    name: "id"
+    parts: [
+      "from"
+      "to"
+      "amount"
+    ]
+    sep: "/"
+  }
 
   name: "convert"
   op: {
@@ -37,9 +56,13 @@ main: kit: entity: convert: {
         {
           method: "POST"
           orig: "/v1/convert"
-          parts: [
-            "v1"
-            "convert"
+          segments: [
+            {
+              lit: "v1"
+            }
+            {
+              lit: "convert"
+            }
           ]
           transform: {
             req: "`reqdata`"
@@ -82,12 +105,22 @@ main: kit: entity: convert: {
           }
           method: "GET"
           orig: "/v1/convert/{from}/{to}/{amount}"
-          parts: [
-            "v1"
-            "convert"
-            "{from}"
-            "{to}"
-            "{amount}"
+          segments: [
+            {
+              lit: "v1"
+            }
+            {
+              lit: "convert"
+            }
+            {
+              var: "from"
+            }
+            {
+              var: "to"
+            }
+            {
+              var: "amount"
+            }
           ]
           select: {
             exist: [

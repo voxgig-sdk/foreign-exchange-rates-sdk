@@ -41,11 +41,16 @@ class ConvertEntityTest < Minitest::Test
     convert_ref01_data_result = convert_ref01_ent.create(convert_ref01_data, nil)
     convert_ref01_data = Helpers.to_map(convert_ref01_data_result.respond_to?(:data_get) ? convert_ref01_data_result.data_get : convert_ref01_data_result)
     assert !convert_ref01_data.nil?
+    assert !convert_ref01_data["id"].nil?
 
     # LOAD
-    convert_ref01_match_dt0 = {}
+    convert_ref01_match_dt0 = {
+      "id" => convert_ref01_data["id"],
+    }
     convert_ref01_data_dt0_loaded = convert_ref01_ent.load(convert_ref01_match_dt0, nil)
-    assert !convert_ref01_data_dt0_loaded.nil?
+    convert_ref01_data_dt0_load_result = Helpers.to_map(convert_ref01_data_dt0_loaded.respond_to?(:data_get) ? convert_ref01_data_dt0_loaded.data_get : convert_ref01_data_dt0_loaded)
+    assert !convert_ref01_data_dt0_load_result.nil?
+    assert_equal convert_ref01_data_dt0_load_result["id"], convert_ref01_data["id"]
 
   end
 end
@@ -83,7 +88,7 @@ def convert_basic_setup(extra)
     "FOREIGN_EXCHANGE_RATES_TEST_CONVERT_ENTID" => idmap,
     "FOREIGN_EXCHANGE_RATES_TEST_LIVE" => "FALSE",
     "FOREIGN_EXCHANGE_RATES_TEST_EXPLAIN" => "FALSE",
-    "FOREIGN_EXCHANGE_RATES_APIKEY" => "NONE",
+    "FOREIGN_EXCHANGE_RATES_APIKEY" => "",
   })
 
   idmap_resolved = Helpers.to_map(
@@ -94,6 +99,9 @@ def convert_basic_setup(extra)
 
   if env["FOREIGN_EXCHANGE_RATES_TEST_LIVE"] == "TRUE"
     merged_opts = Vs.merge([
+      # FIRST, so the generated fields below win: sdk-test-control.json's
+      # test.client.options adds to the live client, it does not redirect it.
+      Runner.live_client_options,
       {
         "apikey" => env["FOREIGN_EXCHANGE_RATES_APIKEY"],
       },
