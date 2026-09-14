@@ -28,7 +28,7 @@ loading a specific record.
 ### 1. Create a client
 
 ```ts
-import { ForeignExchangeRatesSDK } from '@voxgig-sdk/foreign-exchange-rates'
+import { ForeignExchangeRatesSDK } from '@voxgig-sdk/foreign-exchange-rates-sdk'
 
 const client = new ForeignExchangeRatesSDK({
   apikey: process.env.FOREIGN_EXCHANGE_RATES_APIKEY,
@@ -581,7 +581,7 @@ foreign-exchange-rates/
 Import the SDK from the package root:
 
 ```ts
-import { ForeignExchangeRatesSDK } from '@voxgig-sdk/foreign-exchange-rates'
+import { ForeignExchangeRatesSDK } from '@voxgig-sdk/foreign-exchange-rates-sdk'
 ```
 
 ### Entity state

@@ -105,7 +105,7 @@ local result, err = client:Convert():load({ amount = 1, from = "example", to = "
 
 | Language | Package | Install |
 | --- | --- | --- |
-| TypeScript | `@voxgig-sdk/foreign-exchange-rates` | publish pending — [install from git tag](https://github.com/voxgig-sdk/foreign-exchange-rates-sdk/releases) |
+| TypeScript | `@voxgig-sdk/foreign-exchange-rates-sdk` | publish pending — [install from git tag](https://github.com/voxgig-sdk/foreign-exchange-rates-sdk/releases) |
 | Python | `voxgig-sdk-foreign-exchange-rates` | publish pending — [install from git tag](https://github.com/voxgig-sdk/foreign-exchange-rates-sdk/releases) |
 | PHP | `voxgig-sdk/foreign-exchange-rates` | publish pending — [install from git tag](https://github.com/voxgig-sdk/foreign-exchange-rates-sdk/releases) |
 | Golang | `github.com/voxgig-sdk/foreign-exchange-rates-sdk/go` | `go get github.com/voxgig-sdk/foreign-exchange-rates-sdk/go@latest` |
@@ -119,7 +119,7 @@ local result, err = client:Convert():load({ amount = 1, from = "example", to = "
 ### TypeScript
 
 ```ts
-import { ForeignExchangeRatesSDK } from '@voxgig-sdk/foreign-exchange-rates'
+import { ForeignExchangeRatesSDK } from '@voxgig-sdk/foreign-exchange-rates-sdk'
 
 const client = new ForeignExchangeRatesSDK({
   apikey: process.env.FOREIGN_EXCHANGE_RATES_APIKEY,
